@@ -9,63 +9,63 @@ const PLANET_PROPERTIES = {
         NOSCALE_RADIUS: 1.2,
         SOLAR_DISTANCE: 0,
         COLOR: 0xffff00,
-        TEXTURE: 'assets/8k_sun.jpg'
+        TEXTURE: 'assets/1K/sun.jpg'
     },
     MERCURY: {
         RADIUS: 2440,
         NOSCALE_RADIUS: 0.15,
         SOLAR_DISTANCE: 57910000,
         COLOR: 0xc0c0c0,
-        TEXTURE: 'assets/8k_mercury.jpg'
+        TEXTURE: 'assets/1K/mercury.jpg'
     },
     VENUS: {
         RADIUS: 6052,
         NOSCALE_RADIUS: 0.3,
         SOLAR_DISTANCE: 108200000,
         COLOR: 0xffffcc,
-        TEXTURE: 'assets/8k_venus_surface.jpg'
+        TEXTURE: 'assets/1K/venus_surface.jpg'
     },
     EARTH: {
         RADIUS: 6378,
         NOSCALE_RADIUS: 0.3,
         SOLAR_DISTANCE: 149600000,
         COLOR: 0x0080ff,
-        TEXTURE: 'assets/8k_earth_daymap.jpg'
+        TEXTURE: 'assets/1K/earth_daymap.jpg'
     },
     MARS: {
         RADIUS: 3397,
         NOSCALE_RADIUS: 0.25,
         SOLAR_DISTANCE: 227900000,
         COLOR: 0x930000,
-        TEXTURE: 'assets/8k_mars.jpg'
+        TEXTURE: 'assets/1K/mars.jpg'
     },
     JUPITER: {
         RADIUS: 71492,
         NOSCALE_RADIUS: 1,
         SOLAR_DISTANCE: 778500000,
         COLOR: 0xfcc92e,
-        TEXTURE: 'assets/8k_jupiter.jpg'
+        TEXTURE: 'assets/1K/jupiter.jpg'
     },
     SATURN: {
         RADIUS: 60268,
         NOSCALE_RADIUS: 0.9,
         SOLAR_DISTANCE: 1434000000,
         COLOR: 0xc8c800,
-        TEXTURE: 'assets/8k_saturn.jpg'
+        TEXTURE: 'assets/1K/saturn.jpg'
     },
     URANUS: {
         RADIUS: 25559,
         NOSCALE_RADIUS: 0.6,
         SOLAR_DISTANCE: 2871000000,
         COLOR: 0xcaffff,
-        TEXTURE: 'assets/2k_uranus.jpg'
+        TEXTURE: 'assets/1K/uranus.jpg'
     },
     NEPTUNE: {
         RADIUS: 24766,
         NOSCALE_RADIUS: 0.6,
         SOLAR_DISTANCE: 4495000000,
         COLOR: 0x007fff,
-        TEXTURE: 'assets/2k_neptune.jpg'
+        TEXTURE: 'assets/1K/neptune.jpg'
     }
 };
 
