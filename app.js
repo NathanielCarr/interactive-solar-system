@@ -1,26 +1,30 @@
 // const THREE = require("./js/three");
 
 // All distances are in kilometres.
-const ORBIT_SPEED = 1;
-const RADIUS_SCALE = 1 / 57910000;
+const ORBIT_SPEED_MODIFIER = 1 * Math.pow(10, 8);
+const SYNODIC_SPEED_MODIFIER = 1 * Math.pow(10, 2);
 const SOLAR_DISTANCE_SCALE = 1 / 57910000;
 const PLANET_PROPERTIES = {
     // RADIUS is the real radius (km)
     // NOSCALE_RADIUS is a dramatized radius.
     // SOLAR_DISTANCE is distance from the sun (km).
+    // DAYS_PER_ORBIT is the number of earth days per one orbit around the sun.
+    // SYNODIC_PERIOD is hte number of earth days per one rotation around the planets centre.
     // TEXTURE is the location where the texture is found.
     SUN: {
         RADIUS: 695508,
-        NOSCALE_RADIUS: 1.2,
+        NOSCALE_RADIUS: 1.0,
         SOLAR_DISTANCE: 0,
         DAYS_PER_ORBIT: 0,
+        SYNODIC_PERIOD: 26.6,
         TEXTURE: 'assets/1K/sun.jpg'
     },
     MERCURY: {
         RADIUS: 2440,
         NOSCALE_RADIUS: 0.15,
-        SOLAR_DISTANCE: 57910000,
+        SOLAR_DISTANCE: 57910000 * 1.5, // INCORRECT
         DAYS_PER_ORBIT: 87.97,
+        SYNODIC_PERIOD: 175.940,
         TEXTURE: 'assets/1K/mercury.jpg'
     },
     VENUS: {
@@ -28,6 +32,7 @@ const PLANET_PROPERTIES = {
         NOSCALE_RADIUS: 0.3,
         SOLAR_DISTANCE: 108200000,
         DAYS_PER_ORBIT: 224.70,
+        SYNODIC_PERIOD: -116.750,
         TEXTURE: 'assets/1K/venus_surface.jpg'
     },
     EARTH: {
@@ -35,6 +40,7 @@ const PLANET_PROPERTIES = {
         NOSCALE_RADIUS: 0.3,
         SOLAR_DISTANCE: 149600000,
         DAYS_PER_ORBIT: 365.26,
+        SYNODIC_PERIOD: 1,
         TEXTURE: 'assets/1K/earth_daymap.jpg'
     },
     MARS: {
@@ -42,6 +48,7 @@ const PLANET_PROPERTIES = {
         NOSCALE_RADIUS: 0.25,
         SOLAR_DISTANCE: 227900000,
         DAYS_PER_ORBIT: 686.98,
+        SYNODIC_PERIOD: 1.027,
         TEXTURE: 'assets/1K/mars.jpg'
     },
     JUPITER: {
@@ -49,6 +56,7 @@ const PLANET_PROPERTIES = {
         NOSCALE_RADIUS: 1,
         SOLAR_DISTANCE: 778500000,
         DAYS_PER_ORBIT: 4332.82,
+        SYNODIC_PERIOD: 0.414,
         TEXTURE: 'assets/1K/jupiter.jpg'
     },
     SATURN: {
@@ -56,6 +64,7 @@ const PLANET_PROPERTIES = {
         NOSCALE_RADIUS: 0.9,
         SOLAR_DISTANCE: 1434000000,
         DAYS_PER_ORBIT: 10755.70,
+        SYNODIC_PERIOD: 0.439,
         TEXTURE: 'assets/1K/saturn.jpg'
     },
     URANUS: {
@@ -63,6 +72,7 @@ const PLANET_PROPERTIES = {
         NOSCALE_RADIUS: 0.6,
         SOLAR_DISTANCE: 2871000000,
         DAYS_PER_ORBIT: 30687.15,
+        SYNODIC_PERIOD: -0.718,
         TEXTURE: 'assets/1K/uranus.jpg'
     },
     NEPTUNE: {
@@ -70,6 +80,7 @@ const PLANET_PROPERTIES = {
         NOSCALE_RADIUS: 0.6,
         SOLAR_DISTANCE: 4495000000,
         DAYS_PER_ORBIT: 60190.03,
+        SYNODIC_PERIOD: 0.671,
         TEXTURE: 'assets/1K/neptune.jpg'
     }
 };
@@ -145,14 +156,14 @@ async function main() {
     // Set animation function.
     function animate() {
         requestAnimationFrame(animate);
-        let time = Date.now();
+        let time = Date.now() / (24 * 60 * 60 * 1000);
         for (let planetName of Object.keys(planets)) {
             let planet = planets[planetName];
             if (planetName !== "sun") {
-                planet.mesh.position.set(Math.cos(time * (ORBIT_SPEED / planet.DAYS_PER_ORBIT) + 10) * (SOLAR_DISTANCE_SCALE * planet.SOLAR_DISTANCE), 0, Math.sin(time * (ORBIT_SPEED / planet.DAYS_PER_ORBIT) + 10) * (SOLAR_DISTANCE_SCALE * planet.SOLAR_DISTANCE));
+                planet.mesh.position.set(Math.cos(time * ORBIT_SPEED_MODIFIER / planet.DAYS_PER_ORBIT) * (SOLAR_DISTANCE_SCALE * planet.SOLAR_DISTANCE), 0, Math.sin(time * ORBIT_SPEED_MODIFIER / planet.DAYS_PER_ORBIT) * (SOLAR_DISTANCE_SCALE * planet.SOLAR_DISTANCE));
             }
+            planet.mesh.rotateY(time * SYNODIC_SPEED_MODIFIER / planet.SYNODIC_PERIOD);
         }
-        // sun.rotation.x += 0.01;
         renderer.render(scene, camera);
     }
     animate();
