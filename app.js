@@ -1,8 +1,9 @@
 // const THREE = require("./js/three");
 
 // All distances are in kilometres.
+const BACKGROUND_TEXTURE = "assets/1K/stars_milky_way.jpg"
 const ORBIT_SPEED_MODIFIER = 1 * Math.pow(10, 8);
-const SYNODIC_SPEED_MODIFIER = 1 * Math.pow(10, 2);
+const SYNODIC_SPEED_MODIFIER = 1 * Math.pow(10, 0);
 const SOLAR_DISTANCE_SCALE = 1 / 57910000;
 const PLANET_PROPERTIES = {
     // RADIUS is the real radius (km)
@@ -84,6 +85,25 @@ const PLANET_PROPERTIES = {
         TEXTURE: 'assets/1K/neptune.jpg'
     }
 };
+const LIGHT_PROPERTIES = [
+    {
+        TYPE: "ambient",
+        COLOR: 0xffffff,
+        INTENSITY: 0.2
+    },
+    {
+        TYPE: "point",
+        COLOR: 0xffffff,
+        INTENSITY: 1,
+        POSITION: {
+            X: 0,
+            Y: 0,
+            Z: 0
+        },
+        DISTANCE: 100,
+        RADIUS: 0.00001 // The radius can be extremely small, because the distance is what actually matters.
+    }
+];
 
 async function asyncLoadTexture(textureLoader, url) {
     return new Promise((resolve, reject) => {
@@ -96,8 +116,9 @@ async function asyncLoadTexture(textureLoader, url) {
 }
 
 async function main() {
+    let textureLoader = new THREE.TextureLoader();
     let scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x00000);
+    scene.background = await asyncLoadTexture(textureLoader, BACKGROUND_TEXTURE);
     let camera = new THREE.PerspectiveCamera(20, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.up = new THREE.Vector3(0, 1, 0);
 
@@ -105,6 +126,9 @@ async function main() {
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
     renderer.render(scene, camera);
+
+    // Set the scene background.
+    
 
     // Initialize planets.
     let planets = {};
@@ -117,12 +141,19 @@ async function main() {
 
         // Define the attributes of the planet variable.
         planet.geometry = new THREE.SphereGeometry(planet.NOSCALE_RADIUS, 32, 32);
-        planet.texture = await asyncLoadTexture(new THREE.TextureLoader(), planet.TEXTURE).catch((err) => {
+        planet.texture = await asyncLoadTexture(textureLoader, planet.TEXTURE).catch((err) => {
             console.error(err);
-        });
-        planet.material = new THREE.MeshBasicMaterial({
-            map: planet.texture
-        });
+        })
+        if (planetName == 'SUN') {
+            // Ignore lighting if the planet is the sun.
+            planet.material = new THREE.MeshBasicMaterial({
+                map: planet.texture
+            });
+        } else {
+            planet.material = new THREE.MeshPhongMaterial({
+                map: planet.texture
+            });
+        }
         planet.mesh = new THREE.Mesh(planet.geometry, planet.material);
         planet.mesh.translateX(planet.SOLAR_DISTANCE * SOLAR_DISTANCE_SCALE);
 
@@ -130,7 +161,32 @@ async function main() {
         scene.add(planet.mesh);
     }
 
-    // camera.position.x = PLANET_PROPERTIES.NEPTUNE.SOLAR_DISTANCE * SOLAR_DISTANCE_SCALE / 2;
+    // Initialize lighting.
+    for (let lightProperties of LIGHT_PROPERTIES) {
+        switch (lightProperties.TYPE) {
+            case ("ambient"): {
+                scene.add(new THREE.AmbientLight(lightProperties.COLOR, lightProperties.INTENSITY));
+                break;
+            }
+            case ("point"): {
+                let light = new THREE.PointLight(lightProperties.COLOR, lightProperties.INTENSITY, lightProperties.DISTANCE);
+                light.position.set(lightProperties.POSITION.X, lightProperties.POSITION.Y, lightProperties.POSITION.Z);
+                light.add(new THREE.Mesh(
+                    new THREE.SphereGeometry(lightProperties.RADIUS, 1, 1),
+                    new THREE.MeshBasicMaterial({
+                        color: lightProperties.COLOR
+                    })
+                ));
+                scene.add(light);
+                break;
+            }
+            case ("directional"): {
+                break;
+            }
+        }
+    };
+
+    // Set up the controls.
     window.onkeydown = (evt) => {
         if (evt.keyCode == 39) { // Right
             camera.position.x++;
@@ -147,9 +203,16 @@ async function main() {
         }
     };
 
+    // Set up listener to redraw the scene on resize.
+    window.onresize = () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    };
+
     // Move to the default camera position.
-    camera.position.y = 125;
-    camera.position.z = 125;
+    camera.position.y = 50;
+    camera.position.z = 1;
     camera.position.x = PLANET_PROPERTIES.NEPTUNE.SOLAR_DISTANCE * SOLAR_DISTANCE_SCALE + PLANET_PROPERTIES.NEPTUNE.NOSCALE_RADIUS + 100;
     camera.lookAt(planets.sun.mesh.position);
 
@@ -163,6 +226,7 @@ async function main() {
                 planet.mesh.position.set(Math.cos(time * ORBIT_SPEED_MODIFIER / planet.DAYS_PER_ORBIT) * (SOLAR_DISTANCE_SCALE * planet.SOLAR_DISTANCE), 0, Math.sin(time * ORBIT_SPEED_MODIFIER / planet.DAYS_PER_ORBIT) * (SOLAR_DISTANCE_SCALE * planet.SOLAR_DISTANCE));
             }
             planet.mesh.rotateY(time * SYNODIC_SPEED_MODIFIER / planet.SYNODIC_PERIOD);
+            camera.lookAt(planets.sun.mesh.position);
         }
         renderer.render(scene, camera);
     }
