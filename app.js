@@ -2,6 +2,12 @@
 
 // All distances are in kilometres.
 const BACKGROUND_TEXTURE = "assets/1K/stars_milky_way.jpg"
+const BACKGROUND_TEXTURE_HD = "assets/HD/stars_milky_way.jpg"
+const SKYBOX_ROTATION_PROPERTIES = {
+    X: 2 * Math.pow(10, 8),
+    Y: 2.5 * Math.pow(10, 8),
+    Z: -3 * Math.pow(10, 8)
+};
 const ORBIT_SPEED_MODIFIER = 1 * Math.pow(10, 8);
 const SYNODIC_SPEED_MODIFIER = 1 * Math.pow(10, 0);
 const SOLAR_DISTANCE_SCALE = 1 / 57910000;
@@ -117,18 +123,22 @@ async function asyncLoadTexture(textureLoader, url) {
 
 async function main() {
     let textureLoader = new THREE.TextureLoader();
-    let scene = new THREE.Scene();
-    scene.background = await asyncLoadTexture(textureLoader, BACKGROUND_TEXTURE);
-    let camera = new THREE.PerspectiveCamera(20, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.up = new THREE.Vector3(0, 1, 0);
-
     let renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
+    let camera = new THREE.PerspectiveCamera(20, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.up = new THREE.Vector3(0, 1, 0);
+
+    let scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x000000);
     renderer.render(scene, camera);
 
-    // Set the scene background.
-    
+    // Set up the scene's spherical skybox.
+    let skyboxSphere = new THREE.Mesh(new THREE.SphereGeometry(500, 64, 64), new THREE.MeshBasicMaterial({ 
+        map: await asyncLoadTexture(textureLoader, BACKGROUND_TEXTURE_HD),
+        side: THREE.BackSide
+    }));
+    scene.add(skyboxSphere);
 
     // Initialize planets.
     let planets = {};
@@ -228,6 +238,8 @@ async function main() {
             planet.mesh.rotateY(time * SYNODIC_SPEED_MODIFIER / planet.SYNODIC_PERIOD);
             camera.lookAt(planets.sun.mesh.position);
         }
+        skyboxSphere.rotateX(time / SKYBOX_ROTATION_PROPERTIES.X);
+        skyboxSphere.rotateZ(time / SKYBOX_ROTATION_PROPERTIES.Z);
         renderer.render(scene, camera);
     }
     animate();
