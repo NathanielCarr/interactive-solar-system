@@ -95,6 +95,24 @@ async function asyncLoadTexture(textureLoader, url) {
     });
 }
 
+var moveForward = false;
+
+var moveBackward = false;
+
+var moveLeft = false;
+
+var moveRight = false;
+
+var canJump = false;
+
+
+
+var prevTime = performance.now();
+
+var velocity = new THREE.Vector3();
+
+var direction = new THREE.Vector3();
+
 async function main() {
     let scene = new THREE.Scene();
     scene.background = new THREE.Color(0x00000);
@@ -130,22 +148,76 @@ async function main() {
         scene.add(planet.mesh);
     }
 
-    // camera.position.x = PLANET_PROPERTIES.NEPTUNE.SOLAR_DISTANCE * SOLAR_DISTANCE_SCALE / 2;
-    window.onkeydown = (evt) => {
-        if (evt.keyCode == 39) { // Right
-            camera.position.x++;
-            renderer.render(scene, camera);
-        } else if (evt.keyCode == 37) { // Left
-            camera.position.x--;
-            renderer.render(scene, camera);
-        } else if (evt.keyCode == 38) { // Up
-            camera.position.y++;
-            renderer.render(scene, camera);
-        } else if (evt.keyCode == 40) { // Down
-            camera.position.y--;
-            renderer.render(scene, camera);
+    //Setup camera
+    controls = new THREE.PointerLockControls(camera, renderer.domElement);
+    var blocker = document.getElementById('blocker');
+
+    var instructions = document.getElementById('instructions');
+
+    instructions.addEventListener('click', function () {
+        controls.lock();
+    }, false);
+    controls.addEventListener('lock', function () {
+        instructions.style.display = 'none';
+        blocker.style.display = 'none';
+    });
+
+    controls.addEventListener('unlock', function () {
+        blocker.style.display = 'block';
+        instructions.style.display = '';
+    });
+
+    scene.add(controls.getObject());
+
+    var onKeyDown = function (event) {
+
+        switch (event.keyCode) {
+            case 38: // up
+            case 87: // w
+                moveForward = true;
+                break;
+            case 37: // left
+            case 65: // a
+                moveLeft = true;
+                break;
+            case 40: // down
+            case 83: // s
+                moveBackward = true;
+                break;
+            case 39: // right
+            case 68: // d
+                moveRight = true;
+                break;
         }
     };
+
+
+
+    var onKeyUp = function (event) {
+        switch (event.keyCode) {
+            case 38: // up
+            case 87: // w
+                moveForward = false;
+                break;
+            case 37: // left
+            case 65: // a
+                moveLeft = false;
+                break;
+            case 40: // down
+            case 83: // s
+                moveBackward = false;
+                break;
+            case 39: // right
+            case 68: // d
+                moveRight = false;
+                break;
+        }
+
+    };
+
+    document.addEventListener('keydown', onKeyDown, false);
+
+    document.addEventListener('keyup', onKeyUp, false);
 
     // Move to the default camera position.
     camera.position.y = 125;
@@ -164,6 +236,34 @@ async function main() {
             }
             planet.mesh.rotateY(time * SYNODIC_SPEED_MODIFIER / planet.SYNODIC_PERIOD);
         }
+        if ( controls.isLocked === true ) {
+            time = performance.now();
+
+            var delta = ( time - prevTime ) / 1000;
+
+            velocity.x -= velocity.x * 10.0 * delta;
+
+            velocity.z -= velocity.z * 10.0 * delta;
+
+            direction.z = Number( moveForward ) - Number( moveBackward );
+
+            direction.x = Number( moveRight ) - Number( moveLeft );
+
+            direction.normalize(); // this ensures consistent movements in all directions
+
+
+
+            if ( moveForward || moveBackward ) velocity.z -= direction.z * 400.0 * delta;
+
+            if ( moveLeft || moveRight ) velocity.x -= direction.x * 400.0 * delta;
+
+            controls.moveRight( - velocity.x * delta );
+
+            controls.moveForward( - velocity.z * delta );
+
+            prevTime = time;
+        }
+
         renderer.render(scene, camera);
     }
     animate();
