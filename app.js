@@ -1,115 +1,142 @@
-// const THREE = require("./js/three");
-
 // All distances are in kilometres.
-const BACKGROUND_TEXTURE = "assets/1K/stars_milky_way.jpg"
-const BACKGROUND_TEXTURE_HD = "assets/HD/stars_milky_way.jpg"
-const SKYBOX_ROTATION_PROPERTIES = {
-    X: 2 * Math.pow(10, 8),
-    Y: 2.5 * Math.pow(10, 8),
-    Z: -3 * Math.pow(10, 8)
-};
-const ORBIT_SPEED_MODIFIER = 1 * Math.pow(10, 8);
-const SYNODIC_SPEED_MODIFIER = 1 * Math.pow(10, 0);
-const SOLAR_DISTANCE_SCALE = 1 / 57910000;
-const PLANET_PROPERTIES = {
-    // RADIUS is the real radius (km)
-    // NOSCALE_RADIUS is a dramatized radius.
-    // SOLAR_DISTANCE is distance from the sun (km).
-    // DAYS_PER_ORBIT is the number of earth days per one orbit around the sun.
-    // SYNODIC_PERIOD is hte number of earth days per one rotation around the planets centre.
-    // TEXTURE is the location where the texture is found.
-    SUN: {
-        RADIUS: 695508,
-        NOSCALE_RADIUS: 1.0,
-        SOLAR_DISTANCE: 0,
-        DAYS_PER_ORBIT: 0,
-        SYNODIC_PERIOD: 26.6,
-        TEXTURE: 'assets/1K/sun.jpg'
-    },
-    MERCURY: {
-        RADIUS: 2440,
-        NOSCALE_RADIUS: 0.15,
-        SOLAR_DISTANCE: 57910000 * 1.5, // INCORRECT
-        DAYS_PER_ORBIT: 87.97,
-        SYNODIC_PERIOD: 175.940,
-        TEXTURE: 'assets/1K/mercury.jpg'
-    },
-    VENUS: {
-        RADIUS: 6052,
-        NOSCALE_RADIUS: 0.3,
-        SOLAR_DISTANCE: 108200000,
-        DAYS_PER_ORBIT: 224.70,
-        SYNODIC_PERIOD: -116.750,
-        TEXTURE: 'assets/1K/venus_surface.jpg'
-    },
-    EARTH: {
-        RADIUS: 6378,
-        NOSCALE_RADIUS: 0.3,
-        SOLAR_DISTANCE: 149600000,
-        DAYS_PER_ORBIT: 365.26,
-        SYNODIC_PERIOD: 1,
-        TEXTURE: 'assets/1K/earth_daymap.jpg'
-    },
-    MARS: {
-        RADIUS: 3397,
-        NOSCALE_RADIUS: 0.25,
-        SOLAR_DISTANCE: 227900000,
-        DAYS_PER_ORBIT: 686.98,
-        SYNODIC_PERIOD: 1.027,
-        TEXTURE: 'assets/1K/mars.jpg'
-    },
-    JUPITER: {
-        RADIUS: 71492,
-        NOSCALE_RADIUS: 1,
-        SOLAR_DISTANCE: 778500000,
-        DAYS_PER_ORBIT: 4332.82,
-        SYNODIC_PERIOD: 0.414,
-        TEXTURE: 'assets/1K/jupiter.jpg'
-    },
-    SATURN: {
-        RADIUS: 60268,
-        NOSCALE_RADIUS: 0.9,
-        SOLAR_DISTANCE: 1434000000,
-        DAYS_PER_ORBIT: 10755.70,
-        SYNODIC_PERIOD: 0.439,
-        TEXTURE: 'assets/1K/saturn.jpg'
-    },
-    URANUS: {
-        RADIUS: 25559,
-        NOSCALE_RADIUS: 0.6,
-        SOLAR_DISTANCE: 2871000000,
-        DAYS_PER_ORBIT: 30687.15,
-        SYNODIC_PERIOD: -0.718,
-        TEXTURE: 'assets/1K/uranus.jpg'
-    },
-    NEPTUNE: {
-        RADIUS: 24766,
-        NOSCALE_RADIUS: 0.6,
-        SOLAR_DISTANCE: 4495000000,
-        DAYS_PER_ORBIT: 60190.03,
-        SYNODIC_PERIOD: 0.671,
-        TEXTURE: 'assets/1K/neptune.jpg'
-    }
-};
-const LIGHT_PROPERTIES = [
-    {
-        TYPE: "ambient",
-        COLOR: 0xffffff,
-        INTENSITY: 0.2
-    },
-    {
-        TYPE: "point",
-        COLOR: 0xffffff,
-        INTENSITY: 1,
-        POSITION: {
-            X: 0,
-            Y: 0,
-            Z: 0
+const DAYS_PER_MS = 0.1;
+const SYNODIC_SPEED_MODIFIER = 1 * Math.pow(10, 1);
+
+let entities = {
+    skybox: {
+        type: "skybox",
+        rotationProperties: {
+            x: 2 * Math.pow(10, 16),
+            y: 2 * Math.pow(10, 16),
+            z: 2 * Math.pow(10, 16)
         },
-        DISTANCE: 100,
-        RADIUS: 0.00001 // The radius can be extremely small, because the distance is what actually matters.
+        texture: "assets/1K/stars_milky_way.jpg",
+        textureHD: "assets/HD/stars_milky_way.jpg",
+        color: "0x010102"
+    },
+    sun: {
+        type: "sun",
+        position: {
+            x: 0,
+            y: 0,
+            z: 0
+        },
+        radius: 1,
+        texture: "assets/1K/sun.jpg",
+        textureHD: "assets/HD/sun.jpg",
+        color: "0xF18828",
+        daysPerOrbit: 0,
+        synodicPeriod: 26.6
+    },
+    mercury: {
+        type: "planet",
+        solarDistance: 1.5,
+        radius: 0.15,
+        texture: "assets/1K/mercury.jpg",
+        textureHD: "assets/HD/mercury.jpg",
+        color: "0x848383",
+        orbits: "sun",
+        daysPerOrbit: 87.97,
+        synodicPeriod: 175.940
+    },
+    venus: {
+        type: "planet",
+        solarDistance: 1.8684,
+        radius: 0.3,
+        texture: "assets/1K/venus_surface.jpg",
+        textureHD: "assets/HD/venus_surface.jpg",
+        color: "0xC77328",
+        orbits: "sun",
+        daysPerOrbit: 224.70,
+        synodicPeriod: -116.750
+    },
+    earth: {
+        type: "planet",
+        solarDistance: 2.5833,
+        radius: 0.3,
+        texture: "assets/1K/earth_daymap.jpg",
+        textureHD: "assets/HD/earth_daymap.jpg",
+        color: "0x3D567F",
+        orbits: "sun",
+        daysPerOrbit: 365.26,
+        synodicPeriod: 1
+    },
+    mars: {
+        type: "planet",
+        solarDistance: 3.9354,
+        radius: 0.25,
+        texture: "assets/1K/mars.jpg",
+        textureHD: "assets/HD/mars.jpg",
+        color: "0xB76247",
+        orbits: "sun",
+        daysPerOrbit: 686.98,
+        synodicPeriod: 1.027
+    },
+    jupiter: {
+        type: "planet",
+        solarDistance: 13.4433,
+        radius: 0.9,
+        texture: "assets/1K/jupiter.jpg",
+        textureHD: "assets/HD/jupiter.jpg",
+        color: "0xA6A095",
+        orbits: "sun",
+        daysPerOrbit: 4332.82,
+        synodicPeriod: 0.414
+    },
+    saturn: {
+        type: "planet",
+        solarDistance: 24.7626,
+        radius: 0.8,
+        texture: "assets/1K/saturn.jpg",
+        textureHD: "assets/HD/saturn.jpg",
+        color: "0xCFC0A2",
+        orbits: "sun",
+        daysPerOrbit: 10755.70,
+        synodicPeriod: 0.439
+    },
+    uranus: {
+        type: "planet",
+        solarDistance: 49.5769,
+        radius: 0.6,
+        texture: "assets/1K/uranus.jpg",
+        textureHD: "assets/HD/uranus.jpg",
+        color: "0x9BCBD2",
+        orbits: "sun",
+        daysPerOrbit: 30687.15,
+        synodicPeriod: -0.718
+    },
+    neptune: {
+        type: "planet",
+        solarDistance: 77.6204,
+        radius: 0.6,
+        texture: "assets/1K/neptune.jpg",
+        textureHD: "assets/HD/neptune.jpg",
+        color: "0x364FA8",
+        daysPerOrbit: 60190.03,
+        synodicPeriod: 0.671
+    },
+    starLight: {
+        type: "light",
+        lightType: "ambient",
+        color: "0xFFFFFF",
+        intensity: 0.20
+    },
+    sunLight: {
+        type: "light",
+        lightType: "point",
+        color: "0xFFFFFF",
+        position: {
+            x: 0,
+            y: 0,
+            z: 0
+        },
+        distance: 100,
+        intensity: 1,
+        radius: 0.0001,
+        covered: true
     }
-];
+};
+let entitiesArr = Object.values(entities);
 
 async function asyncLoadTexture(textureLoader, url) {
     return new Promise((resolve, reject) => {
@@ -121,94 +148,161 @@ async function asyncLoadTexture(textureLoader, url) {
     });
 }
 
+/**
+ * Ref: https://stackoverflow.com/questions/11060734/how-to-rotate-a-3d-object-on-axis-three-js
+ */
+function rotateAboutPivot(subject, pivot, axis, radians) {
+    // Move the subject to the origin.
+    subject.position.set(
+        subject.position.x - pivot.position.x,
+        subject.position.y - pivot.position.y,
+        subject.position.z - pivot.position.z
+    );
+
+    // Apply the rotation.
+    subject.position.applyAxisAngle(axis.normalize(), radians);
+
+    // Move the subject back to its position.
+    subject.position.set(
+        subject.position.x + pivot.position.x,
+        subject.position.y + pivot.position.y,
+        subject.position.z + pivot.position.z
+    );
+}   
+
+async function renderentitiesArr(scene, textureLoader) {
+    for (let entity of entitiesArr) {
+        switch (entity.type) {
+            case ("skybox"): {
+                let geometry = new THREE.SphereGeometry(500, 64, 64)
+                let texture = await asyncLoadTexture(textureLoader, entity.textureHD)
+                    .catch((err) => {
+                        console.error(err);
+                        return undefined;
+                    });
+                let material = texture === undefined
+                    ? new THREE.MeshBasicMaterial({
+                        color: parseInt(entity.color)
+                    })
+                    : new THREE.MeshBasicMaterial({
+                        map: texture,
+                        side: THREE.BackSide
+                    });
+                entity.mesh = new THREE.Mesh(
+                    geometry,
+                    material
+                )
+                entity.mesh.position.set(0, 0, 0);
+                scene.add(entity.mesh);
+                break;
+            }
+            case ("sun"): {
+                let geometry = new THREE.SphereGeometry(entity.radius, 32, 32);
+                let texture = await asyncLoadTexture(textureLoader, entity.texture)
+                    .catch((err) => {
+                        console.error(err);
+                        return undefined;
+                    });
+                let material = texture === undefined
+                    ? new THREE.MeshBasicMaterial({
+                        color: parseInt(entity.color)
+                    })
+                    : new THREE.MeshBasicMaterial({
+                        map: texture
+                    });
+                entity.mesh = new THREE.Mesh(
+                    geometry,
+                    material
+                )
+                entity.mesh.position.set(0, 0, 0);
+                scene.add(entity.mesh);
+                break;
+            }
+            case ("planet"): {
+                let geometry = new THREE.SphereGeometry(entity.radius, 32, 32);
+                let texture = await asyncLoadTexture(textureLoader, entity.texture)
+                    .catch((err) => {
+                        console.error(err);
+                        return undefined;
+                    });
+                let material = texture === undefined
+                    ? new THREE.MeshBasicMaterial({
+                        color: parseInt(entity.color)
+                    })
+                    : new THREE.MeshPhongMaterial({
+                        map: texture
+                    });
+                entity.mesh = new THREE.Mesh(
+                    geometry,
+                    material
+                )
+                entity.mesh.position.set(entity.solarDistance, 0, 0);
+                scene.add(entity.mesh);
+                break;
+            }
+            case ("light"): {
+                switch (entity.lightType) {
+                    case ("ambient"): {
+                        entity.light = new THREE.AmbientLight(parseInt(entity.color), entity.intensity);
+                        scene.add(entity.light);
+                        break;
+                    }
+                    case ("point"): {
+                        entity.light = new THREE.PointLight(parseInt(entity.color), entity.intensity, entity.distance);
+                        entity.light.position.set(entity.position.x, entity.position.y, entity.position.z);
+                        let geometry = entity.covered
+                            ? new THREE.SphereGeometry(entity.radius, 8, 8)
+                            : new THREE.SphereGeometry(entity.radius, 32, 32);
+                        let mesh = new THREE.MeshBasicMaterial({
+                            color: parseInt(entity.color)
+                        })
+                        entity.light.add(new THREE.Mesh(geometry, mesh));
+                        scene.add(entity.light);
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+    }
+}
+
 async function main() {
+    // Set up the textureLoader.
     let textureLoader = new THREE.TextureLoader();
+
+    // Set up the renderer.
     let renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
+
+    // Set up the camera.
     let camera = new THREE.PerspectiveCamera(20, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.set(0, 0, 0);
     camera.up = new THREE.Vector3(0, 1, 0);
 
+    // Set up the scene to show darkness until the entitiesArr are rendered.
     let scene = new THREE.Scene();
     scene.background = new THREE.Color(0x000000);
     renderer.render(scene, camera);
 
-    // Set up the scene's spherical skybox.
-    let skyboxSphere = new THREE.Mesh(new THREE.SphereGeometry(500, 64, 64), new THREE.MeshBasicMaterial({ 
-        map: await asyncLoadTexture(textureLoader, BACKGROUND_TEXTURE_HD),
-        side: THREE.BackSide
-    }));
-    scene.add(skyboxSphere);
-
-    // Initialize planets.
-    let planets = {};
-    for (let planetName of Object.keys(PLANET_PROPERTIES)) {
-
-        // Create the planet variable.
-        planets[planetName.toLowerCase()] = {};
-        let planet = planets[planetName.toLowerCase()];
-        planet = Object.assign(planet, PLANET_PROPERTIES[planetName]);
-
-        // Define the attributes of the planet variable.
-        planet.geometry = new THREE.SphereGeometry(planet.NOSCALE_RADIUS, 32, 32);
-        planet.texture = await asyncLoadTexture(textureLoader, planet.TEXTURE).catch((err) => {
-            console.error(err);
-        })
-        if (planetName == 'SUN') {
-            // Ignore lighting if the planet is the sun.
-            planet.material = new THREE.MeshBasicMaterial({
-                map: planet.texture
-            });
-        } else {
-            planet.material = new THREE.MeshPhongMaterial({
-                map: planet.texture
-            });
-        }
-        planet.mesh = new THREE.Mesh(planet.geometry, planet.material);
-        planet.mesh.translateX(planet.SOLAR_DISTANCE * SOLAR_DISTANCE_SCALE);
-
-        // Add the planet.
-        scene.add(planet.mesh);
-    }
-
-    // Initialize lighting.
-    for (let lightProperties of LIGHT_PROPERTIES) {
-        switch (lightProperties.TYPE) {
-            case ("ambient"): {
-                scene.add(new THREE.AmbientLight(lightProperties.COLOR, lightProperties.INTENSITY));
-                break;
-            }
-            case ("point"): {
-                let light = new THREE.PointLight(lightProperties.COLOR, lightProperties.INTENSITY, lightProperties.DISTANCE);
-                light.position.set(lightProperties.POSITION.X, lightProperties.POSITION.Y, lightProperties.POSITION.Z);
-                light.add(new THREE.Mesh(
-                    new THREE.SphereGeometry(lightProperties.RADIUS, 1, 1),
-                    new THREE.MeshBasicMaterial({
-                        color: lightProperties.COLOR
-                    })
-                ));
-                scene.add(light);
-                break;
-            }
-            case ("directional"): {
-                break;
-            }
-        }
-    };
+    // Render the entitiesArr.
+    await renderentitiesArr(scene, textureLoader);
+    renderer.render(scene, camera);
 
     // Set up the controls.
     window.onkeydown = (evt) => {
         if (evt.keyCode == 39) { // Right
-            camera.position.x++;
+            camera.translateX(1);
             renderer.render(scene, camera);
         } else if (evt.keyCode == 37) { // Left
-            camera.position.x--;
+            camera.translateX(-1);
             renderer.render(scene, camera);
         } else if (evt.keyCode == 38) { // Up
-            camera.position.y++;
+            camera.translateY(1);
             renderer.render(scene, camera);
         } else if (evt.keyCode == 40) { // Down
-            camera.position.y--;
+            camera.translateY(-1);
             renderer.render(scene, camera);
         }
     };
@@ -218,28 +312,45 @@ async function main() {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.render(scene, camera);
     };
 
-    // Move to the default camera position.
-    camera.position.y = 50;
-    camera.position.z = 1;
-    camera.position.x = PLANET_PROPERTIES.NEPTUNE.SOLAR_DISTANCE * SOLAR_DISTANCE_SCALE + PLANET_PROPERTIES.NEPTUNE.NOSCALE_RADIUS + 100;
-    camera.lookAt(planets.sun.mesh.position);
+    // Move to a position that will get every entity in view.
+    let furthestPlanet = entitiesArr
+        .filter((e) => { return e.type === "planet"; })
+        .sort((a, b) => { return b.solarDistance - a.solarDistance; })[0];
+    camera.position.set(furthestPlanet.solarDistance * 2, furthestPlanet.solarDistance, furthestPlanet.solarDistance * 2);
 
-    // Set animation function.
+    // Look at the sun.
+    camera.lookAt(entities.sun.mesh.position);
+    renderer.render(scene, camera);
+
+    // Start animating.
+    let lastTick = Date.now();
     function animate() {
         requestAnimationFrame(animate);
-        let time = Date.now() / (24 * 60 * 60 * 1000);
-        for (let planetName of Object.keys(planets)) {
-            let planet = planets[planetName];
-            if (planetName !== "sun") {
-                planet.mesh.position.set(Math.cos(time * ORBIT_SPEED_MODIFIER / planet.DAYS_PER_ORBIT) * (SOLAR_DISTANCE_SCALE * planet.SOLAR_DISTANCE), 0, Math.sin(time * ORBIT_SPEED_MODIFIER / planet.DAYS_PER_ORBIT) * (SOLAR_DISTANCE_SCALE * planet.SOLAR_DISTANCE));
+
+        // Animate the entitiesArr.
+        let time = Date.now();
+        let daysPassed = (time - lastTick) * DAYS_PER_MS;
+        lastTick = time;
+        for (let entity of entitiesArr) {
+            if (["planet", "skybox", "sun"].includes(entity.type)) {
+                if (entity.orbits !== undefined) {
+                    rotateAboutPivot(entity.mesh, entities[entity.orbits].mesh, new THREE.Vector3(0,1,0), 2 * Math.PI * daysPassed * (1 / entity.daysPerOrbit));
+                }
+                if (entity.type !== "skybox") {
+                    entity.mesh.rotateY(daysPassed * SYNODIC_SPEED_MODIFIER / entity.synodicPeriod);
+                } else {
+                    entity.mesh.rotateX(time / entity.rotationProperties.x);
+                    entity.mesh.rotateY(time / entity.rotationProperties.y);
+                    entity.mesh.rotateZ(time / entity.rotationProperties.z);
+                }
             }
-            planet.mesh.rotateY(time * SYNODIC_SPEED_MODIFIER / planet.SYNODIC_PERIOD);
-            camera.lookAt(planets.sun.mesh.position);
         }
-        skyboxSphere.rotateX(time / SKYBOX_ROTATION_PROPERTIES.X);
-        skyboxSphere.rotateZ(time / SKYBOX_ROTATION_PROPERTIES.Z);
+
+        // Look at the sun.
+        camera.lookAt(entities.sun.mesh.position);
         renderer.render(scene, camera);
     }
     animate();
