@@ -85,6 +85,8 @@ const PLANET_PROPERTIES = {
     }
 };
 
+const CAMERA_START_POS = PLANET_PROPERTIES.NEPTUNE.SOLAR_DISTANCE * SOLAR_DISTANCE_SCALE + PLANET_PROPERTIES.NEPTUNE.NOSCALE_RADIUS + 100;
+
 async function asyncLoadTexture(textureLoader, url) {
     return new Promise((resolve, reject) => {
         textureLoader.load(url, (texture) => {
@@ -95,6 +97,8 @@ async function asyncLoadTexture(textureLoader, url) {
     });
 }
 
+var orbiting = false;
+
 var moveForward = false;
 
 var moveBackward = false;
@@ -103,21 +107,25 @@ var moveLeft = false;
 
 var moveRight = false;
 
-var canJump = false;
-
-
-
 var prevTime = performance.now();
 
 var velocity = new THREE.Vector3();
 
 var direction = new THREE.Vector3();
 
+function resetCam(camera, target){
+    camera.position.y = 125;
+    camera.position.z = 125;
+    camera.position.x = CAMERA_START_POS;
+    camera.lookAt(target);
+}
+
 async function main() {
     let scene = new THREE.Scene();
     scene.background = new THREE.Color(0x00000);
     let camera = new THREE.PerspectiveCamera(20, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.up = new THREE.Vector3(0, 1, 0);
+    camera = camera;
 
     let renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -149,27 +157,37 @@ async function main() {
     }
 
     //Setup camera
-    controls = new THREE.PointerLockControls(camera, renderer.domElement);
-    var blocker = document.getElementById('blocker');
+    let orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
+    let controls = new THREE.PointerLockControls(camera, renderer.domElement);
+    let blocker = document.getElementById('blocker');
 
-    var instructions = document.getElementById('instructions');
+    let instructions = document.getElementById('instructions');
+
+    let lockedCam = true;
 
     instructions.addEventListener('click', function () {
-        controls.lock();
+        if(lockedCam){
+            controls.lock();
+        }
     }, false);
+
     controls.addEventListener('lock', function () {
-        instructions.style.display = 'none';
-        blocker.style.display = 'none';
+        if(lockedCam){
+            instructions.style.display = 'none';
+            blocker.style.display = 'none';
+        }
     });
 
     controls.addEventListener('unlock', function () {
-        blocker.style.display = 'block';
-        instructions.style.display = '';
+        if(lockedCam){
+            blocker.style.display = 'block';
+            instructions.style.display = '';
+        }
     });
 
     scene.add(controls.getObject());
 
-    var onKeyDown = function (event) {
+    let onKeyDown = function (event) {
 
         switch (event.keyCode) {
             case 38: // up
@@ -188,12 +206,23 @@ async function main() {
             case 68: // d
                 moveRight = true;
                 break;
+            case 49:
+                controls.unlock();
+                lockedCam = false;
+                moveForward, moveBackward, moveLeft, moveRight = false;
+                orbiting = true;
+                break;
+            case 50:
+                controls.lock();
+                lockedCam = true;
+                resetCam(camera, planets.sun.mesh.position);
+                moveForward, moveBackward, moveLeft, moveRight = false;
+                orbiting = false;
+                break;
         }
     };
 
-
-
-    var onKeyUp = function (event) {
+    let onKeyUp = function (event) {
         switch (event.keyCode) {
             case 38: // up
             case 87: // w
@@ -220,10 +249,7 @@ async function main() {
     document.addEventListener('keyup', onKeyUp, false);
 
     // Move to the default camera position.
-    camera.position.y = 125;
-    camera.position.z = 125;
-    camera.position.x = PLANET_PROPERTIES.NEPTUNE.SOLAR_DISTANCE * SOLAR_DISTANCE_SCALE + PLANET_PROPERTIES.NEPTUNE.NOSCALE_RADIUS + 100;
-    camera.lookAt(planets.sun.mesh.position);
+    resetCam(camera, planets.sun.mesh.position);
 
     // Set animation function.
     function animate() {
@@ -236,16 +262,22 @@ async function main() {
             }
             planet.mesh.rotateY(time * SYNODIC_SPEED_MODIFIER / planet.SYNODIC_PERIOD);
         }
-        if ( controls.isLocked === true ) {
+        if ( controls.isLocked === true  && !orbiting) {
             time = performance.now();
 
             var delta = ( time - prevTime ) / 1000;
 
             velocity.x -= velocity.x * 10.0 * delta;
+            
+            velocity.y -= velocity.y * 10.0 * delta;
 
             velocity.z -= velocity.z * 10.0 * delta;
+            
+            camera.getWorldDirection(direction);
 
             direction.z = Number( moveForward ) - Number( moveBackward );
+
+            //direction.y = Number(moveForward) - Number(moveBackward);
 
             direction.x = Number( moveRight ) - Number( moveLeft );
 
@@ -253,7 +285,13 @@ async function main() {
 
 
 
-            if ( moveForward || moveBackward ) velocity.z -= direction.z * 400.0 * delta;
+            if ( moveForward ){
+                velocity.y -= direction.y * 400.0 * delta;
+                velocity.z -= direction.z * 400.0 * delta;
+            }else if (moveBackward){
+                velocity.y += direction.y * 400.0 * delta;
+                velocity.z -= direction.z * 400.0 * delta;
+            }
 
             if ( moveLeft || moveRight ) velocity.x -= direction.x * 400.0 * delta;
 
@@ -261,7 +299,12 @@ async function main() {
 
             controls.moveForward( - velocity.z * delta );
 
+            controls.getObject().position.y -= ( velocity.y * delta );
+
             prevTime = time;
+        }
+        else if(orbiting){
+            orbitControls.update();
         }
 
         renderer.render(scene, camera);
