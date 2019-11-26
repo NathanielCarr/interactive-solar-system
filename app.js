@@ -1,8 +1,8 @@
 // All distances are in kilometres.
 const DAYS_PER_MS = 0.1;
 const SYNODIC_SPEED_MODIFIER = 1 * Math.pow(10, 0.25);
-var objects = [];
-var intersects = [];
+let objects = [];
+let intersects = [];
 var target;
 let entities = {
     skybox: {
@@ -164,21 +164,21 @@ async function asyncLoadTexture(textureLoader, url) {
     });
 }
 
-var orbiting = false;
+let orbiting = false;
 
-var moveForward = false;
+let moveForward = false;
 
-var moveBackward = false;
+let moveBackward = false;
 
-var moveLeft = false;
+let moveLeft = false;
 
-var moveRight = false;
+let moveRight = false;
 
-var prevTime = performance.now();
+let prevTime = performance.now();
 
-var velocity = new THREE.Vector3();
+let velocity = new THREE.Vector3();
 
-var direction = new THREE.Vector3();
+let direction = new THREE.Vector3();
 
 function resetCam(camera, target) {
     camera.position.y = 125;
@@ -338,23 +338,23 @@ async function main() {
 
 
     // We will use 2D canvas element to render our HUD.  
-    var hudCanvas = document.createElement('canvas');
+    let hudCanvas = document.createElement('canvas');
     hudCanvas.width = window.innerWidth;
     hudCanvas.height = window.innerHeight;
-    var hudBitmap = hudCanvas.getContext('2d');
+    let hudBitmap = hudCanvas.getContext('2d');
     hudBitmap.font = "Normal 50px Courier New";
     hudBitmap.textAlign = 'center';
     hudBitmap.fillStyle = "rgba(245,245,245,0.75)";
     hudBitmap.fillText('SUN', window.innerWidth / 2, window.innerHeight / 1.05);
-    var cameraHUD = new THREE.OrthographicCamera(-window.innerWidth / 2, window.innerWidth / 2, window.innerHeight / 2, -window.innerHeight / 2, 0, 30);
+    let cameraHUD = new THREE.OrthographicCamera(-window.innerWidth / 2, window.innerWidth / 2, window.innerHeight / 2, -window.innerHeight / 2, 0, 30);
     hudscene = new THREE.Scene();
     //create meterial by usuing the 2d graphics we just renderd
-    var hudTexture = new THREE.Texture(hudCanvas)
+    let hudTexture = new THREE.Texture(hudCanvas)
     hudTexture.needsUpdate = true;
-    var material = new THREE.MeshBasicMaterial({ map: hudTexture });
+    let material = new THREE.MeshBasicMaterial({ map: hudTexture });
     material.transparent = true;
-    var planeGeometry = new THREE.PlaneGeometry(window.innerWidth, window.innerHeight);
-    var plane = new THREE.Mesh(planeGeometry, material);
+    let planeGeometry = new THREE.PlaneGeometry(window.innerWidth, window.innerHeight);
+    let plane = new THREE.Mesh(planeGeometry, material);
     hudscene.add(plane);
 
     // Render the entitiesArr.
@@ -456,27 +456,28 @@ async function main() {
         }
     } 
 
-    // window.onclick = (evt) => {
-    //     console.log("click");
-    //     //console.log(entities);
-    //     //objects=entities;
-    //     console.log(objects);
-    //     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-    //     mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
-    //     //find the intererections
-    //     raycaster.setFromCamera(mouse, camera);
-    //     let intersectables = entitiesArr
-    //         .filter((entity) => {
-    //             return entity.clickable;
-    //         })
-    //         .map((entity) => { return entity.mesh; });
-    //     intersects = raycaster.intersectObjects(intersectables, false);
-    //     console.log(intersects);
-    //     if (intersects.length != 0) {
-    //         target = intersects[0].point;
-    //     }
+    window.onclick = (evt) => {
+        console.log("click");
+        //console.log(entities);
+        //objects=entities;
+        console.log(objects);
+        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+        //find the intererections
+        raycaster.setFromCamera(mouse, camera);
+        let intersectables = entitiesArr
+            .filter((entity) => {
+                return entity.clickable;
+            })
+            .map((entity) => { return entity.mesh; });
+        intersects = raycaster.intersectObjects(intersectables, false);
+        console.log(intersects);
+        if (intersects.length != 0) {
+            target = intersects[0];
+            console.log("Point: " + target);
+        }
 
-    // };
+    };
 
     document.addEventListener('keydown', onKeyDown, false);
 
@@ -529,7 +530,7 @@ async function main() {
         if (controls.isLocked === true && !orbiting) {
             time = performance.now();
 
-            var delta = (time - prevTime) / 1000;
+            let delta = (time - prevTime) / 1000;
 
             velocity.x -= velocity.x * 10.0 * delta;
 
@@ -568,18 +569,17 @@ async function main() {
             prevTime = time;
         }
         else if (orbiting) {
+            // Look at the currently selected target
+            if (intersects.length != 0) {
+                target = intersects[0].point;
+                //console.log(target);
+            }
+            //camera.lookAt(target);
+            orbitControls.target = target;
+            orbitControls.position = target.point - orbitControls.position;
             orbitControls.update();
         }
 
-
-
-
-        // Look at the currently selected target
-        if (intersects.length != 0) {
-            target = intersects[0].point;
-            //console.log(target);
-        }
-        //camera.lookAt(target);
         renderer.render(scene, camera);
         renderer.render(hudscene, cameraHUD);
     }
