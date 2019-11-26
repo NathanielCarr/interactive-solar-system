@@ -1,8 +1,8 @@
 // All distances are in kilometres.
 const DAYS_PER_MS = 0.1;
-const SYNODIC_SPEED_MODIFIER = 100 * Math.pow(10, 1);
-var objects=[];
-var intersects=[];
+const SYNODIC_SPEED_MODIFIER = 1 * Math.pow(10, 0.25);
+var objects = [];
+var intersects = [];
 var target;
 let entities = {
     skybox: {
@@ -14,7 +14,8 @@ let entities = {
         },
         texture: "assets/1K/stars_milky_way.jpg",
         textureHD: "assets/HD/stars_milky_way.jpg",
-        color: "0x010102"
+        color: "0x010102",
+        clickable: false
     },
     sun: {
         type: "sun",
@@ -28,7 +29,8 @@ let entities = {
         textureHD: "assets/HD/sun.jpg",
         color: "0xF18828",
         daysPerOrbit: 0,
-        synodicPeriod: 26.6
+        synodicPeriod: 26.6,
+        clickable: true
     },
     mercury: {
         type: "planet",
@@ -39,7 +41,8 @@ let entities = {
         color: "0x848383",
         orbits: "sun",
         daysPerOrbit: 87.97,
-        synodicPeriod: 175.940
+        synodicPeriod: 175.940,
+        clickable: true
     },
     venus: {
         type: "planet",
@@ -50,7 +53,8 @@ let entities = {
         color: "0xC77328",
         orbits: "sun",
         daysPerOrbit: 224.70,
-        synodicPeriod: -116.750
+        synodicPeriod: -116.750,
+        clickable: true
     },
     earth: {
         type: "planet",
@@ -61,7 +65,8 @@ let entities = {
         color: "0x3D567F",
         orbits: "sun",
         daysPerOrbit: 365.26,
-        synodicPeriod: 1
+        synodicPeriod: 1,
+        clickable: true
     },
     mars: {
         type: "planet",
@@ -72,7 +77,8 @@ let entities = {
         color: "0xB76247",
         orbits: "sun",
         daysPerOrbit: 686.98,
-        synodicPeriod: 1.027
+        synodicPeriod: 1.027,
+        clickable: true
     },
     jupiter: {
         type: "planet",
@@ -83,7 +89,8 @@ let entities = {
         color: "0xA6A095",
         orbits: "sun",
         daysPerOrbit: 4332.82,
-        synodicPeriod: 0.414
+        synodicPeriod: 0.414,
+        clickable: true
     },
     saturn: {
         type: "planet",
@@ -94,7 +101,8 @@ let entities = {
         color: "0xCFC0A2",
         orbits: "sun",
         daysPerOrbit: 10755.70,
-        synodicPeriod: 0.439
+        synodicPeriod: 0.439,
+        clickable: true
     },
     uranus: {
         type: "planet",
@@ -105,7 +113,8 @@ let entities = {
         color: "0x9BCBD2",
         orbits: "sun",
         daysPerOrbit: 30687.15,
-        synodicPeriod: -0.718
+        synodicPeriod: -0.718,
+        clickable: true
     },
     neptune: {
         type: "planet",
@@ -115,13 +124,15 @@ let entities = {
         textureHD: "assets/HD/neptune.jpg",
         color: "0x364FA8",
         daysPerOrbit: 60190.03,
-        synodicPeriod: 0.671
+        synodicPeriod: 0.671,
+        clickable: true
     },
     starLight: {
         type: "light",
         lightType: "ambient",
         color: "0xFFFFFF",
-        intensity: 0.20
+        intensity: 0.20,
+        clickable: false
     },
     sunLight: {
         type: "light",
@@ -135,7 +146,8 @@ let entities = {
         distance: 100,
         intensity: 1,
         radius: 0.0001,
-        covered: true
+        covered: true,
+        clickable: false
     }
 };
 let entitiesArr = Object.values(entities);
@@ -170,7 +182,7 @@ function rotateAboutPivot(subject, pivot, axis, radians) {
         subject.position.y + pivot.position.y,
         subject.position.z + pivot.position.z
     );
-}   
+}
 
 async function renderentitiesArr(scene, textureLoader) {
     for (let entity of entitiesArr) {
@@ -242,7 +254,7 @@ async function renderentitiesArr(scene, textureLoader) {
                 entity.mesh.position.set(entity.solarDistance, 0, 0);
                 objects.push(entity.mesh)
                 scene.add(entity.mesh);
-                
+
                 break;
             }
             case ("light"): {
@@ -275,11 +287,8 @@ async function renderentitiesArr(scene, textureLoader) {
 async function main() {
     //vars for the mouse click vector
     let raycaster = new THREE.Raycaster();
-    let mouse = new THREE.Vector2(); 
-  
-    
-    
-    
+    let mouse = new THREE.Vector2();
+
     // Set up the textureLoader.
     let textureLoader = new THREE.TextureLoader();
 
@@ -298,39 +307,39 @@ async function main() {
     let scene = new THREE.Scene();
     scene.background = new THREE.Color(0x000000);
     renderer.render(scene, camera);
-    
+
 
     //HUD/UI elements
 
 
     // We will use 2D canvas element to render our HUD.  
-	var hudCanvas = document.createElement('canvas');
+    var hudCanvas = document.createElement('canvas');
     hudCanvas.width = window.innerWidth;
     hudCanvas.height = window.innerHeight;
     var hudBitmap = hudCanvas.getContext('2d');
-    hudBitmap.font = "Normal 50px Arial";
+    hudBitmap.font = "Normal 50px Courier New";
     hudBitmap.textAlign = 'center';
     hudBitmap.fillStyle = "rgba(245,245,245,0.75)";
-    hudBitmap.fillText('SUN', window.innerWidth / 2, window.innerHeight/1.05 );
-    var cameraHUD = new THREE.OrthographicCamera(-window.innerWidth/2, window.innerWidth/2,window.innerHeight/2, -window.innerHeight/2,0, 30);
+    hudBitmap.fillText('SUN', window.innerWidth / 2, window.innerHeight / 1.05);
+    var cameraHUD = new THREE.OrthographicCamera(-window.innerWidth / 2, window.innerWidth / 2, window.innerHeight / 2, -window.innerHeight / 2, 0, 30);
     hudscene = new THREE.Scene();
     //create meterial by usuing the 2d graphics we just renderd
     var hudTexture = new THREE.Texture(hudCanvas)
     hudTexture.needsUpdate = true;
-    var material = new THREE.MeshBasicMaterial( {map: hudTexture } );
+    var material = new THREE.MeshBasicMaterial({ map: hudTexture });
     material.transparent = true;
-    var planeGeometry = new THREE.PlaneGeometry( window.innerWidth, window.innerHeight );
-    var plane = new THREE.Mesh( planeGeometry, material );
-    hudscene.add( plane );
+    var planeGeometry = new THREE.PlaneGeometry(window.innerWidth, window.innerHeight);
+    var plane = new THREE.Mesh(planeGeometry, material);
+    hudscene.add(plane);
 
 
-    
-    
+
+
 
     // Render the entitiesArr.
     await renderentitiesArr(scene, textureLoader);
     renderer.render(scene, camera);
-    
+
 
 
 
@@ -351,21 +360,25 @@ async function main() {
         }
     };
 
-    window.onclick = (evt)=>{
+    window.onclick = (evt) => {
         console.log("click");
         //console.log(entities);
         //objects=entities;
         console.log(objects);
-        mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-        mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
         //find the intererections
-        raycaster.setFromCamera( mouse, camera );
-        intersects = raycaster.intersectObjects( objects, false );
+        raycaster.setFromCamera(mouse, camera);
+        let intersectables = entitiesArr
+            .filter((entity) => {
+                return entity.clickable;
+            })
+            .map((entity) => { return entity.mesh; });
+        intersects = raycaster.intersectObjects(intersectables, false);
         console.log(intersects);
-        if(intersects.length!=0){
-            target=intersects[0].point;
+        if (intersects.length != 0) {
+            target = intersects[0].point;
         }
-        
 
     };
 
@@ -384,7 +397,7 @@ async function main() {
     camera.position.set(furthestPlanet.solarDistance * 2, furthestPlanet.solarDistance, furthestPlanet.solarDistance * 2);
 
     // Look at the sun.
-    target=entities.sun.mesh.position;
+    target = entities.sun.mesh.position;
     camera.lookAt(target);
     renderer.render(scene, camera);
 
@@ -400,7 +413,7 @@ async function main() {
         for (let entity of entitiesArr) {
             if (["planet", "skybox", "sun"].includes(entity.type)) {
                 if (entity.orbits !== undefined) {
-                    rotateAboutPivot(entity.mesh, entities[entity.orbits].mesh, new THREE.Vector3(0,1,0), 2 * Math.PI * daysPassed * (1 / entity.daysPerOrbit));
+                    rotateAboutPivot(entity.mesh, entities[entity.orbits].mesh, new THREE.Vector3(0, 1, 0), 2 * Math.PI * daysPassed * (1 / entity.daysPerOrbit));
                 }
                 if (entity.type !== "skybox") {
                     entity.mesh.rotateY(daysPassed * SYNODIC_SPEED_MODIFIER / entity.synodicPeriod);
@@ -411,12 +424,12 @@ async function main() {
                 }
             }
         }
-       
-    
+
+
 
         // Look at the currently selected target
-        if(intersects.length!=0){
-            target=intersects[0].point;
+        if (intersects.length != 0) {
+            target = intersects[0].point;
             //console.log(target);
         }
         camera.lookAt(target);
