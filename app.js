@@ -1,7 +1,9 @@
 // All distances are in kilometres.
 const DAYS_PER_MS = 0.1;
-const SYNODIC_SPEED_MODIFIER = 1 * Math.pow(10, 1);
-
+const SYNODIC_SPEED_MODIFIER = 100 * Math.pow(10, 1);
+var objects=[];
+var intersects=[];
+var target;
 let entities = {
     skybox: {
         type: "skybox",
@@ -216,6 +218,7 @@ async function renderentitiesArr(scene, textureLoader) {
                 )
                 entity.mesh.position.set(0, 0, 0);
                 scene.add(entity.mesh);
+                objects.push(entity.mesh)
                 break;
             }
             case ("planet"): {
@@ -237,7 +240,9 @@ async function renderentitiesArr(scene, textureLoader) {
                     material
                 )
                 entity.mesh.position.set(entity.solarDistance, 0, 0);
+                objects.push(entity.mesh)
                 scene.add(entity.mesh);
+                
                 break;
             }
             case ("light"): {
@@ -268,12 +273,20 @@ async function renderentitiesArr(scene, textureLoader) {
 }
 
 async function main() {
+    //vars for the mouse click vector
+    let raycaster = new THREE.Raycaster();
+    let mouse = new THREE.Vector2(); 
+  
+    
+    
+    
     // Set up the textureLoader.
     let textureLoader = new THREE.TextureLoader();
 
     // Set up the renderer.
     let renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.autoClear = false;
     document.body.appendChild(renderer.domElement);
 
     // Set up the camera.
@@ -285,10 +298,41 @@ async function main() {
     let scene = new THREE.Scene();
     scene.background = new THREE.Color(0x000000);
     renderer.render(scene, camera);
+    
+
+    //HUD/UI elements
+
+
+    // We will use 2D canvas element to render our HUD.  
+	var hudCanvas = document.createElement('canvas');
+    hudCanvas.width = window.innerWidth;
+    hudCanvas.height = window.innerHeight;
+    var hudBitmap = hudCanvas.getContext('2d');
+    hudBitmap.font = "Normal 50px Arial";
+    hudBitmap.textAlign = 'center';
+    hudBitmap.fillStyle = "rgba(245,245,245,0.75)";
+    hudBitmap.fillText('SUN', window.innerWidth / 2, window.innerHeight/1.05 );
+    var cameraHUD = new THREE.OrthographicCamera(-window.innerWidth/2, window.innerWidth/2,window.innerHeight/2, -window.innerHeight/2,0, 30);
+    hudscene = new THREE.Scene();
+    //create meterial by usuing the 2d graphics we just renderd
+    var hudTexture = new THREE.Texture(hudCanvas)
+    hudTexture.needsUpdate = true;
+    var material = new THREE.MeshBasicMaterial( {map: hudTexture } );
+    material.transparent = true;
+    var planeGeometry = new THREE.PlaneGeometry( window.innerWidth, window.innerHeight );
+    var plane = new THREE.Mesh( planeGeometry, material );
+    hudscene.add( plane );
+
+
+    
+    
 
     // Render the entitiesArr.
     await renderentitiesArr(scene, textureLoader);
     renderer.render(scene, camera);
+    
+
+
 
     // Set up the controls.
     window.onkeydown = (evt) => {
@@ -299,12 +343,30 @@ async function main() {
             camera.translateX(-1);
             renderer.render(scene, camera);
         } else if (evt.keyCode == 38) { // Up
-            camera.translateY(1);
+            camera.translateZ(-2);
             renderer.render(scene, camera);
         } else if (evt.keyCode == 40) { // Down
-            camera.translateY(-1);
+            camera.translateZ(2);
             renderer.render(scene, camera);
         }
+    };
+
+    window.onclick = (evt)=>{
+        console.log("click");
+        //console.log(entities);
+        //objects=entities;
+        console.log(objects);
+        mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+        mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+        //find the intererections
+        raycaster.setFromCamera( mouse, camera );
+        intersects = raycaster.intersectObjects( objects, false );
+        console.log(intersects);
+        if(intersects.length!=0){
+            target=intersects[0].point;
+        }
+        
+
     };
 
     // Set up listener to redraw the scene on resize.
@@ -322,7 +384,8 @@ async function main() {
     camera.position.set(furthestPlanet.solarDistance * 2, furthestPlanet.solarDistance, furthestPlanet.solarDistance * 2);
 
     // Look at the sun.
-    camera.lookAt(entities.sun.mesh.position);
+    target=entities.sun.mesh.position;
+    camera.lookAt(target);
     renderer.render(scene, camera);
 
     // Start animating.
@@ -348,10 +411,17 @@ async function main() {
                 }
             }
         }
+       
+    
 
-        // Look at the sun.
-        camera.lookAt(entities.sun.mesh.position);
+        // Look at the currently selected target
+        if(intersects.length!=0){
+            target=intersects[0].point;
+            //console.log(target);
+        }
+        camera.lookAt(target);
         renderer.render(scene, camera);
+        renderer.render(hudscene, cameraHUD);
     }
     animate();
 }
