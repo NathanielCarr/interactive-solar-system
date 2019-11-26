@@ -411,19 +411,6 @@ async function main() {
             case 68: // d
                 moveRight = true;
                 break;
-            case 49:
-                controls.unlock();
-                lockedCam = false;
-                moveForward, moveBackward, moveLeft, moveRight = false;
-                orbiting = true;
-                break;
-            case 50:
-                controls.lock();
-                lockedCam = true;
-                //resetCam(camera, planets.sun.mesh.position);
-                moveForward, moveBackward, moveLeft, moveRight = false;
-                orbiting = false;
-                break;
         }
     };
 
@@ -444,6 +431,27 @@ async function main() {
             case 39: // right
             case 68: // d
                 moveRight = false;
+                break;
+            case 49:
+                controls.lock();
+                lockedCam = true;
+                // resetCam(camera, entities.sun.mesh.position);
+                moveForward, moveBackward, moveLeft, moveRight = false;
+                orbiting = false;
+                break;
+            case 50: 
+                controls.unlock();
+                lockedCam = false;
+                //resetCam(camera, planets[].mesh.position);
+                moveForward, moveBackward, moveLeft, moveRight = false;
+                orbiting = true;
+                break;
+            case 51:
+                controls.unlock();
+                lockedCam = false;
+                moveForward, moveBackward, moveLeft, moveRight = false;
+                //resetCam(camera, planets[1].mesh.position);
+                orbiting = true;
                 break;
         }
     } 
