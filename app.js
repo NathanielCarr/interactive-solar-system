@@ -1,6 +1,6 @@
 // All distances are in kilometres.
 const DAYS_PER_MS = 0.1;
-const SYNODIC_SPEED_MODIFIER = 1 * Math.pow(10, 0.25);
+let SYNODIC_SPEED_MODIFIER = 1 * Math.pow(10, 0.25);
 let objects = [];
 let intersects = [];
 var target;
@@ -188,6 +188,9 @@ let prevTime = performance.now();
 let velocity = new THREE.Vector3();
 
 let direction = new THREE.Vector3();
+
+let cameraOrbitSpeed = 1;
+let speedMod = 1;
 
 function resetCam(camera, targ) {
     camera.position.y = 125;
@@ -420,6 +423,9 @@ async function main() {
             case 68: // d
                 moveRight = true;
                 break;
+            case 16: //shift
+                speedMod = 3;
+                break;
         }
     };
 
@@ -440,6 +446,15 @@ async function main() {
             case 39: // right
             case 68: // d
                 moveRight = false;
+                break;
+            case 190:
+                SYNODIC_SPEED_MODIFIER *= 2;
+                break;
+            case 188:
+                SYNODIC_SPEED_MODIFIER /= 2;
+                break;
+            case 16: //shift
+                speedMod = 1;
                 break;
             case 49:
                 controls.lock();
@@ -505,8 +520,6 @@ async function main() {
 
     document.addEventListener('keyup', onKeyUp, false);
 
-    // Move to the default camera position.
-    //resetCam(camera, planets.sun.mesh.position);
     // Set up listener to redraw the scene on resize.
     window.onresize = () => {
         camera.aspect = window.innerWidth / window.innerHeight;
@@ -520,11 +533,13 @@ async function main() {
         .filter((e) => { return e.type === "planet"; })
         .sort((a, b) => { return b.solarDistance - a.solarDistance; })[0];
     camera.position.set(furthestPlanet.solarDistance * 2, furthestPlanet.solarDistance, furthestPlanet.solarDistance * 2);
-
+    camera.lookAt(entities.sun.mesh.position);
     // Look at the sun.
     target = null;
     renderer.render(scene, camera);
 
+    orbitControls.autoRotate = true;
+    orbitControls.autoRotateSpeed = cameraOrbitSpeed;
     // Start animating.
     let lastTick = Date.now();
     function animate() {
@@ -537,7 +552,7 @@ async function main() {
         for (let entity of entitiesArr) {
             if (["planet", "skybox", "sun"].includes(entity.type)) {
                 if (entity.orbits !== undefined) {
-                    rotateAboutPivot(entity.mesh, entities[entity.orbits].mesh, new THREE.Vector3(0, 1, 0), 2 * Math.PI * daysPassed * (1 / entity.daysPerOrbit));
+                    rotateAboutPivot(entity.mesh, entities[entity.orbits].mesh, new THREE.Vector3(0, 1, 0), 2 * Math.PI * daysPassed * SYNODIC_SPEED_MODIFIER * (1 / entity.daysPerOrbit));
                 }
                 if (entity.type !== "skybox") {
                     entity.mesh.rotateY(daysPassed * SYNODIC_SPEED_MODIFIER / entity.synodicPeriod);
@@ -572,14 +587,14 @@ async function main() {
 
 
             if (moveForward) {
-                velocity.y -= direction.y * 400.0 * delta;
-                velocity.z -= direction.z * 400.0 * delta;
+                velocity.y -= direction.y * 1200.0 * speedMod * delta;
+                velocity.z -= direction.z * 1200.0 * speedMod * delta;
             } else if (moveBackward) {
-                velocity.y += direction.y * 400.0 * delta;
-                velocity.z -= direction.z * 400.0 * delta;
+                velocity.y += direction.y * 1200.0 * speedMod * delta;
+                velocity.z -= direction.z * 1200.0 * speedMod * delta;
             }
 
-            if (moveLeft || moveRight) velocity.x -= direction.x * 400.0 * delta;
+            if (moveLeft || moveRight) velocity.x -= direction.x * speedMod * 1200.0 * delta;
 
             controls.moveRight(- velocity.x * delta);
 
@@ -590,13 +605,10 @@ async function main() {
             prevTime = time;
         }
         else if (orbiting) {
-            //orbitControls.target = target;
             if(target != null){
-                
-                camera.position.set(target.position.x, target.position.y + 50, target.position.z - 50);
-                camera.lookAt(target.position);
+                orbitControls.target = target.position;
             }
-            //orbitControls.update();
+            orbitControls.update();
         }
 
         renderer.render(scene, camera);
