@@ -19,6 +19,7 @@ let entities = {
     },
     sun: {
         type: "sun",
+        name: "sun",
         position: {
             x: 0,
             y: 0,
@@ -34,6 +35,7 @@ let entities = {
     },
     mercury: {
         type: "planet",
+        name: "mercury",
         solarDistance: 1.5,
         radius: 0.15,
         texture: "assets/1K/mercury.jpg",
@@ -46,6 +48,7 @@ let entities = {
     },
     venus: {
         type: "planet",
+        name: "venus",
         solarDistance: 1.8684,
         radius: 0.3,
         texture: "assets/1K/venus_surface.jpg",
@@ -58,6 +61,7 @@ let entities = {
     },
     earth: {
         type: "planet",
+        name: "earth",
         solarDistance: 2.5833,
         radius: 0.3,
         texture: "assets/1K/earth_daymap.jpg",
@@ -70,6 +74,7 @@ let entities = {
     },
     mars: {
         type: "planet",
+        name: "mars",
         solarDistance: 3.9354,
         radius: 0.25,
         texture: "assets/1K/mars.jpg",
@@ -82,6 +87,7 @@ let entities = {
     },
     jupiter: {
         type: "planet",
+        name: "jupiter",
         solarDistance: 13.4433,
         radius: 0.9,
         texture: "assets/1K/jupiter.jpg",
@@ -94,6 +100,7 @@ let entities = {
     },
     saturn: {
         type: "planet",
+        name: "saturn",
         solarDistance: 24.7626,
         radius: 0.8,
         texture: "assets/1K/saturn.jpg",
@@ -106,6 +113,7 @@ let entities = {
     },
     uranus: {
         type: "planet",
+        name: "uranus",
         solarDistance: 49.5769,
         radius: 0.6,
         texture: "assets/1K/uranus.jpg",
@@ -118,6 +126,7 @@ let entities = {
     },
     neptune: {
         type: "planet",
+        name: "neptune",
         solarDistance: 77.6204,
         radius: 0.6,
         texture: "assets/1K/neptune.jpg",
@@ -180,11 +189,11 @@ let velocity = new THREE.Vector3();
 
 let direction = new THREE.Vector3();
 
-function resetCam(camera, target) {
+function resetCam(camera, targ) {
     camera.position.y = 125;
     camera.position.z = 125;
     camera.position.x = CAMERA_START_POS;
-    camera.lookAt(target);
+    camera.lookAt(targ);
 }
 
 /**
@@ -473,8 +482,21 @@ async function main() {
         intersects = raycaster.intersectObjects(intersectables, false);
         console.log(intersects);
         if (intersects.length != 0) {
-            target = intersects[0];
-            console.log("Point: " + target);
+            for (let entity of entitiesArr){
+                if(entity.mesh != null){
+                    let minPosX = entity.mesh.position.x - entity.radius;
+                    let maxPosX = entity.mesh.position.x + entity.radius;
+                    let minPosY = entity.mesh.position.y - entity.radius;
+                    let maxPosY = entity.mesh.position.y + entity.radius;
+                    let minPosZ = entity.mesh.position.z - entity.radius;
+                    let maxPosZ = entity.mesh.position.z + entity.radius;
+                    if(minPosX <= intersects[0].point.x && maxPosX >= intersects[0].point.x && minPosZ <= intersects[0].point.z && maxPosZ >= intersects[0].point.z){
+                        console.log("Planet found, it's ", entity.name);
+                        target = entity.mesh
+                        break;
+                    }
+                }
+            }
         }
 
     };
@@ -500,8 +522,7 @@ async function main() {
     camera.position.set(furthestPlanet.solarDistance * 2, furthestPlanet.solarDistance, furthestPlanet.solarDistance * 2);
 
     // Look at the sun.
-    target = entities.sun.mesh.position;
-    camera.lookAt(target);
+    target = null;
     renderer.render(scene, camera);
 
     // Start animating.
@@ -532,11 +553,11 @@ async function main() {
 
             let delta = (time - prevTime) / 1000;
 
-            velocity.x -= velocity.x * 10.0 * delta;
+            velocity.x = 0;
 
-            velocity.y -= velocity.y * 10.0 * delta;
+            velocity.y = 0;
 
-            velocity.z -= velocity.z * 10.0 * delta;
+            velocity.z = 0;
 
             camera.getWorldDirection(direction);
 
@@ -569,15 +590,13 @@ async function main() {
             prevTime = time;
         }
         else if (orbiting) {
-            // Look at the currently selected target
-            if (intersects.length != 0) {
-                target = intersects[0].point;
-                //console.log(target);
+            //orbitControls.target = target;
+            if(target != null){
+                
+                camera.position.set(target.position.x, target.position.y + 50, target.position.z - 50);
+                camera.lookAt(target.position);
             }
-            //camera.lookAt(target);
-            orbitControls.target = target;
-            orbitControls.position = target.point - orbitControls.position;
-            orbitControls.update();
+            //orbitControls.update();
         }
 
         renderer.render(scene, camera);
