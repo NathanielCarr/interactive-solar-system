@@ -7,6 +7,11 @@ var target;
 let entities = {
     skybox: {
         type: "skybox",
+        initPosition: {
+            x: 0,
+            y: 0,
+            z: 0
+        },
         rotationProperties: {
             x: 2 * Math.pow(10, 16),
             y: 2 * Math.pow(10, 16),
@@ -20,7 +25,7 @@ let entities = {
     sun: {
         type: "sun",
         name: "sun",
-        position: {
+        initPosition: {
             x: 0,
             y: 0,
             z: 0
@@ -33,10 +38,28 @@ let entities = {
         synodicPeriod: 26.6,
         clickable: true
     },
+    sunLight: {
+        type: "light",
+        lightType: "point",
+        color: "0xFFFFFF",
+        initPosition: {
+            x: 0,
+            y: 0,
+            z: 0
+        },
+        distance: 100,
+        intensity: 1,
+        radius: 0.0001,
+        covered: true
+    },
     mercury: {
         type: "planet",
         name: "mercury",
-        solarDistance: 1.5,
+        initPosition: {
+            x: 1.5 + 0.25,
+            y: 0,
+            z: 0
+        },
         radius: 0.15,
         texture: "assets/1K/mercury.jpg",
         textureHD: "assets/HD/mercury.jpg",
@@ -49,7 +72,11 @@ let entities = {
     venus: {
         type: "planet",
         name: "venus",
-        solarDistance: 1.8684,
+        initPosition: {
+            x: 1.8684 + 0.5,
+            y: 0,
+            z: 0
+        },
         radius: 0.3,
         texture: "assets/1K/venus_surface.jpg",
         textureHD: "assets/HD/venus_surface.jpg",
@@ -62,7 +89,11 @@ let entities = {
     earth: {
         type: "planet",
         name: "earth",
-        solarDistance: 2.5833,
+        initPosition: {
+            x: 2.5833 + 0.75,
+            y: 0,
+            z: 0
+        },
         radius: 0.3,
         texture: "assets/1K/earth_daymap.jpg",
         textureHD: "assets/HD/earth_daymap.jpg",
@@ -72,10 +103,28 @@ let entities = {
         synodicPeriod: 1,
         clickable: true
     },
+    earthMoon1: {
+        type: "moon",
+        initPosition: {
+            x: 2.5833 + 0.75 + 0.3 + 0.1,
+            y: 0,
+            z: 0
+        },
+        radius: 0.04,
+        texture: "assets/1k/moon.jpg",
+        textureHD: "assets/HD/moon.jpg",
+        color: "0x979392",
+        orbits: "earth",
+        daysPerOrbit: 27.322
+    },
     mars: {
         type: "planet",
         name: "mars",
-        solarDistance: 3.9354,
+        initPosition: {
+            x: 3.9354 + 1,
+            y: 0,
+            z: 0
+        },
         radius: 0.25,
         texture: "assets/1K/mars.jpg",
         textureHD: "assets/HD/mars.jpg",
@@ -88,7 +137,11 @@ let entities = {
     jupiter: {
         type: "planet",
         name: "jupiter",
-        solarDistance: 13.4433,
+        initPosition: {
+            x: 13.4433 * 0.7 + 1,
+            y: 0,
+            z: 0
+        },
         radius: 0.9,
         texture: "assets/1K/jupiter.jpg",
         textureHD: "assets/HD/jupiter.jpg",
@@ -101,7 +154,11 @@ let entities = {
     saturn: {
         type: "planet",
         name: "saturn",
-        solarDistance: 24.7626,
+        initPosition: {
+            x: 24.7626 * 0.7 + 1,
+            y: 0,
+            z: 0
+        },
         radius: 0.8,
         texture: "assets/1K/saturn.jpg",
         textureHD: "assets/HD/saturn.jpg",
@@ -114,7 +171,11 @@ let entities = {
     uranus: {
         type: "planet",
         name: "uranus",
-        solarDistance: 49.5769,
+        initPosition: {
+            x: 49.5769 * 0.7 + 1,
+            y: 0,
+            z: 0
+        },
         radius: 0.6,
         texture: "assets/1K/uranus.jpg",
         textureHD: "assets/HD/uranus.jpg",
@@ -127,11 +188,16 @@ let entities = {
     neptune: {
         type: "planet",
         name: "neptune",
-        solarDistance: 77.6204,
+        initPosition: {
+            x: 77.6204 * 0.7 + 1,
+            y: 0,
+            z: 0
+        },
         radius: 0.6,
         texture: "assets/1K/neptune.jpg",
         textureHD: "assets/HD/neptune.jpg",
         color: "0x364FA8",
+        orbits: "sun",
         daysPerOrbit: 60190.03,
         synodicPeriod: 0.671,
         clickable: true
@@ -142,24 +208,16 @@ let entities = {
         color: "0xFFFFFF",
         intensity: 0.20,
         clickable: false
-    },
-    sunLight: {
-        type: "light",
-        lightType: "point",
-        color: "0xFFFFFF",
-        position: {
-            x: 0,
-            y: 0,
-            z: 0
-        },
-        distance: 100,
-        intensity: 1,
-        radius: 0.0001,
-        covered: true,
-        clickable: false
     }
 };
-let entitiesArr = Object.values(entities);
+let animationOrder = [
+    "skybox",
+    "sun",
+    "planet",
+    "moon",
+    "light"
+];
+let entitiesArr = Object.values(entities).sort((a, b) => { return animationOrder.indexOf(b.type) - animationOrder.indexOf(a.type); });
 
 //const CAMERA_START_POS = PLANET_PROPERTIES.NEPTUNE.SOLAR_DISTANCE * SOLAR_DISTANCE_SCALE + PLANET_PROPERTIES.NEPTUNE.NOSCALE_RADIUS + 100;
 
@@ -202,30 +260,30 @@ function resetCam(camera, targ) {
 /**
  * Ref: https://stackoverflow.com/questions/11060734/how-to-rotate-a-3d-object-on-axis-three-js
  */
-function rotateAboutPivot(subject, pivot, axis, radians) {
+function rotateAboutPivot(subjectMesh, pivotPosition, axis, radians) {
     // Move the subject to the origin.
-    subject.position.set(
-        subject.position.x - pivot.position.x,
-        subject.position.y - pivot.position.y,
-        subject.position.z - pivot.position.z
+    subjectMesh.position.set(
+        subjectMesh.position.x - pivotPosition.x,
+        subjectMesh.position.y - pivotPosition.y,
+        subjectMesh.position.z - pivotPosition.z
     );
 
     // Apply the rotation.
-    subject.position.applyAxisAngle(axis.normalize(), radians);
+    subjectMesh.position.applyAxisAngle(axis.normalize(), radians);
 
     // Move the subject back to its position.
-    subject.position.set(
-        subject.position.x + pivot.position.x,
-        subject.position.y + pivot.position.y,
-        subject.position.z + pivot.position.z
+    subjectMesh.position.set(
+        subjectMesh.position.x + pivotPosition.x,
+        subjectMesh.position.y + pivotPosition.y,
+        subjectMesh.position.z + pivotPosition.z
     );
 }
 
-async function renderentitiesArr(scene, textureLoader) {
+async function renderEntitiesArr(scene, textureLoader) {
     for (let entity of entitiesArr) {
         switch (entity.type) {
             case ("skybox"): {
-                let geometry = new THREE.SphereGeometry(500, 64, 64)
+                let geometry = new THREE.SphereGeometry(500 / 2, 64, 64)
                 let texture = await asyncLoadTexture(textureLoader, entity.textureHD)
                     .catch((err) => {
                         console.error(err);
@@ -243,7 +301,7 @@ async function renderentitiesArr(scene, textureLoader) {
                     geometry,
                     material
                 )
-                entity.mesh.position.set(0, 0, 0);
+                entity.mesh.position.set(entity.initPosition.x, entity.initPosition.y, entity.initPosition.z);
                 scene.add(entity.mesh);
                 break;
             }
@@ -265,11 +323,12 @@ async function renderentitiesArr(scene, textureLoader) {
                     geometry,
                     material
                 )
-                entity.mesh.position.set(0, 0, 0);
+                entity.mesh.position.set(entity.initPosition.x, entity.initPosition.y, entity.initPosition.z);
                 scene.add(entity.mesh);
                 objects.push(entity.mesh)
                 break;
             }
+            case ("moon"):
             case ("planet"): {
                 let geometry = new THREE.SphereGeometry(entity.radius, 32, 32);
                 let texture = await asyncLoadTexture(textureLoader, entity.texture)
@@ -288,7 +347,7 @@ async function renderentitiesArr(scene, textureLoader) {
                     geometry,
                     material
                 )
-                entity.mesh.position.set(entity.solarDistance, 0, 0);
+                entity.mesh.position.set(entity.initPosition.x, entity.initPosition.y, entity.initPosition.z);
                 objects.push(entity.mesh)
                 scene.add(entity.mesh);
 
@@ -303,7 +362,7 @@ async function renderentitiesArr(scene, textureLoader) {
                     }
                     case ("point"): {
                         entity.light = new THREE.PointLight(parseInt(entity.color), entity.intensity, entity.distance);
-                        entity.light.position.set(entity.position.x, entity.position.y, entity.position.z);
+                        entity.light.position.set(entity.initPosition.x, entity.initPosition.y, entity.initPosition.z);
                         let geometry = entity.covered
                             ? new THREE.SphereGeometry(entity.radius, 8, 8)
                             : new THREE.SphereGeometry(entity.radius, 32, 32);
@@ -370,7 +429,14 @@ async function main() {
     hudscene.add(plane);
 
     // Render the entitiesArr.
-    await renderentitiesArr(scene, textureLoader);
+    await renderEntitiesArr(scene, textureLoader);
+    // Associate the entities with the entities that orbit them.
+    for (let entity of entitiesArr) {
+        if (entity.orbits !== undefined) {
+            entities[entity.orbits].orbiters = entities[entity.orbits].orbiters || [];
+            entities[entity.orbits].orbiters.push(entity);
+        }
+    }
     renderer.render(scene, camera);
 
     // Setup camera
@@ -463,7 +529,7 @@ async function main() {
                 moveForward, moveBackward, moveLeft, moveRight = false;
                 orbiting = false;
                 break;
-            case 50: 
+            case 50:
                 controls.unlock();
                 lockedCam = false;
                 //resetCam(camera, planets[].mesh.position);
@@ -478,7 +544,7 @@ async function main() {
                 orbiting = true;
                 break;
         }
-    } 
+    }
 
     window.onclick = (evt) => {
         console.log("click");
@@ -497,15 +563,15 @@ async function main() {
         intersects = raycaster.intersectObjects(intersectables, false);
         console.log(intersects);
         if (intersects.length != 0) {
-            for (let entity of entitiesArr){
-                if(entity.mesh != null){
+            for (let entity of entitiesArr) {
+                if (entity.mesh != null) {
                     let minPosX = entity.mesh.position.x - entity.radius;
                     let maxPosX = entity.mesh.position.x + entity.radius;
                     let minPosY = entity.mesh.position.y - entity.radius;
                     let maxPosY = entity.mesh.position.y + entity.radius;
                     let minPosZ = entity.mesh.position.z - entity.radius;
                     let maxPosZ = entity.mesh.position.z + entity.radius;
-                    if(minPosX <= intersects[0].point.x && maxPosX >= intersects[0].point.x && minPosZ <= intersects[0].point.z && maxPosZ >= intersects[0].point.z){
+                    if (minPosX <= intersects[0].point.x && maxPosX >= intersects[0].point.x && minPosZ <= intersects[0].point.z && maxPosZ >= intersects[0].point.z) {
                         console.log("Planet found, it's ", entity.name);
                         target = entity.mesh
                         break;
@@ -531,8 +597,10 @@ async function main() {
     // Move to a position that will get every entity in view.
     let furthestPlanet = entitiesArr
         .filter((e) => { return e.type === "planet"; })
-        .sort((a, b) => { return b.solarDistance - a.solarDistance; })[0];
-    camera.position.set(furthestPlanet.solarDistance * 2, furthestPlanet.solarDistance, furthestPlanet.solarDistance * 2);
+        .sort((a, b) => { return b.mesh.position.length() - a.mesh.position.length() })[0];
+    camera.position.set(furthestPlanet.mesh.position.length() * 2, furthestPlanet.mesh.position.length(), furthestPlanet.mesh.position.length() * 2);
+
+    // Look at the sun.
     camera.lookAt(entities.sun.mesh.position);
     // Look at the sun.
     target = null;
@@ -550,17 +618,28 @@ async function main() {
         let daysPassed = (time - lastTick) * DAYS_PER_MS;
         lastTick = time;
         for (let entity of entitiesArr) {
-            if (["planet", "skybox", "sun"].includes(entity.type)) {
-                if (entity.orbits !== undefined) {
-                    rotateAboutPivot(entity.mesh, entities[entity.orbits].mesh, new THREE.Vector3(0, 1, 0), 2 * Math.PI * daysPassed * SYNODIC_SPEED_MODIFIER * (1 / entity.daysPerOrbit));
+            // Orbit this entity, if this entity orbits.
+            if (entity.orbits !== undefined) {
+                rotateAboutPivot(entity.mesh, entities[entity.orbits].mesh.position, new THREE.Vector3(0, 1, 0), 2 * Math.PI * daysPassed * (1 / entity.daysPerOrbit));
+                // Orbit every planet that orbits this entity (DFS) appropriately.
+                let orbiterStack = [...(entity.orbiters || [])];
+                while (orbiterStack.length > 0) {
+                    let orbiter = orbiterStack.pop();
+                    rotateAboutPivot(orbiter.mesh, entities[entity.orbits].mesh.position, new THREE.Vector3(0, 1, 0), 2 * Math.PI * daysPassed * (1 / entity.daysPerOrbit));
+                    for (orbiter of orbiter.orbiters || []) {
+                        orbiterStack.push();
+                    }
                 }
-                if (entity.type !== "skybox") {
-                    entity.mesh.rotateY(daysPassed * SYNODIC_SPEED_MODIFIER / entity.synodicPeriod);
-                } else {
-                    entity.mesh.rotateX(time / entity.rotationProperties.x);
-                    entity.mesh.rotateY(time / entity.rotationProperties.y);
-                    entity.mesh.rotateZ(time / entity.rotationProperties.z);
-                }
+            }
+            // Apply the synodic spin.
+            if (entity.synodicPeriod !== undefined) {
+                entity.mesh.rotateY(daysPassed * SYNODIC_SPEED_MODIFIER / entity.synodicPeriod);
+            }
+            // If there is a fixed rotation, apply it.
+            if (entity.rotationProperties !== undefined) {
+                entity.mesh.rotateX(time / entity.rotationProperties.x);
+                entity.mesh.rotateY(time / entity.rotationProperties.y);
+                entity.mesh.rotateZ(time / entity.rotationProperties.z);
             }
         }
         if (controls.isLocked === true && !orbiting) {
@@ -584,8 +663,6 @@ async function main() {
 
             direction.normalize(); // this ensures consistent movements in all directions
 
-
-
             if (moveForward) {
                 velocity.y -= direction.y * 1200.0 * speedMod * delta;
                 velocity.z -= direction.z * 1200.0 * speedMod * delta;
@@ -605,7 +682,7 @@ async function main() {
             prevTime = time;
         }
         else if (orbiting) {
-            if(target != null){
+            if (target != null) {
                 orbitControls.target = target.position;
             }
             orbitControls.update();
