@@ -4,7 +4,6 @@ let SYNODIC_SPEED_MODIFIER = 1 * Math.pow(10, 0.25);
 let objects = [];
 let intersects = [];
 let intersected;
-let target;
 let csp;
 let psp;
 let entities = {
@@ -905,24 +904,21 @@ async function renderEntitiesArr(scene, textureLoader) {
 }
 
 async function main() {
+    
     //vars for the mouse click vector
     let raycaster = new THREE.Raycaster();
     let mouse = new THREE.Vector2();
-
     // Set up the textureLoader.
     let textureLoader = new THREE.TextureLoader();
-
     // Set up the renderer.
     let renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.autoClear = false;
     document.body.appendChild(renderer.domElement);
-
     // Set up the camera.
     let camera = new THREE.PerspectiveCamera(20, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.set(0, 0, 0);
     camera.up = new THREE.Vector3(0, 1, 0);
-
     // Set up the scene to show darkness until the entitiesArr are rendered.
     let scene = new THREE.Scene();
     scene.background = new THREE.Color(0x000000);
@@ -952,9 +948,105 @@ async function main() {
     let planeGeometry = new THREE.PlaneGeometry(window.innerWidth, window.innerHeight);
     let plane = new THREE.Mesh(planeGeometry, material);
     hudscene.add(plane);
-    //dat gui for the demo 
 
-    //TODO replace this with a custom menu, or even just a css button
+    //dat gui for the demo 
+    let guivars=  {
+        target:entities.sun,
+        targetselect: function(){
+            console.log("target select");
+            console.log(guivars.target)
+            updatehud(guivars.target);
+        },
+        nextPlanet: function() {
+            let count = 0;
+            for (let entity of entitiesArr) {
+                if (entity.mesh != null) {
+                    if (entity.name == csp) {
+                        if (csp == "asteroid") { //if its an asteroid we jump stright to juipter
+                            entity = entitiesArr[27];
+                            updatehud(entity);
+                            break;
+                        } else if (csp == "sun") { //if its an asteroid we jump stright to juipter
+                            entity = entitiesArr[22];
+                            updatehud(entity);
+                            break;
+                        } else {
+                            entity = entitiesArr[count + 1];
+                            updatehud(entity);
+                            break;
+                        }
+                    }
+                    count += 1;
+                }
+            }
+        },
+        previousPlanet: function(){
+            let count = 0;
+            for (let entity of entitiesArr) {
+                if (entity.mesh != null) {
+                    if (entity.name == csp) {
+                        if (csp == "asteroid") { //if its an asteroid we jump stright to mars
+                            entity = entitiesArr[25];
+                            updatehud(entity);
+                            break;
+                        } else if (csp == "sun") { //if its the sun we jump stright to neptune
+                            entity = entitiesArr[29];
+                            updatehud(entity);
+                            break;
+                        } else {
+                            entity = entitiesArr[count - 1];
+                            updatehud(entity);
+                            break;``
+    
+                        }
+                    }
+                }
+                count += 1;
+            }
+        },
+        pausebutton: function() {
+            if (simspeed != 0) {
+                SYNODIC_SPEED_MODIFIER = 0;
+                DAYS_PER_MS = 0;
+                simspeed = 0;
+            } else {
+                SYNODIC_SPEED_MODIFIER = 1 * Math.pow(10, 0.25);
+                DAYS_PER_MS = 0.1 * Math.pow(10, 0.25);
+                simspeed = 1;
+            }
+    
+            simspeedtext.innerText = "Sim Speed:" + simspeed;
+        },
+        slowtime: function(){
+            SYNODIC_SPEED_MODIFIER /= 2;
+            DAYS_PER_MS /= 2;
+            simspeed /= 2;
+            simspeedtext.innerText = "Sim Speed:" + simspeed;},
+        speedup: function(){
+                SYNODIC_SPEED_MODIFIER *= 2;
+                DAYS_PER_MS *= 2;
+                simspeed *= 2;
+                simspeedtext.innerText = "Sim Speed:" + simspeed;
+        },
+        orbitlinet:function(){
+
+        },
+        lightingt:function(){
+
+        }
+        
+    }
+    var gui = new dat.GUI();
+    gui.add(guivars,"target",{Sun:entities.sun, Mercury:entities.mercury , Venus:entities.venus, Earth:entities.earth, Mars:entities.mars,Jupiter:entities.jupiter,Staurn:entities.saturn,Uranus:entities.uranus, Neptune:entities.neptune});
+    gui.add(guivars,"targetselect");
+    gui.add(guivars,"nextPlanet");
+    gui.add(guivars,"previousPlanet");
+    gui.add(guivars,"pausebutton");
+    gui.add(guivars,"slowtime");
+    gui.add(guivars,"speedup");
+    gui.add(guivars,"orbitlinet");
+    gui.add(guivars,"lightingt");
+    
 
     // Render the entitiesArr.
     await renderEntitiesArr(scene, textureLoader);
@@ -972,14 +1064,9 @@ async function main() {
     let controls = new THREE.PointerLockControls(camera, renderer.domElement);
     let blocker = document.getElementById('blocker');
     let instructions = document.getElementById('instructions');
-    let nextbutton = document.getElementById('next-button');
-    let previousbutton = document.getElementById('previous-button');
-    let pausebutton = document.getElementById('pause-button');
+    //let nextbutton = document.getElementById('next-button');
     let simspeedtext = document.getElementById('simspeed-text');
     let lockedCam = true;
-    nextbutton.style.display = "block";
-    previousbutton.style.display = "block";
-    pausebutton.style.display = "block";
     simspeedtext.style.display = "block";
     instructions.addEventListener('click', function () {
         if (lockedCam) {
@@ -989,7 +1076,7 @@ async function main() {
 
     function updatehud(entity) {
         csp = entity.name;
-        target = entity.mesh;
+        guivars.target = entity.mesh;
         hudBitmap.clearRect(0, 0, window.innerWidth * 2, window.innerHeight * 2);
         //hudBitmap.fillStyle = "rgba(20,139,224,0.25)";
         //hudBitmap.fillRect((window.innerWidth / 12), (window.innerHeight / 16),window.innerWidth/2,window.innerHeight/5)
@@ -1004,68 +1091,6 @@ async function main() {
         //hudBitmap.fillText(entity., window.innerWidth / 12, 4*(window.innerHeight / 8));
         hudTexture.needsUpdate = true;
     }
-    nextbutton.addEventListener('click', function () {
-        let count = 0;
-        for (let entity of entitiesArr) {
-            if (entity.mesh != null) {
-                if (entity.name == csp) {
-                    if (csp == "asteroid") { //if its an asteroid we jump stright to juipter
-                        entity = entitiesArr[27];
-                        updatehud(entity);
-                        break;
-                    } else if (csp == "sun") { //if its an asteroid we jump stright to juipter
-                        entity = entitiesArr[22];
-                        updatehud(entity);
-                        break;
-                    } else {
-                        entity = entitiesArr[count + 1];
-                        updatehud(entity);
-                        break;
-                    }
-                }
-                count += 1;
-            }
-        }
-    });
-
-    previousbutton.addEventListener('click', function () {
-        console.log(entitiesArr);
-        let count = 0;
-        for (let entity of entitiesArr) {
-            if (entity.mesh != null) {
-                if (entity.name == csp) {
-                    if (csp == "asteroid") { //if its an asteroid we jump stright to mars
-                        entity = entitiesArr[25];
-                        updatehud(entity);
-                        break;
-                    } else if (csp == "sun") { //if its the sun we jump stright to neptune
-                        entity = entitiesArr[29];
-                        updatehud(entity);
-                        break;
-                    } else {
-                        entity = entitiesArr[count - 1];
-                        updatehud(entity);
-                        break;
-
-                    }
-                }
-            }
-            count += 1;
-        }
-    });
-    pausebutton.addEventListener('click', function () {
-        if (simspeed != 0) {
-            SYNODIC_SPEED_MODIFIER = 0;
-            DAYS_PER_MS = 0;
-            simspeed = 0;
-        } else {
-            SYNODIC_SPEED_MODIFIER = 1 * Math.pow(10, 0.25);
-            DAYS_PER_MS = 0.1 * Math.pow(10, 0.25);
-            simspeed = 1;
-        }
-
-        simspeedtext.innerText = "Sim Speed:" + simspeed;
-    });
 
     controls.addEventListener('lock', function () {
         if (lockedCam) {
@@ -1131,32 +1156,14 @@ async function main() {
                 DAYS_PER_MS *= 2;
                 simspeed *= 2;
                 simspeedtext.innerText = "Sim Speed:" + simspeed;
-                // hudBitmap.font = "Normal 50px Courier New";
-                // hudBitmap.fillText('Simulation Speed '+simspeed, window.innerWidth / 12, 19.5* (window.innerHeight / 10));
-                // hudTexture.needsUpdate = true;
-                //   if(orbitControls.autoRotateSpeed<1){
-                //      if(orbitControls.autoRotateSpeed>=0.5){
-                //         orbitControls.autoRotateSpeed=1;
-                //    }else if(orbitControls.autoRotateSpeed==0){
-                //       orbitControls.autoRotateSpeed=0.125;
-                //  }else{
-                //     orbitControls.autoRotateSpeed*=2;
-                //}  
-                // }
+         
                 break;
             case 188:
                 SYNODIC_SPEED_MODIFIER /= 2;
                 DAYS_PER_MS /= 2;
                 simspeed /= 2;
                 simspeedtext.innerText = "Sim Speed:" + simspeed;
-                //  hudBitmap.font = "Normal 50px Courier New";
-                //hudBitmap.fillText('Simulation Speed '+simspeed, window.innerWidth / 12, 19.5* (window.innerHeight / 10));
-                //  hudTexture.needsUpdate = true;
-                //if(orbitControls.autoRotateSpeed<0.125){
-                //   orbitControls.autoRotateSpeed=0;
-                //}else{
-                //   orbitControls.autoRotateSpeed/=2
-                // }
+                
                 break;
             case 16: //shift
                 speedMod = 1;
@@ -1185,67 +1192,6 @@ async function main() {
                 break;
         }
     }
-    window.onmousemove = (evt) => {
-        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-        if (intersects.length != 0) {
-            for (let entity of entitiesArr) {
-                if (entity.mesh != null) {
-                    let minPosX = entity.mesh.position.x - entity.radius;
-                    let maxPosX = entity.mesh.position.x + entity.radius;
-                    let minPosY = entity.mesh.position.y - entity.radius;
-                    let maxPosY = entity.mesh.position.y + entity.radius;
-                    let minPosZ = entity.mesh.position.z - entity.radius;
-                    let maxPosZ = entity.mesh.position.z + entity.radius;
-                    if (minPosX <= intersects[0].point.x && maxPosX >= intersects[0].point.x && minPosZ <= intersects[0].point.z && maxPosZ >= intersects[0].point.z) {
-                        //poutline();
-                        break;
-                    }
-                }
-            }
-        }
-    };
-
-    // function poutline(){
-    //     //find the intererections
-    //      raycaster.setFromCamera(mouse, camera);
-    //      let intersectables = entitiesArr
-    //          .filter((entity) => {
-    //              return entity.clickable;
-    //          })
-    //          .map((entity) => { return entity.mesh; });
-    //      intersects = raycaster.intersectObjects(intersectables, false);
-    //      if (intersects.length != 0) {
-    //         for (let entity of entitiesArr) {
-    //             if (entity.mesh != null) {
-    //                 let minPosX = entity.mesh.position.x - entity.radius;
-    //                 let maxPosX = entity.mesh.position.x + entity.radius;
-    //                 let minPosY = entity.mesh.position.y - entity.radius;
-    //                 let maxPosY = entity.mesh.position.y + entity.radius;
-    //                 let minPosZ = entity.mesh.position.z - entity.radius;
-    //                 let maxPosZ = entity.mesh.position.z + entity.radius;
-    //                 if (minPosX <= intersects[0].point.x && maxPosX >= intersects[0].point.x && minPosZ <= intersects[0].point.z && maxPosZ >= intersects[0].point.z) {
-    //                    //if the current selected object is not he currently stored intersectio object
-    //                     if(entity!=intersected){
-    //                         //restore previous
-    //                         if(intersected) intersected.material=intersected.oldmat;
-    //                         //store refence to object
-    //                         intersected=entity;
-    //                         intersected.oldmat=entity.material;
-    //                         intersected.material.color.setHex(0xffff00 );
-
-    //                    }else{
-    //                         //restore previous
-    //                         if(intersected) intersected.material=intersected.oldmat;
-    //                         intersected = null;                           
-    //                    }
-    //                     break;
-    //                 }
-    //             }
-    //         }
-    //     }
-
-    // }
 
     window.onclick = (evt) => {
         mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -1305,7 +1251,7 @@ async function main() {
     // Look at the sun.
     camera.lookAt(entities.sun.mesh.position);
     // Look at the sun.
-    target = null;
+    guivars.target = null;
     renderer.render(scene, camera);
 
     orbitControls.autoRotate = false;
@@ -1384,8 +1330,8 @@ async function main() {
 
             prevTime = time;
         } else if (orbiting) {
-            if (target != null) {
-                orbitControls.target = target.position;
+            if (guivars.target != null) {
+                orbitControls.target = guivars.target.position;
             }
             orbitControls.update();
         }
