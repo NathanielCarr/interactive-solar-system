@@ -27,10 +27,10 @@ let entities = {
     },
     sun: {
         type: "sun",
-        name: "sun:",
-        info1: "Observation data:",
-        info2: "Visual brightness (V): -26.74",
-        info3: "Absolute magnitude: 4.83",
+        name: "sun",
+        info1:"Observation data:",
+        info2:"Visual brightness (V): -26.74",
+        info3:"Absolute magnitude: 4.83",
         initPosition: {
             x: 0,
             y: 0,
@@ -1007,21 +1007,21 @@ async function main() {
     nextbutton.addEventListener('click', function () {
         let count = 0;
         for (let entity of entitiesArr) {
-            if (entity.mesh != null && entity.clickable) {
-                if (entity.name == csp) {
-                    if (csp == "asteroid") { //if its an asteroid we jump stright to juipter
-                        entity = entitiesArr[27];
-                        updatehud(entity);
-                        break;
-                    } else if (csp == "sun") { //if its an asteroid we jump stright to juipter
-                        entity = entitiesArr[22];
-                        updatehud(entity);
-                        break;
-                    } else {
-                        entity = entitiesArr[count + 1];
-                        updatehud(entity);
-                        break;
-                    }
+            if (entity.mesh != null) {
+            if(entity.name==csp){
+                if(csp=="asteroid"){//if its an asteroid we jump stright to juipter
+                    entity=entitiesArr[27];
+                    updatehud(entity);
+                    break;
+                }
+                else if(csp=="sun"){//if its an asteroid we jump stright to juipter
+                    entity=entitiesArr[22];
+                    updatehud(entity);
+                    break;
+                } else {
+                    entity=entitiesArr[count+1];
+                    updatehud(entity);
+                    break;
                 }
             }
             count += 1;
@@ -1031,20 +1031,21 @@ async function main() {
         console.log(entitiesArr);
         let count = 0;
         for (let entity of entitiesArr) {
-            if (entity.mesh != null && entity.clickable) {
-                if (entity.name == csp) {
-                    if (csp == "asteroid") { //if its an asteroid we jump stright to mars
-                        entity = entitiesArr[25];
-                        updatehud(entity);
-                        break;
-                    } else if (csp == "sun") { //if its the sun we jump stright to neptune
-                        entity = entitiesArr[29];
-                        updatehud(entity);
-                        break;
-                    } else {
-                        entity = entitiesArr[count - 1];
-                        updatehud(entity);
-                        break;
+            if (entity.mesh != null) {
+            if(entity.name==csp){
+                if(csp=="asteroid"){//if its an asteroid we jump stright to mars
+                    entity=entitiesArr[25];
+                    updatehud(entity);
+                    break;
+                }
+                else if(csp=="sun"){//if its the sun we jump stright to neptune
+                    entity=entitiesArr[29];
+                    updatehud(entity);
+                    break;
+                } else {
+                    entity=entitiesArr[count-1];
+                    updatehud(entity);
+                    break;
 
                     }
                 }
