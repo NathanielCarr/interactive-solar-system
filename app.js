@@ -1,4 +1,12 @@
 // All distances are in kilometres.
+const ASTEROID_TEXTURES = [
+    "assets/1K/asteroid_1.png",
+    "assets/1K/asteroid_2.png",
+    "assets/1K/asteroid_3.png",
+    "assets/1K/asteroid_4.png",
+    "assets/1K/asteroid_5.png",
+    "assets/1K/asteroid_6.png",
+]
 let DAYS_PER_MS = (0.1 * Math.pow(10, 0.25));
 let SYNODIC_SPEED_MODIFIER = 1 * Math.pow(10, 0.25);
 let objects = [];
@@ -155,408 +163,6 @@ let entities = {
         orbits: "sun",
         daysPerOrbit: 686.98,
         synodicPeriod: 1.027,
-        clickable: true
-    },
-    asteroid1: {
-        type: "asteroid",
-        name: "asteroid",
-        info1: "Physical characteristics:",
-        info2: "its a rocky lump filled with hopes and dreams",
-        info3: "Atmosphere:  Surface pressure 0.0 kPA",
-        initPosition: {
-            x: 3.9354 + 2.5,
-            y: 0,
-            z: 0
-        },
-        radius: 0.02,
-        texture: "assets/1K/moon.jpg",
-        textureHD: "assets/HD/moon.jpg",
-        color: "0xB76247",
-        orbits: "sun",
-        daysPerOrbit: 616.98,
-        synodicPeriod: 1.027,
-        clickable: true
-    },
-    asteroid2: {
-        type: "asteroid",
-        name: "asteroid",
-        info1: "Physical characteristics:",
-        info2: "its a rocky lump filled with hopes and dreams",
-        info3: "Atmosphere:  Surface pressure 0.0 kPA",
-        initPosition: {
-            x: 3.9354 + 2.6,
-            y: 0,
-            z: 0
-        },
-        radius: 0.02,
-        texture: "assets/1K/moon.jpg",
-        textureHD: "assets/HD/moon.jpg",
-        color: "0xB76247",
-        orbits: "sun",
-        daysPerOrbit: 626.98,
-        synodicPeriod: 1.027,
-        clickable: true
-    },
-    asteroid3: {
-        type: "asteroid",
-        name: "asteroid",
-        info1: "Physical characteristics:",
-        info2: "its a rocky lump filled with hopes and dreams",
-        info3: "Atmosphere:  Surface pressure 0.0 kPA",
-        initPosition: {
-            x: 3.9354 + 2.7,
-            y: 0,
-            z: 0
-        },
-        radius: 0.02,
-        texture: "assets/1K/moon.jpg",
-        textureHD: "assets/HD/moon.jpg",
-        color: "0xB76247",
-        orbits: "sun",
-        daysPerOrbit: 450.98,
-        synodicPeriod: 0.027,
-        clickable: true
-    },
-    asteroid4: {
-        type: "asteroid",
-        name: "asteroid",
-        info1: "Physical characteristics:",
-        info2: "its a rocky lump filled with hopes and dreams",
-        info3: "Atmosphere:  Surface pressure 0.0 kPA",
-        initPosition: {
-            x: 3.9354 + 2.9,
-            y: 0,
-            z: 0
-        },
-        radius: 0.02,
-        texture: "assets/1K/moon.jpg",
-        textureHD: "assets/HD/moon.jpg",
-        color: "0xB76247",
-        orbits: "sun",
-        daysPerOrbit: 450.98,
-        synodicPeriod: 0.027,
-        clickable: true
-    },
-    asteroid5: {
-        type: "asteroid",
-        name: "asteroid",
-        info1: "Physical characteristics:",
-        info2: "its a rocky lump filled with hopes and dreams",
-        info3: "Atmosphere:  Surface pressure 0.0 kPA",
-        initPosition: {
-            x: 3.9354 + 3.1,
-            y: 0,
-            z: 0
-        },
-        radius: 0.02,
-        texture: "assets/1K/moon.jpg",
-        textureHD: "assets/HD/moon.jpg",
-        color: "0xB76247",
-        orbits: "sun",
-        daysPerOrbit: 650.98,
-        synodicPeriod: 0.027,
-        clickable: true
-    },
-    asteroid6: {
-        type: "asteroid",
-        name: "asteroid",
-        info1: "Physical characteristics:",
-        info2: "its a rocky lump filled with hopes and dreams",
-        info3: "Atmosphere:  Surface pressure 0.0 kPA",
-        initPosition: {
-            x: 3.9354 + 3.2,
-            y: 0,
-            z: 0
-        },
-        radius: 0.02,
-        texture: "assets/1K/moon.jpg",
-        textureHD: "assets/HD/moon.jpg",
-        color: "0xB76247",
-        orbits: "sun",
-        daysPerOrbit: 425.98,
-        synodicPeriod: 0.027,
-        clickable: true
-    },
-    asteroid7: {
-        type: "asteroid",
-        name: "asteroid",
-        info1: "Physical characteristics:",
-        info2: "its a rocky lump filled with hopes and dreams",
-        info3: "Atmosphere:  Surface pressure 0.0 kPA",
-        initPosition: {
-            x: 3.9354 + 3.4,
-            y: 0,
-            z: 0
-        },
-        radius: 0.02,
-        texture: "assets/1K/moon.jpg",
-        textureHD: "assets/HD/moon.jpg",
-        color: "0xB76247",
-        orbits: "sun",
-        daysPerOrbit: 665.98,
-        synodicPeriod: 0.027,
-        clickable: true
-    },
-    asteroid8: {
-        type: "asteroid",
-        name: "asteroid",
-        info1: "Physical characteristics:",
-        info2: "its a rocky lump filled with hopes and dreams",
-        info3: "Atmosphere:  Surface pressure 0.0 kPA",
-        initPosition: {
-            x: 3.9354 + 3.7,
-            y: 0,
-            z: 0
-        },
-        radius: 0.02,
-        texture: "assets/1K/moon.jpg",
-        textureHD: "assets/HD/moon.jpg",
-        color: "0xB76247",
-        orbits: "sun",
-        daysPerOrbit: 365.98,
-        synodicPeriod: 0.027,
-        clickable: true
-    },
-    asteroid9: {
-        type: "asteroid",
-        name: "asteroid",
-        info1: "Physical characteristics:",
-        info2: "its a rocky lump filled with hopes and dreams",
-        info3: "Atmosphere:  Surface pressure 0.0 kPA",
-        initPosition: {
-            x: 3.9354 + 3.8,
-            y: 0,
-            z: 0
-        },
-        radius: 0.02,
-        texture: "assets/1K/moon.jpg",
-        textureHD: "assets/HD/moon.jpg",
-        color: "0xB76247",
-        orbits: "sun",
-        daysPerOrbit: 635.98,
-        synodicPeriod: 0.027,
-        clickable: true
-    },
-    asteroid10: {
-        type: "asteroid",
-        name: "asteroid",
-        info1: "Physical characteristics:",
-        info2: "its a rocky lump filled with hopes and dreams",
-        info3: "Atmosphere:  Surface pressure 0.0 kPA",
-        initPosition: {
-            x: 3.9354 + 4,
-            y: 0,
-            z: 0
-        },
-
-        radius: 0.02,
-        texture: "assets/1K/moon.jpg",
-        textureHD: "assets/HD/moon.jpg",
-        color: "0xB76247",
-        orbits: "sun",
-        daysPerOrbit: 520.98,
-        synodicPeriod: 0.027,
-        clickable: true
-    },
-    asteroid12: {
-        type: "asteroid",
-        name: "asteroid",
-        info1: "Physical characteristics:",
-        info2: "its a rocky lump filled with hopes and dreams",
-        info3: "Atmosphere:  Surface pressure 0.0 kPA",
-        initPosition: {
-            x: 3.9354 + 2.5 + 1,
-            y: 0,
-            z: 0
-        },
-        radius: 0.02,
-        texture: "assets/1K/moon.jpg",
-        textureHD: "assets/HD/moon.jpg",
-        color: "0xB76247",
-        orbits: "sun",
-        daysPerOrbit: 619.98,
-        synodicPeriod: 1.027,
-        clickable: true
-    },
-    asteroid12: {
-        type: "asteroid",
-        name: "asteroid",
-        info1: "Physical characteristics:",
-        info2: "its a rocky lump filled with hopes and dreams",
-        info3: "Atmosphere:  Surface pressure 0.0 kPA",
-        initPosition: {
-            x: 3.9354 + 2.6 + 1,
-            y: 0,
-            z: 0
-        },
-        radius: 0.02,
-        texture: "assets/1K/moon.jpg",
-        textureHD: "assets/HD/moon.jpg",
-        color: "0xB76247",
-        orbits: "sun",
-        daysPerOrbit: 606.98,
-        synodicPeriod: 1.027,
-        clickable: true
-    },
-    asteroid13: {
-        type: "asteroid",
-        name: "asteroid",
-        info1: "Physical characteristics:",
-        info2: "its a rocky lump filled with hopes and dreams",
-        info3: "Atmosphere:  Surface pressure 0.0 kPA",
-        initPosition: {
-            x: 3.9354 + 2.7 + 1,
-            y: 0,
-            z: 0
-        },
-        radius: 0.02,
-        texture: "assets/1K/moon.jpg",
-        textureHD: "assets/HD/moon.jpg",
-        color: "0xB76247",
-        orbits: "sun",
-        daysPerOrbit: 425.98,
-        synodicPeriod: 0.027,
-        clickable: true
-    },
-    asteroid14: {
-        type: "asteroid",
-        name: "asteroid",
-        info1: "Physical characteristics:",
-        info2: "its a rocky lump filled with hopes and dreams",
-        info3: "Atmosphere:  Surface pressure 0.0 kPA",
-        initPosition: {
-            x: 3.9354 + 2.9 + 1,
-            y: 0,
-            z: 0
-        },
-        radius: 0.02,
-        texture: "assets/1K/moon.jpg",
-        textureHD: "assets/HD/moon.jpg",
-        color: "0xB76247",
-        orbits: "sun",
-        daysPerOrbit: 430.98,
-        synodicPeriod: 0.027,
-        clickable: true
-    },
-    asteroid15: {
-        type: "asteroid",
-        name: "asteroid",
-        info1: "Physical characteristics:",
-        info2: "its a rocky lump filled with hopes and dreams",
-        info3: "Atmosphere:  Surface pressure 0.0 kPA",
-        initPosition: {
-            x: 3.9354 + 3.1 + 1,
-            y: 0,
-            z: 0
-        },
-        radius: 0.02,
-        texture: "assets/1K/moon.jpg",
-        textureHD: "assets/HD/moon.jpg",
-        color: "0xB76247",
-        orbits: "sun",
-        daysPerOrbit: 690.98,
-        synodicPeriod: 0.027,
-        clickable: true
-    },
-    asteroid16: {
-        type: "asteroid",
-        name: "asteroid",
-        info1: "Physical characteristics:",
-        info2: "its a rocky lump filled with hopes and dreams",
-        info3: "Atmosphere:  Surface pressure 0.0 kPA",
-        initPosition: {
-            x: 3.9354 + 3.2 + 1,
-            y: 0,
-            z: 0
-        },
-        radius: 0.02,
-        texture: "assets/1K/moon.jpg",
-        textureHD: "assets/HD/moon.jpg",
-        color: "0xB76247",
-        orbits: "sun",
-        daysPerOrbit: 412.98,
-        synodicPeriod: 0.027,
-        clickable: true
-    },
-    asteroid17: {
-        type: "asteroid",
-        name: "asteroid",
-        info1: "Physical characteristics:",
-        info2: "its a rocky lump filled with hopes and dreams",
-        info3: "Atmosphere:  Surface pressure 0.0 kPA",
-        initPosition: {
-            x: 3.9354 + 3.4 + 1,
-            y: 0,
-            z: 0
-        },
-        radius: 0.02,
-        texture: "assets/1K/moon.jpg",
-        textureHD: "assets/HD/moon.jpg",
-        color: "0xB76247",
-        orbits: "sun",
-        daysPerOrbit: 635.98,
-        synodicPeriod: 0.027,
-        clickable: true
-    },
-    asteroid18: {
-        type: "asteroid",
-        name: "asteroid",
-        info1: "Physical characteristics:",
-        info2: "its a rocky lump filled with hopes and dreams",
-        info3: "Atmosphere:  Surface pressure 0.0 kPA",
-        initPosition: {
-            x: 3.9354 + 3.7 + 1,
-            y: 0,
-            z: 0
-        },
-        radius: 0.02,
-        texture: "assets/1K/moon.jpg",
-        textureHD: "assets/HD/moon.jpg",
-        color: "0xB76247",
-        orbits: "sun",
-        daysPerOrbit: 375.98,
-        synodicPeriod: 0.027,
-        clickable: true
-    },
-    asteroid19: {
-        type: "asteroid",
-        name: "asteroid",
-        info1: "Physical characteristics:",
-        info2: "its a rocky lump filled with hopes and dreams",
-        info3: "Atmosphere:  Surface pressure 0.0 kPA",
-        initPosition: {
-            x: 3.9354 + 3.8 + 1,
-            y: 0,
-            z: 0
-        },
-        radius: 0.02,
-        texture: "assets/1K/moon.jpg",
-        textureHD: "assets/HD/moon.jpg",
-        color: "0xB76247",
-        orbits: "sun",
-        daysPerOrbit: 639.98,
-        synodicPeriod: 0.027,
-        clickable: true
-    },
-    asteroid20: {
-        type: "asteroid",
-        name: "asteroid",
-        info1: "Physical characteristics:",
-        info2: "its a rocky lump filled with hopes and dreams",
-        info3: "Atmosphere:  Surface pressure 0.0 kPA",
-        initPosition: {
-            x: 3.9354 + 4 + 1,
-            y: 0,
-            z: 0
-        },
-
-        radius: 0.02,
-        texture: "assets/1K/moon.jpg",
-        textureHD: "assets/HD/moon.jpg",
-        color: "0xB76247",
-        orbits: "sun",
-        daysPerOrbit: 427.98,
-        synodicPeriod: 0.027,
         clickable: true
     },
     jupiter: {
@@ -739,6 +345,28 @@ function rotateAboutPivot(subjectMesh, pivotPosition, axis, radians) {
     );
 }
 
+function generateAsteroids(count, textureChoices, minRadius, maxRadius, minDistance, maxDistance, minDaysPerOrbit, maxDaysPerOrbit, minSynodicPeriod, maxSynodicPeriod) {
+    for (let i = 0; i < count; i++) {
+        let textureChoice = Math.round(Math.random() * (textureChoices.length - 1));
+        entities[`asteroid_${i}`] = {
+            type: "asteroid",
+            name: `asteroid_${i}`,
+            clickable: false,
+            initPosition: {
+                x: parseFloat((Math.random() * (maxDistance - minDistance) + minDistance).toFixed(4)),
+                y: 0,
+                z: 0
+            },
+            radius: Math.random() * (maxRadius - minRadius) + minRadius,
+            orbits: "sun",
+            daysPerOrbit: Math.random() * (maxDaysPerOrbit - minDaysPerOrbit) + minDaysPerOrbit,
+            synodicPeriod: Math.random() * (maxSynodicPeriod - minSynodicPeriod) + minSynodicPeriod,
+            preloadedTexture: textureChoices[textureChoice],
+            color: "0xB76247"
+        };
+    }
+}
+
 async function renderEntitiesArr(scene, textureLoader) {
     for (let entity of entitiesArr) {
         switch (entity.type) {
@@ -788,11 +416,11 @@ async function renderEntitiesArr(scene, textureLoader) {
                 objects.push(entity.mesh)
                 break;
             }
-
+            case ("asteroid"):
             case ("moon"):
             case ("planet"): {
                 let geometry = new THREE.SphereGeometry(entity.radius, 32, 32);
-                let texture = await asyncLoadTexture(textureLoader, entity.texture)
+                let texture = entity.preloadedTexture || await asyncLoadTexture(textureLoader, entity.texture)
                     .catch((err) => {
                         console.error(err);
                         return undefined;
@@ -852,31 +480,31 @@ async function renderEntitiesArr(scene, textureLoader) {
                 scene.add(entity.mesh);
                 break;
             }
-            case ("asteroid"): {
-                for (i = 0; i < 1; i++) {
-                    let geometry = new THREE.SphereGeometry(entity.radius, 32, 32);
-                    let texture = await asyncLoadTexture(textureLoader, entity.texture)
-                        .catch((err) => {
-                            console.error(err);
-                            return undefined;
-                        });
-                    let material = texture === undefined ?
-                        new THREE.MeshBasicMaterial({
-                            color: parseInt(entity.color)
-                        }) :
-                        new THREE.MeshPhongMaterial({
-                            map: texture
-                        });
-                    entity.mesh = new THREE.Mesh(
-                        geometry,
-                        material
-                    )
-                    entity.mesh.position.set(entity.initPosition.x + (i * 0.2), entity.initPosition.y, entity.initPosition.z);
-                    objects.push(entity.mesh)
-                    scene.add(entity.mesh);
-                }
-                break;
-            }
+            // case ("asteroid"): {
+            //     for (i = 0; i < 1; i++) {
+            //         let geometry = new THREE.SphereGeometry(entity.radius, 32, 32);
+            //         let texture = await asyncLoadTexture(textureLoader, entity.texture)
+            //             .catch((err) => {
+            //                 console.error(err);
+            //                 return undefined;
+            //             });
+            //         let material = texture === undefined ?
+            //             new THREE.MeshBasicMaterial({
+            //                 color: parseInt(entity.color)
+            //             }) :
+            //             new THREE.MeshPhongMaterial({
+            //                 map: texture
+            //             });
+            //         entity.mesh = new THREE.Mesh(
+            //             geometry,
+            //             material
+            //         )
+            //         entity.mesh.position.set(entity.initPosition.x, entity.initPosition.y, entity.initPosition.z);
+            //         objects.push(entity.mesh)
+            //         scene.add(entity.mesh);
+            //     }
+            //     break;
+            // }
             case ("light"): {
                 switch (entity.lightType) {
                     case ("ambient"): {
@@ -955,6 +583,24 @@ async function main() {
     //dat gui for the demo 
 
     //TODO replace this with a custom menu, or even just a css button
+
+    // Preload all the textures for the asteroids.
+    let texturePromises = [];
+    for (let texture of ASTEROID_TEXTURES) {
+        texturePromises.push(asyncLoadTexture(textureLoader, texture));
+    }
+    let preLoadedTextures = await Promise.all(texturePromises);
+
+    // Generate the asteroids.
+    generateAsteroids(75, preLoadedTextures, 0.03, 0.005,
+        entities.mars.initPosition.x + entities.mars.radius + 0.01,
+        entities.jupiter.initPosition.x - entities.jupiter.radius - 0.01,
+        100, 1000, 10, 1000);
+
+    // Order the entitites for animation.
+    entitiesArr = Object.values(entities).sort((a, b) => {
+        return animationOrder.indexOf(b.type) - animationOrder.indexOf(a.type);
+    });
 
     // Render the entitiesArr.
     await renderEntitiesArr(scene, textureLoader);
