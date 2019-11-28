@@ -1,5 +1,5 @@
 // All distances are in kilometres.
-let DAYS_PER_MS = 0.1;
+let DAYS_PER_MS = (0.1* Math.pow(10, 0.25));
 let SYNODIC_SPEED_MODIFIER = 1 * Math.pow(10, 0.25);
 let objects = [];
 let intersects = [];
@@ -877,8 +877,6 @@ async function main() {
     let scene = new THREE.Scene();
     scene.background = new THREE.Color(0x000000);
     renderer.render(scene, camera);
-
-
     //HUD/UI elements
     let uielements=[];
     // We will use 2D canvas element to render our HUD.  
@@ -924,10 +922,12 @@ async function main() {
     let instructions = document.getElementById('instructions');
     let nextbutton =  document.getElementById('next-button');
     let previousbutton =  document.getElementById('previous-button');
+    let pausebutton =  document.getElementById('pause-button');
     let simspeedtext = document.getElementById('simspeed-text');
     let lockedCam = true;
     nextbutton.style.display="block";
     previousbutton.style.display="block";
+    pausebutton.style.display="block";
     simspeedtext.style.display="block";
     instructions.addEventListener('click', function () {
         if (lockedCam) {
@@ -945,9 +945,9 @@ async function main() {
         hudBitmap.fillText(entity.name, window.innerWidth / 12, window.innerHeight / 10);
         hudBitmap.font = "Normal 60px Courier New";
         hudBitmap.textAlign = 'left';
-        hudBitmap.fillText(entity.info1, window.innerWidth / 12, 1.2*window.innerHeight / 8);
-        hudBitmap.fillText(entity.info2, window.innerWidth / 12, 1.5*(window.innerHeight / 8));
-        hudBitmap.fillText(entity.info3, window.innerWidth / 12, 1.8*(window.innerHeight / 8));
+        hudBitmap.fillText(entity.info1, window.innerWidth / 12, 1.4*window.innerHeight / 8);
+        hudBitmap.fillText(entity.info2, window.innerWidth / 12, 1.9*(window.innerHeight / 8));
+        hudBitmap.fillText(entity.info3, window.innerWidth / 12, 2.4*(window.innerHeight / 8));
         //hudBitmap.fillText(entity., window.innerWidth / 12, 4*(window.innerHeight / 8));
         hudTexture.needsUpdate = true;
     }
@@ -1001,6 +1001,18 @@ async function main() {
         count+=1;
     }
     });
+    pausebutton.addEventListener('click',function(){ 
+        if(simspeed!=0){
+            SYNODIC_SPEED_MODIFIER = 0;
+            DAYS_PER_MS=0;
+            simspeed=0;
+        }else{
+            SYNODIC_SPEED_MODIFIER = 1 * Math.pow(10, 0.25);
+            DAYS_PER_MS=0.1 * Math.pow(10, 0.25);
+            simspeed=1;
+        }
+       
+        simspeedtext.innerText="Sim Speed:"+simspeed;});
 
     controls.addEventListener('lock', function () {
         if (lockedCam) {
@@ -1295,14 +1307,14 @@ async function main() {
             direction.normalize(); // this ensures consistent movements in all directions
 
             if (moveForward) {
-                velocity.y -= direction.y * 1200.0 * speedMod * delta;
-                velocity.z -= direction.z * 1200.0 * speedMod * delta;
+                velocity.y -= direction.y * 600.0 * speedMod * delta;
+                velocity.z -= direction.z * 600.0 * speedMod * delta;
             } else if (moveBackward) {
-                velocity.y += direction.y * 1200.0 * speedMod * delta;
-                velocity.z -= direction.z * 1200.0 * speedMod * delta;
+                velocity.y += direction.y * 600.0 * speedMod * delta;
+                velocity.z -= direction.z * 600.0 * speedMod * delta;
             }
 
-            if (moveLeft || moveRight) velocity.x -= direction.x * speedMod * 1200.0 * delta;
+            if (moveLeft || moveRight) velocity.x -= direction.x * speedMod * 600.0 * delta;
 
             controls.moveRight(- velocity.x * delta);
 
