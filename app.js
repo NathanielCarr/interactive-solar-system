@@ -1,9 +1,11 @@
 // All distances are in kilometres.
-const DAYS_PER_MS = 0.1;
+let DAYS_PER_MS = 0.1;
 let SYNODIC_SPEED_MODIFIER = 1 * Math.pow(10, 0.25);
 let objects = [];
 let intersects = [];
-var target;
+let intersected;
+let target;
+
 let entities = {
     skybox: {
         type: "skybox",
@@ -24,7 +26,10 @@ let entities = {
     },
     sun: {
         type: "sun",
-        name: "sun",
+        name: "sun:",
+        info1:"Observation data:",
+        info2:"Visual brightness (V): -26.74",
+        info3:"Absolute magnitude: 4.83",
         initPosition: {
             x: 0,
             y: 0,
@@ -55,6 +60,9 @@ let entities = {
     mercury: {
         type: "planet",
         name: "mercury",
+        info1:"Physical characteristics:",
+        info2:"Mean radius: 2439.7km",
+        info3:"Atmosphere:  Surface pressure <0.5 nPA",
         initPosition: {
             x: 1.5 + 0.25,
             y: 0,
@@ -72,6 +80,9 @@ let entities = {
     venus: {
         type: "planet",
         name: "venus",
+        info1:"Physical characteristics:",
+        info2:"Mean radius: 6051.8km",
+        info3:"Atmosphere:  Surface pressure 9.2 MPa",
         initPosition: {
             x: 1.8684 + 0.5,
             y: 0,
@@ -89,6 +100,9 @@ let entities = {
     earth: {
         type: "planet",
         name: "earth",
+        info1:"Physical characteristics:",
+        info2:"Mean radius: 6371km",
+        info3:"Atmosphere:  Surface pressure 101.325 kPa",
         initPosition: {
             x: 2.5833 + 0.75,
             y: 0,
@@ -105,6 +119,10 @@ let entities = {
     },
     earthMoon1: {
         type: "moon",
+        name:"moon",
+        info1:"Physical characteristics:",
+        info2:"Mean radius: 1737.4km",
+        info3:"Atmosphere:  Surface pressure <0.5 nPA",
         initPosition: {
             x: 2.5833 + 0.75 + 0.3 + 0.1,
             y: 0,
@@ -115,11 +133,15 @@ let entities = {
         textureHD: "assets/HD/moon.jpg",
         color: "0x979392",
         orbits: "earth",
-        daysPerOrbit: 27.322
+        daysPerOrbit: 27.322,
+        clickable: true
     },
     mars: {
         type: "planet",
         name: "mars",
+        info1:"Physical characteristics:",
+        info2:"Mean radius: 3389.5km",
+        info3:"Atmosphere:  Surface pressure 0.636 kPA",
         initPosition: {
             x: 3.9354 + 1,
             y: 0,
@@ -134,11 +156,35 @@ let entities = {
         synodicPeriod: 1.027,
         clickable: true
     },
+    asteroid1: {
+        type: "asteroid",
+        name: "asteroid",
+        info1:"Physical characteristics:",
+        info2:"its a rocky lump filled with hopes and dreams",
+        info3:"Atmosphere:  Surface pressure 0.0 kPA",
+        initPosition: {
+            x: 3.9354 + 1.5,
+            y: 0,
+            z: 0
+        },
+        radius: 0.02,
+        texture: "assets/1K/moon.jpg",
+        textureHD: "assets/HD/moon.jpg",
+        color: "0xB76247",
+        orbits: "sun",
+        daysPerOrbit: 686.98,
+        synodicPeriod: 1.027,
+        clickable: true
+    },
+    
     jupiter: {
         type: "planet",
         name: "jupiter",
+        info1:"Physical characteristics:",
+        info2:"Mean radius: 69911km",
+        info3:"Atmosphere:  Surface pressure 20-200 kPA",
         initPosition: {
-            x: 13.4433 * 0.7 + 1,
+            x: 13.4433 * 1+ 1,
             y: 0,
             z: 0
         },
@@ -154,8 +200,11 @@ let entities = {
     saturn: {
         type: "planet",
         name: "saturn",
+        info1:"Physical characteristics:",
+        info2:"Mean radius: 58232km",
+        info3:"Atmosphere:  Surface pressure 140 kPA",
         initPosition: {
-            x: 24.7626 * 0.7 + 1,
+            x: 24.7626 * 1 + 1,
             y: 0,
             z: 0
         },
@@ -171,8 +220,11 @@ let entities = {
     uranus: {
         type: "planet",
         name: "uranus",
+        info1:"Physical characteristics:",
+        info2:"Mean radius: 25362km",
+        info3:"Atmosphere:  Surface pressure 130 kPA",
         initPosition: {
-            x: 49.5769 * 0.7 + 1,
+            x: 49.5769 * 1 + 1,
             y: 0,
             z: 0
         },
@@ -188,8 +240,11 @@ let entities = {
     neptune: {
         type: "planet",
         name: "neptune",
+        info1:"Physical characteristics:",
+        info2:"Mean radius: 24622km",
+        info3:"Atmosphere:  Surface pressure 130 kPA",
         initPosition: {
-            x: 77.6204 * 0.7 + 1,
+            x: 77.6204 * 1 + 1,
             y: 0,
             z: 0
         },
@@ -215,6 +270,7 @@ let animationOrder = [
     "sun",
     "planet",
     "moon",
+    "asteroid",
     "light"
 ];
 let entitiesArr = Object.values(entities).sort((a, b) => { return animationOrder.indexOf(b.type) - animationOrder.indexOf(a.type); });
@@ -247,8 +303,9 @@ let velocity = new THREE.Vector3();
 
 let direction = new THREE.Vector3();
 
-let cameraOrbitSpeed = 1;
+let cameraOrbitSpeed = 0;
 let speedMod = 1;
+let simspeed=1;
 
 function resetCam(camera, targ) {
     camera.position.y = 125;
@@ -350,7 +407,44 @@ async function renderEntitiesArr(scene, textureLoader) {
                 entity.mesh.position.set(entity.initPosition.x, entity.initPosition.y, entity.initPosition.z);
                 objects.push(entity.mesh)
                 scene.add(entity.mesh);
-
+                if(entity.type=='planet'){
+                let orbit = new THREE.Line(new THREE.CircleGeometry(entity.initPosition.x, 90),
+                new THREE.MeshBasicMaterial({
+                  color: 0xffffff,
+                  transparent: true,
+                  opacity: .1,
+                  side: THREE.BackSide
+                })
+              );
+              orbit.geometry.vertices.shift();
+              orbit.rotation.x = THREE.Math.degToRad(90);
+              scene.add(orbit);
+            }
+                break;
+            }
+            case("asteroid"):
+            { for(i=0; i<1; i++){
+                let geometry = new THREE.SphereGeometry(entity.radius, 32, 32);
+                let texture = await asyncLoadTexture(textureLoader, entity.texture)
+                    .catch((err) => {
+                        console.error(err);
+                        return undefined;
+                    });
+                let material = texture === undefined
+                    ? new THREE.MeshBasicMaterial({
+                        color: parseInt(entity.color)
+                    })
+                    : new THREE.MeshPhongMaterial({
+                        map: texture
+                    });
+                entity.mesh = new THREE.Mesh(
+                    geometry,
+                    material
+                )
+                entity.mesh.position.set(entity.initPosition.x+(i*0.2), entity.initPosition.y, entity.initPosition.z);
+                objects.push(entity.mesh)
+                scene.add(entity.mesh);
+            }
                 break;
             }
             case ("light"): {
@@ -406,28 +500,32 @@ async function main() {
 
 
     //HUD/UI elements
-
-
+    let uielements=[];
     // We will use 2D canvas element to render our HUD.  
     let hudCanvas = document.createElement('canvas');
-    hudCanvas.width = window.innerWidth;
-    hudCanvas.height = window.innerHeight;
+    hudCanvas.width = window.innerWidth*2;
+    hudCanvas.height = window.innerHeight*2;
     let hudBitmap = hudCanvas.getContext('2d');
-    hudBitmap.font = "Normal 50px Courier New";
-    hudBitmap.textAlign = 'center';
+    hudBitmap.font = "Normal 100px Courier New";
+    hudBitmap.textAlign = 'left';
     hudBitmap.fillStyle = "rgba(245,245,245,0.75)";
-    hudBitmap.fillText('SUN', window.innerWidth / 2, window.innerHeight / 1.05);
+    hudBitmap.fillText('The Solar System', window.innerWidth / 12, window.innerHeight / 10);
+    hudBitmap.font = "Normal 50px Courier New";
+    hudBitmap.fillText('Simulation Speed 1', window.innerWidth / 12, 19.5* (window.innerHeight / 10));
     let cameraHUD = new THREE.OrthographicCamera(-window.innerWidth / 2, window.innerWidth / 2, window.innerHeight / 2, -window.innerHeight / 2, 0, 30);
     hudscene = new THREE.Scene();
     //create meterial by usuing the 2d graphics we just renderd
-    let hudTexture = new THREE.Texture(hudCanvas)
+    let hudTexture = new THREE.Texture(hudCanvas);
     hudTexture.needsUpdate = true;
     let material = new THREE.MeshBasicMaterial({ map: hudTexture });
     material.transparent = true;
     let planeGeometry = new THREE.PlaneGeometry(window.innerWidth, window.innerHeight);
     let plane = new THREE.Mesh(planeGeometry, material);
     hudscene.add(plane);
+    //dat gui for the demo 
 
+    //TODO replace this with a custom menu, or even just a css button
+    
     // Render the entitiesArr.
     await renderEntitiesArr(scene, textureLoader);
     // Associate the entities with the entities that orbit them.
@@ -445,6 +543,7 @@ async function main() {
     let blocker = document.getElementById('blocker');
 
     let instructions = document.getElementById('instructions');
+    let button =  document.getElementById('start-button');
 
     let lockedCam = true;
 
@@ -515,9 +614,33 @@ async function main() {
                 break;
             case 190:
                 SYNODIC_SPEED_MODIFIER *= 2;
+                DAYS_PER_MS*=2;
+                simspeed*=2;
+                hudBitmap.font = "Normal 50px Courier New";
+                hudBitmap.fillText('Simulation Speed '+simspeed, window.innerWidth / 12, 19.5* (window.innerHeight / 10));
+                hudTexture.needsUpdate = true;
+             //   if(orbitControls.autoRotateSpeed<1){
+              //      if(orbitControls.autoRotateSpeed>=0.5){
+               //         orbitControls.autoRotateSpeed=1;
+                //    }else if(orbitControls.autoRotateSpeed==0){
+                 //       orbitControls.autoRotateSpeed=0.125;
+                  //  }else{
+                   //     orbitControls.autoRotateSpeed*=2;
+                    //}  
+               // }
                 break;
             case 188:
                 SYNODIC_SPEED_MODIFIER /= 2;
+                DAYS_PER_MS/=2;
+                simspeed/=2;
+                hudBitmap.font = "Normal 50px Courier New";
+                hudBitmap.fillText('Simulation Speed '+simspeed, window.innerWidth / 12, 19.5* (window.innerHeight / 10));
+                hudTexture.needsUpdate = true;
+                //if(orbitControls.autoRotateSpeed<0.125){
+                 //   orbitControls.autoRotateSpeed=0;
+                //}else{
+                 //   orbitControls.autoRotateSpeed/=2
+               // }
                 break;
             case 16: //shift
                 speedMod = 1;
@@ -544,6 +667,68 @@ async function main() {
                 orbiting = true;
                 break;
         }
+    }
+    window.onmousemove=(evt)=>{
+        mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+        mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+         console.log(intersects);
+         if (intersects.length != 0) {
+             for (let entity of entitiesArr) {
+                 if (entity.mesh != null) {
+                     let minPosX = entity.mesh.position.x - entity.radius;
+                     let maxPosX = entity.mesh.position.x + entity.radius;
+                     let minPosY = entity.mesh.position.y - entity.radius;
+                     let maxPosY = entity.mesh.position.y + entity.radius;
+                     let minPosZ = entity.mesh.position.z - entity.radius;
+                     let maxPosZ = entity.mesh.position.z + entity.radius;
+                     if (minPosX <= intersects[0].point.x && maxPosX >= intersects[0].point.x && minPosZ <= intersects[0].point.z && maxPosZ >= intersects[0].point.z) {
+                        
+                         break;
+                     }
+                 }
+             }
+         }
+    };
+
+    function poutline(){
+        //find the intererections
+         raycaster.setFromCamera(mouse, camera);
+         let intersectables = entitiesArr
+             .filter((entity) => {
+                 return entity.clickable;
+             })
+             .map((entity) => { return entity.mesh; });
+         intersects = raycaster.intersectObjects(intersectables, false);
+         if (intersects.length != 0) {
+            for (let entity of entitiesArr) {
+                if (entity.mesh != null) {
+                    let minPosX = entity.mesh.position.x - entity.radius;
+                    let maxPosX = entity.mesh.position.x + entity.radius;
+                    let minPosY = entity.mesh.position.y - entity.radius;
+                    let maxPosY = entity.mesh.position.y + entity.radius;
+                    let minPosZ = entity.mesh.position.z - entity.radius;
+                    let maxPosZ = entity.mesh.position.z + entity.radius;
+                    if (minPosX <= intersects[0].point.x && maxPosX >= intersects[0].point.x && minPosZ <= intersects[0].point.z && maxPosZ >= intersects[0].point.z) {
+                       //if the current selected object is not he currently stored intersectio object
+                        if(entity!=intersected){
+                            //restore previous
+                            if(intersected) intersected.material=intersected.oldmat;
+                            //store refence to object
+                            intersected=entity;
+                            intersected.oldmat=entity.material;
+                            intersected.material.color.setHex(0xffff00 );
+
+                       }else{
+                            //restore previous
+                            if(intersected) intersected.material=intersected.oldmat;
+                            intersected = null;                           
+                       }
+                        break;
+                    }
+                }
+            }
+        }
+
     }
 
     window.onclick = (evt) => {
@@ -574,6 +759,17 @@ async function main() {
                     if (minPosX <= intersects[0].point.x && maxPosX >= intersects[0].point.x && minPosZ <= intersects[0].point.z && maxPosZ >= intersects[0].point.z) {
                         console.log("Planet found, it's ", entity.name);
                         target = entity.mesh
+                        hudBitmap.clearRect(0, 0, window.innerWidth*2, window.innerHeight*2);
+                        console.log(entity.name);
+                        hudBitmap.font = "Normal 100px Courier New";
+                        hudBitmap.fillText(entity.name, window.innerWidth / 12, window.innerHeight / 10);
+                        hudBitmap.font = "Normal 60px Courier New";
+                        hudBitmap.textAlign = 'left';
+                        hudBitmap.fillText(entity.info1, window.innerWidth / 12, 1.2*window.innerHeight / 8);
+                        hudBitmap.fillText(entity.info2, window.innerWidth / 12, 1.5*(window.innerHeight / 8));
+                        hudBitmap.fillText(entity.info3, window.innerWidth / 12, 1.8*(window.innerHeight / 8));
+                        //hudBitmap.fillText(entity., window.innerWidth / 12, 4*(window.innerHeight / 8));
+                        hudTexture.needsUpdate = true;
                         break;
                     }
                 }
@@ -596,7 +792,7 @@ async function main() {
 
     // Move to a position that will get every entity in view.
     let furthestPlanet = entitiesArr
-        .filter((e) => { return e.type === "planet"; })
+        .filter((e) => { return e.type === "planet" ; })
         .sort((a, b) => { return b.mesh.position.length() - a.mesh.position.length() })[0];
     camera.position.set(furthestPlanet.mesh.position.length() * 2, furthestPlanet.mesh.position.length(), furthestPlanet.mesh.position.length() * 2);
 
@@ -606,7 +802,7 @@ async function main() {
     target = null;
     renderer.render(scene, camera);
 
-    orbitControls.autoRotate = true;
+    orbitControls.autoRotate = false;
     orbitControls.autoRotateSpeed = cameraOrbitSpeed;
     // Start animating.
     let lastTick = Date.now();
@@ -687,9 +883,10 @@ async function main() {
             }
             orbitControls.update();
         }
-
+        poutline();
         renderer.render(scene, camera);
         renderer.render(hudscene, cameraHUD);
+        
     }
     animate();
 }
