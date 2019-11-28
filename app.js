@@ -5,7 +5,8 @@ let objects = [];
 let intersects = [];
 let intersected;
 let target;
-
+let csp;
+let psp;
 let entities = {
     skybox: {
         type: "skybox",
@@ -163,7 +164,7 @@ let entities = {
         info2:"its a rocky lump filled with hopes and dreams",
         info3:"Atmosphere:  Surface pressure 0.0 kPA",
         initPosition: {
-            x: 3.9354 + 1.5,
+            x: 3.9354 + 2.5,
             y: 0,
             z: 0
         },
@@ -172,8 +173,384 @@ let entities = {
         textureHD: "assets/HD/moon.jpg",
         color: "0xB76247",
         orbits: "sun",
-        daysPerOrbit: 686.98,
+        daysPerOrbit: 616.98,
         synodicPeriod: 1.027,
+        clickable: true
+    },
+    asteroid2: {
+        type: "asteroid",
+        name: "asteroid",
+        info1:"Physical characteristics:",
+        info2:"its a rocky lump filled with hopes and dreams",
+        info3:"Atmosphere:  Surface pressure 0.0 kPA",
+        initPosition: {
+            x: 3.9354 + 2.6,
+            y: 0,
+            z: 0
+        },
+        radius: 0.02,
+        texture: "assets/1K/moon.jpg",
+        textureHD: "assets/HD/moon.jpg",
+        color: "0xB76247",
+        orbits: "sun",
+        daysPerOrbit: 626.98,
+        synodicPeriod: 1.027,
+        clickable: true
+    },
+    asteroid3: {
+        type: "asteroid",
+        name: "asteroid",
+        info1:"Physical characteristics:",
+        info2:"its a rocky lump filled with hopes and dreams",
+        info3:"Atmosphere:  Surface pressure 0.0 kPA",
+        initPosition: {
+            x: 3.9354 + 2.7,
+            y: 0,
+            z: 0
+        },
+        radius: 0.02,
+        texture: "assets/1K/moon.jpg",
+        textureHD: "assets/HD/moon.jpg",
+        color: "0xB76247",
+        orbits: "sun",
+        daysPerOrbit: 450.98,
+        synodicPeriod: 0.027,
+        clickable: true
+    },
+    asteroid4: {
+        type: "asteroid",
+        name: "asteroid",
+        info1:"Physical characteristics:",
+        info2:"its a rocky lump filled with hopes and dreams",
+        info3:"Atmosphere:  Surface pressure 0.0 kPA",
+        initPosition: {
+            x: 3.9354 + 2.9,
+            y: 0,
+            z: 0
+        },
+        radius: 0.02,
+        texture: "assets/1K/moon.jpg",
+        textureHD: "assets/HD/moon.jpg",
+        color: "0xB76247",
+        orbits: "sun",
+        daysPerOrbit: 450.98,
+        synodicPeriod: 0.027,
+        clickable: true
+    },
+    asteroid5: {
+        type: "asteroid",
+        name: "asteroid",
+        info1:"Physical characteristics:",
+        info2:"its a rocky lump filled with hopes and dreams",
+        info3:"Atmosphere:  Surface pressure 0.0 kPA",
+        initPosition: {
+            x: 3.9354 + 3.1,
+            y: 0,
+            z: 0
+        },
+        radius: 0.02,
+        texture: "assets/1K/moon.jpg",
+        textureHD: "assets/HD/moon.jpg",
+        color: "0xB76247",
+        orbits: "sun",
+        daysPerOrbit: 650.98,
+        synodicPeriod: 0.027,
+        clickable: true
+    },asteroid6: {
+        type: "asteroid",
+        name: "asteroid",
+        info1:"Physical characteristics:",
+        info2:"its a rocky lump filled with hopes and dreams",
+        info3:"Atmosphere:  Surface pressure 0.0 kPA",
+        initPosition: {
+            x: 3.9354 + 3.2,
+            y: 0,
+            z: 0
+        },
+        radius: 0.02,
+        texture: "assets/1K/moon.jpg",
+        textureHD: "assets/HD/moon.jpg",
+        color: "0xB76247",
+        orbits: "sun",
+        daysPerOrbit: 425.98,
+        synodicPeriod: 0.027,
+        clickable: true
+    },asteroid7: {
+        type: "asteroid",
+        name: "asteroid",
+        info1:"Physical characteristics:",
+        info2:"its a rocky lump filled with hopes and dreams",
+        info3:"Atmosphere:  Surface pressure 0.0 kPA",
+        initPosition: {
+            x: 3.9354 + 3.4,
+            y: 0,
+            z: 0
+        },
+        radius: 0.02,
+        texture: "assets/1K/moon.jpg",
+        textureHD: "assets/HD/moon.jpg",
+        color: "0xB76247",
+        orbits: "sun",
+        daysPerOrbit: 665.98,
+        synodicPeriod: 0.027,
+        clickable: true
+    },
+    asteroid8: {
+        type: "asteroid",
+        name: "asteroid",
+        info1:"Physical characteristics:",
+        info2:"its a rocky lump filled with hopes and dreams",
+        info3:"Atmosphere:  Surface pressure 0.0 kPA",
+        initPosition: {
+            x: 3.9354 + 3.7,
+            y: 0,
+            z: 0
+        },
+        radius: 0.02,
+        texture: "assets/1K/moon.jpg",
+        textureHD: "assets/HD/moon.jpg",
+        color: "0xB76247",
+        orbits: "sun",
+        daysPerOrbit: 365.98,
+        synodicPeriod: 0.027,
+        clickable: true
+    },
+    asteroid9: {
+        type: "asteroid",
+        name: "asteroid",
+        info1:"Physical characteristics:",
+        info2:"its a rocky lump filled with hopes and dreams",
+        info3:"Atmosphere:  Surface pressure 0.0 kPA",
+        initPosition: {
+            x: 3.9354 + 3.8,
+            y: 0,
+            z: 0
+        },
+        radius: 0.02,
+        texture: "assets/1K/moon.jpg",
+        textureHD: "assets/HD/moon.jpg",
+        color: "0xB76247",
+        orbits: "sun",
+        daysPerOrbit: 635.98,
+        synodicPeriod: 0.027,
+        clickable: true
+    },asteroid10: {
+        type: "asteroid",
+        name: "asteroid",
+        info1:"Physical characteristics:",
+        info2:"its a rocky lump filled with hopes and dreams",
+        info3:"Atmosphere:  Surface pressure 0.0 kPA",
+        initPosition: {
+            x: 3.9354 + 4,
+            y: 0,
+            z: 0
+        },
+       
+        radius: 0.02,
+        texture: "assets/1K/moon.jpg",
+        textureHD: "assets/HD/moon.jpg",
+        color: "0xB76247",
+        orbits: "sun",
+        daysPerOrbit: 520.98,
+        synodicPeriod: 0.027,
+        clickable: true
+    },
+    asteroid12: {
+        type: "asteroid",
+        name: "asteroid",
+        info1:"Physical characteristics:",
+        info2:"its a rocky lump filled with hopes and dreams",
+        info3:"Atmosphere:  Surface pressure 0.0 kPA",
+        initPosition: {
+            x: 3.9354 + 2.5+1,
+            y: 0,
+            z: 0
+        },
+        radius: 0.02,
+        texture: "assets/1K/moon.jpg",
+        textureHD: "assets/HD/moon.jpg",
+        color: "0xB76247",
+        orbits: "sun",
+        daysPerOrbit: 619.98,
+        synodicPeriod: 1.027,
+        clickable: true
+    },
+    asteroid12: {
+        type: "asteroid",
+        name: "asteroid",
+        info1:"Physical characteristics:",
+        info2:"its a rocky lump filled with hopes and dreams",
+        info3:"Atmosphere:  Surface pressure 0.0 kPA",
+        initPosition: {
+            x: 3.9354 + 2.6+1,
+            y: 0,
+            z: 0
+        },
+        radius: 0.02,
+        texture: "assets/1K/moon.jpg",
+        textureHD: "assets/HD/moon.jpg",
+        color: "0xB76247",
+        orbits: "sun",
+        daysPerOrbit: 606.98,
+        synodicPeriod: 1.027,
+        clickable: true
+    },
+    asteroid13: {
+        type: "asteroid",
+        name: "asteroid",
+        info1:"Physical characteristics:",
+        info2:"its a rocky lump filled with hopes and dreams",
+        info3:"Atmosphere:  Surface pressure 0.0 kPA",
+        initPosition: {
+            x: 3.9354 + 2.7+1,
+            y: 0,
+            z: 0
+        },
+        radius: 0.02,
+        texture: "assets/1K/moon.jpg",
+        textureHD: "assets/HD/moon.jpg",
+        color: "0xB76247",
+        orbits: "sun",
+        daysPerOrbit: 425.98,
+        synodicPeriod: 0.027,
+        clickable: true
+    },
+    asteroid14: {
+        type: "asteroid",
+        name: "asteroid",
+        info1:"Physical characteristics:",
+        info2:"its a rocky lump filled with hopes and dreams",
+        info3:"Atmosphere:  Surface pressure 0.0 kPA",
+        initPosition: {
+            x: 3.9354 + 2.9+1,
+            y: 0,
+            z: 0
+        },
+        radius: 0.02,
+        texture: "assets/1K/moon.jpg",
+        textureHD: "assets/HD/moon.jpg",
+        color: "0xB76247",
+        orbits: "sun",
+        daysPerOrbit: 430.98,
+        synodicPeriod: 0.027,
+        clickable: true
+    },
+    asteroid15: {
+        type: "asteroid",
+        name: "asteroid",
+        info1:"Physical characteristics:",
+        info2:"its a rocky lump filled with hopes and dreams",
+        info3:"Atmosphere:  Surface pressure 0.0 kPA",
+        initPosition: {
+            x: 3.9354 + 3.1+1,
+            y: 0,
+            z: 0
+        },
+        radius: 0.02,
+        texture: "assets/1K/moon.jpg",
+        textureHD: "assets/HD/moon.jpg",
+        color: "0xB76247",
+        orbits: "sun",
+        daysPerOrbit: 690.98,
+        synodicPeriod: 0.027,
+        clickable: true
+    },asteroid16: {
+        type: "asteroid",
+        name: "asteroid",
+        info1:"Physical characteristics:",
+        info2:"its a rocky lump filled with hopes and dreams",
+        info3:"Atmosphere:  Surface pressure 0.0 kPA",
+        initPosition: {
+            x: 3.9354 + 3.2+1,
+            y: 0,
+            z: 0
+        },
+        radius: 0.02,
+        texture: "assets/1K/moon.jpg",
+        textureHD: "assets/HD/moon.jpg",
+        color: "0xB76247",
+        orbits: "sun",
+        daysPerOrbit: 412.98,
+        synodicPeriod: 0.027,
+        clickable: true
+    },asteroid17: {
+        type: "asteroid",
+        name: "asteroid",
+        info1:"Physical characteristics:",
+        info2:"its a rocky lump filled with hopes and dreams",
+        info3:"Atmosphere:  Surface pressure 0.0 kPA",
+        initPosition: {
+            x: 3.9354 + 3.4+1,
+            y: 0,
+            z: 0
+        },
+        radius: 0.02,
+        texture: "assets/1K/moon.jpg",
+        textureHD: "assets/HD/moon.jpg",
+        color: "0xB76247",
+        orbits: "sun",
+        daysPerOrbit: 635.98,
+        synodicPeriod: 0.027,
+        clickable: true
+    },
+    asteroid18: {
+        type: "asteroid",
+        name: "asteroid",
+        info1:"Physical characteristics:",
+        info2:"its a rocky lump filled with hopes and dreams",
+        info3:"Atmosphere:  Surface pressure 0.0 kPA",
+        initPosition: {
+            x: 3.9354 + 3.7+1,
+            y: 0,
+            z: 0
+        },
+        radius: 0.02,
+        texture: "assets/1K/moon.jpg",
+        textureHD: "assets/HD/moon.jpg",
+        color: "0xB76247",
+        orbits: "sun",
+        daysPerOrbit: 375.98,
+        synodicPeriod: 0.027,
+        clickable: true
+    },
+    asteroid19: {
+        type: "asteroid",
+        name: "asteroid",
+        info1:"Physical characteristics:",
+        info2:"its a rocky lump filled with hopes and dreams",
+        info3:"Atmosphere:  Surface pressure 0.0 kPA",
+        initPosition: {
+            x: 3.9354 + 3.8+1,
+            y: 0,
+            z: 0
+        },
+        radius: 0.02,
+        texture: "assets/1K/moon.jpg",
+        textureHD: "assets/HD/moon.jpg",
+        color: "0xB76247",
+        orbits: "sun",
+        daysPerOrbit: 639.98,
+        synodicPeriod: 0.027,
+        clickable: true
+    },asteroid20: {
+        type: "asteroid",
+        name: "asteroid",
+        info1:"Physical characteristics:",
+        info2:"its a rocky lump filled with hopes and dreams",
+        info3:"Atmosphere:  Surface pressure 0.0 kPA",
+        initPosition: {
+            x: 3.9354 + 4+1,
+            y: 0,
+            z: 0
+        },
+       
+        radius: 0.02,
+        texture: "assets/1K/moon.jpg",
+        textureHD: "assets/HD/moon.jpg",
+        color: "0xB76247",
+        orbits: "sun",
+        daysPerOrbit: 427.98,
+        synodicPeriod: 0.027,
         clickable: true
     },
     
@@ -217,6 +594,7 @@ let entities = {
         synodicPeriod: 0.439,
         clickable: true
     },
+    
     uranus: {
         type: "planet",
         name: "uranus",
@@ -269,6 +647,7 @@ let animationOrder = [
     "skybox",
     "sun",
     "planet",
+    'ring',
     "moon",
     "asteroid",
     "light"
@@ -385,6 +764,7 @@ async function renderEntitiesArr(scene, textureLoader) {
                 objects.push(entity.mesh)
                 break;
             }
+            
             case ("moon"):
             case ("planet"): {
                 let geometry = new THREE.SphereGeometry(entity.radius, 32, 32);
@@ -508,10 +888,10 @@ async function main() {
     let hudBitmap = hudCanvas.getContext('2d');
     hudBitmap.font = "Normal 100px Courier New";
     hudBitmap.textAlign = 'left';
-    hudBitmap.fillStyle = "rgba(245,245,245,0.75)";
+    hudBitmap.fillStyle = "rgba(245,245,245,0.95)";
     hudBitmap.fillText('The Solar System', window.innerWidth / 12, window.innerHeight / 10);
-    hudBitmap.font = "Normal 50px Courier New";
-    hudBitmap.fillText('Simulation Speed 1', window.innerWidth / 12, 19.5* (window.innerHeight / 10));
+    //hudBitmap.font = "Normal 50px Courier New";
+    //hudBitmap.fillText('Simulation Speed 1', window.innerWidth / 12, 19.5* (window.innerHeight / 10));
     let cameraHUD = new THREE.OrthographicCamera(-window.innerWidth / 2, window.innerWidth / 2, window.innerHeight / 2, -window.innerHeight / 2, 0, 30);
     hudscene = new THREE.Scene();
     //create meterial by usuing the 2d graphics we just renderd
@@ -541,17 +921,86 @@ async function main() {
     let orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
     let controls = new THREE.PointerLockControls(camera, renderer.domElement);
     let blocker = document.getElementById('blocker');
-
     let instructions = document.getElementById('instructions');
-    let button =  document.getElementById('start-button');
-
+    let nextbutton =  document.getElementById('next-button');
+    let previousbutton =  document.getElementById('previous-button');
+    let simspeedtext = document.getElementById('simspeed-text');
     let lockedCam = true;
-
+    nextbutton.style.display="block";
+    previousbutton.style.display="block";
+    simspeedtext.style.display="block";
     instructions.addEventListener('click', function () {
         if (lockedCam) {
             controls.lock();
         }
     }, false);
+    function updatehud(entity){
+        csp=entity.name;
+        target = entity.mesh;
+        hudBitmap.clearRect(0, 0, window.innerWidth*2, window.innerHeight*2);
+        //hudBitmap.fillStyle = "rgba(20,139,224,0.25)";
+        //hudBitmap.fillRect((window.innerWidth / 12), (window.innerHeight / 16),window.innerWidth/2,window.innerHeight/5)
+        hudBitmap.fillStyle = "rgba(245,245,245,0.95)";
+        hudBitmap.font = "Normal 100px Courier New";
+        hudBitmap.fillText(entity.name, window.innerWidth / 12, window.innerHeight / 10);
+        hudBitmap.font = "Normal 60px Courier New";
+        hudBitmap.textAlign = 'left';
+        hudBitmap.fillText(entity.info1, window.innerWidth / 12, 1.2*window.innerHeight / 8);
+        hudBitmap.fillText(entity.info2, window.innerWidth / 12, 1.5*(window.innerHeight / 8));
+        hudBitmap.fillText(entity.info3, window.innerWidth / 12, 1.8*(window.innerHeight / 8));
+        //hudBitmap.fillText(entity., window.innerWidth / 12, 4*(window.innerHeight / 8));
+        hudTexture.needsUpdate = true;
+    }
+    nextbutton.addEventListener('click', function () {
+        let count=0;
+        for (let entity of entitiesArr) {
+            if (entity.mesh != null) {
+            if(entity.name==csp){
+                if(csp=="asteroid"){//if its an asteroid we jump stright to juipter
+                    entity=entitiesArr[27];
+                    updatehud(entity);
+                    break;
+                }
+                else if(csp=="sun:"){//if its an asteroid we jump stright to juipter
+                    entity=entitiesArr[22];
+                    updatehud(entity);
+                    break;
+                } else {
+                    entity=entitiesArr[count+1];
+                    updatehud(entity);
+                    break;
+                }
+            }
+        }
+        count+=1;
+    }
+    });
+    previousbutton.addEventListener('click', function () {
+        console.log(entitiesArr);
+        let count=0;
+        for (let entity of entitiesArr) {
+            if (entity.mesh != null) {
+            if(entity.name==csp){
+                if(csp=="asteroid"){//if its an asteroid we jump stright to mars
+                    entity=entitiesArr[25];
+                    updatehud(entity);
+                    break;
+                }
+                else if(csp=="sun:"){//if its the sun we jump stright to neptune
+                    entity=entitiesArr[29];
+                    updatehud(entity);
+                    break;
+                } else {
+                    entity=entitiesArr[count-1];
+                    updatehud(entity);
+                    break;
+
+                }
+            }
+        }
+        count+=1;
+    }
+    });
 
     controls.addEventListener('lock', function () {
         if (lockedCam) {
@@ -616,9 +1065,10 @@ async function main() {
                 SYNODIC_SPEED_MODIFIER *= 2;
                 DAYS_PER_MS*=2;
                 simspeed*=2;
-                hudBitmap.font = "Normal 50px Courier New";
-                hudBitmap.fillText('Simulation Speed '+simspeed, window.innerWidth / 12, 19.5* (window.innerHeight / 10));
-                hudTexture.needsUpdate = true;
+                simspeedtext.innerText="Sim Speed:"+simspeed;
+               // hudBitmap.font = "Normal 50px Courier New";
+               // hudBitmap.fillText('Simulation Speed '+simspeed, window.innerWidth / 12, 19.5* (window.innerHeight / 10));
+               // hudTexture.needsUpdate = true;
              //   if(orbitControls.autoRotateSpeed<1){
               //      if(orbitControls.autoRotateSpeed>=0.5){
                //         orbitControls.autoRotateSpeed=1;
@@ -633,9 +1083,10 @@ async function main() {
                 SYNODIC_SPEED_MODIFIER /= 2;
                 DAYS_PER_MS/=2;
                 simspeed/=2;
-                hudBitmap.font = "Normal 50px Courier New";
-                hudBitmap.fillText('Simulation Speed '+simspeed, window.innerWidth / 12, 19.5* (window.innerHeight / 10));
-                hudTexture.needsUpdate = true;
+                simspeedtext.innerText="Sim Speed:"+simspeed;
+              //  hudBitmap.font = "Normal 50px Courier New";
+                //hudBitmap.fillText('Simulation Speed '+simspeed, window.innerWidth / 12, 19.5* (window.innerHeight / 10));
+              //  hudTexture.needsUpdate = true;
                 //if(orbitControls.autoRotateSpeed<0.125){
                  //   orbitControls.autoRotateSpeed=0;
                 //}else{
@@ -658,6 +1109,7 @@ async function main() {
                 //resetCam(camera, planets[].mesh.position);
                 moveForward, moveBackward, moveLeft, moveRight = false;
                 orbiting = true;
+                csp=entitiesArr[1].name;//set the current selected planet to the sun
                 break;
             case 51:
                 controls.unlock();
@@ -671,7 +1123,6 @@ async function main() {
     window.onmousemove=(evt)=>{
         mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
         mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-         console.log(intersects);
          if (intersects.length != 0) {
              for (let entity of entitiesArr) {
                  if (entity.mesh != null) {
@@ -682,7 +1133,7 @@ async function main() {
                      let minPosZ = entity.mesh.position.z - entity.radius;
                      let maxPosZ = entity.mesh.position.z + entity.radius;
                      if (minPosX <= intersects[0].point.x && maxPosX >= intersects[0].point.x && minPosZ <= intersects[0].point.z && maxPosZ >= intersects[0].point.z) {
-                        
+                        //poutline();
                          break;
                      }
                  }
@@ -690,52 +1141,48 @@ async function main() {
          }
     };
 
-    function poutline(){
-        //find the intererections
-         raycaster.setFromCamera(mouse, camera);
-         let intersectables = entitiesArr
-             .filter((entity) => {
-                 return entity.clickable;
-             })
-             .map((entity) => { return entity.mesh; });
-         intersects = raycaster.intersectObjects(intersectables, false);
-         if (intersects.length != 0) {
-            for (let entity of entitiesArr) {
-                if (entity.mesh != null) {
-                    let minPosX = entity.mesh.position.x - entity.radius;
-                    let maxPosX = entity.mesh.position.x + entity.radius;
-                    let minPosY = entity.mesh.position.y - entity.radius;
-                    let maxPosY = entity.mesh.position.y + entity.radius;
-                    let minPosZ = entity.mesh.position.z - entity.radius;
-                    let maxPosZ = entity.mesh.position.z + entity.radius;
-                    if (minPosX <= intersects[0].point.x && maxPosX >= intersects[0].point.x && minPosZ <= intersects[0].point.z && maxPosZ >= intersects[0].point.z) {
-                       //if the current selected object is not he currently stored intersectio object
-                        if(entity!=intersected){
-                            //restore previous
-                            if(intersected) intersected.material=intersected.oldmat;
-                            //store refence to object
-                            intersected=entity;
-                            intersected.oldmat=entity.material;
-                            intersected.material.color.setHex(0xffff00 );
+    // function poutline(){
+    //     //find the intererections
+    //      raycaster.setFromCamera(mouse, camera);
+    //      let intersectables = entitiesArr
+    //          .filter((entity) => {
+    //              return entity.clickable;
+    //          })
+    //          .map((entity) => { return entity.mesh; });
+    //      intersects = raycaster.intersectObjects(intersectables, false);
+    //      if (intersects.length != 0) {
+    //         for (let entity of entitiesArr) {
+    //             if (entity.mesh != null) {
+    //                 let minPosX = entity.mesh.position.x - entity.radius;
+    //                 let maxPosX = entity.mesh.position.x + entity.radius;
+    //                 let minPosY = entity.mesh.position.y - entity.radius;
+    //                 let maxPosY = entity.mesh.position.y + entity.radius;
+    //                 let minPosZ = entity.mesh.position.z - entity.radius;
+    //                 let maxPosZ = entity.mesh.position.z + entity.radius;
+    //                 if (minPosX <= intersects[0].point.x && maxPosX >= intersects[0].point.x && minPosZ <= intersects[0].point.z && maxPosZ >= intersects[0].point.z) {
+    //                    //if the current selected object is not he currently stored intersectio object
+    //                     if(entity!=intersected){
+    //                         //restore previous
+    //                         if(intersected) intersected.material=intersected.oldmat;
+    //                         //store refence to object
+    //                         intersected=entity;
+    //                         intersected.oldmat=entity.material;
+    //                         intersected.material.color.setHex(0xffff00 );
 
-                       }else{
-                            //restore previous
-                            if(intersected) intersected.material=intersected.oldmat;
-                            intersected = null;                           
-                       }
-                        break;
-                    }
-                }
-            }
-        }
+    //                    }else{
+    //                         //restore previous
+    //                         if(intersected) intersected.material=intersected.oldmat;
+    //                         intersected = null;                           
+    //                    }
+    //                     break;
+    //                 }
+    //             }
+    //         }
+    //     }
 
-    }
+    // }
 
     window.onclick = (evt) => {
-        console.log("click");
-        //console.log(entities);
-        //objects=entities;
-        console.log(objects);
         mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
         mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
         //find the intererections
@@ -746,7 +1193,6 @@ async function main() {
             })
             .map((entity) => { return entity.mesh; });
         intersects = raycaster.intersectObjects(intersectables, false);
-        console.log(intersects);
         if (intersects.length != 0) {
             for (let entity of entitiesArr) {
                 if (entity.mesh != null) {
@@ -758,18 +1204,7 @@ async function main() {
                     let maxPosZ = entity.mesh.position.z + entity.radius;
                     if (minPosX <= intersects[0].point.x && maxPosX >= intersects[0].point.x && minPosZ <= intersects[0].point.z && maxPosZ >= intersects[0].point.z) {
                         console.log("Planet found, it's ", entity.name);
-                        target = entity.mesh
-                        hudBitmap.clearRect(0, 0, window.innerWidth*2, window.innerHeight*2);
-                        console.log(entity.name);
-                        hudBitmap.font = "Normal 100px Courier New";
-                        hudBitmap.fillText(entity.name, window.innerWidth / 12, window.innerHeight / 10);
-                        hudBitmap.font = "Normal 60px Courier New";
-                        hudBitmap.textAlign = 'left';
-                        hudBitmap.fillText(entity.info1, window.innerWidth / 12, 1.2*window.innerHeight / 8);
-                        hudBitmap.fillText(entity.info2, window.innerWidth / 12, 1.5*(window.innerHeight / 8));
-                        hudBitmap.fillText(entity.info3, window.innerWidth / 12, 1.8*(window.innerHeight / 8));
-                        //hudBitmap.fillText(entity., window.innerWidth / 12, 4*(window.innerHeight / 8));
-                        hudTexture.needsUpdate = true;
+                        updatehud(entity);
                         break;
                     }
                 }
@@ -883,7 +1318,7 @@ async function main() {
             }
             orbitControls.update();
         }
-        poutline();
+        //poutline();
         renderer.render(scene, camera);
         renderer.render(hudscene, cameraHUD);
         

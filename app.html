@@ -9,17 +9,30 @@
             position: absolute;
             width: 100%;
             height: 100%;
+        
             background-color: rgba(0, 0, 0, 0.5);
         }
-        #start-button{
-			transition: opacity 0.5s ease, transform 0.5s ease;
-			opacity: 0;
-			transform: translatey(-50px);
-			border: 3px solid color-dark;
-			padding: 10px 20px;
-			background-color: transparent;
-			color:color-dark;
-			font-size: 30px;
+        #previous-button{
+            position: absolute;
+            top:98%;
+            left:2.5%;
+            width: 100%;
+            height: 100%;
+		}
+        #next-button{
+            position: absolute;
+            top:98%;
+            left:12.5%;
+            width: 100%;
+            height: 100%;
+		}
+        #simspeed-text{
+            position: absolute;
+            color:#ffffff;
+            top:98%;
+            left:20%;
+            width: 100%;
+            height: 100%;
 		}
 	
 	
@@ -60,7 +73,9 @@
 </head>
 
 <body>
+    
     <div id="blocker">
+
         <div id="instructions">
             <span style="font-size:36px">Click to begin</span>
             <br /><br />
@@ -73,9 +88,12 @@
             Orbit Cam: 2<br />
             Zoom: Scroll Up/Down
         </div>
-        <div id="start-button">Start</div>
-    </div>
 
+        
+    </div>
+    <div id="previous-button"><button type="button">Previous Planet</button></div>
+    <div id="next-button"><button type="button">Next Planet</button></div>
+    <div id="simspeed-text"><b></b>Sim Speed: 1</b></div>
     <script src="js/three.js"></script>
     <script type="text/javascript" src="dat.gui.min.js"></script>
     <script src="js/OrbitControls.js"></script>
