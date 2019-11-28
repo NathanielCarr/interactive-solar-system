@@ -67,7 +67,8 @@ let entities = {
             info1: "Physical characteristics:",
             info2: "Mean radius: 2439.7km",
             info3: "Atmosphere:  Surface pressure <0.5 nPA",
-            info4: "Sidereal Period: 88 days",
+            info4: "Average Distance To Sun:  0.387 AU",
+            info5: "Sidereal Period: 88 days",
         },
         initPosition: {
             x: 1.5 + 0.25,
@@ -90,7 +91,8 @@ let entities = {
             info1: "Physical characteristics:",
             info2: "Mean radius: 6051.8km",
             info3: "Atmosphere:  Surface pressure 9.2 MPa",
-            info4: "Sidereal Period: 225 days"
+            info4: "Average Distance To Sun: 0.722 Au",
+            info5: "Sidereal Period: 225 days"
         },
         initPosition: {
             x: 1.8684 + 0.5,
@@ -113,7 +115,8 @@ let entities = {
             info1: "Physical characteristics:",
             info2: "Mean radius: 6371km",
             info3: "Atmosphere:  Surface pressure 101.325 kPa",
-            info4: "Sidereal Period: 1 year"
+            info4: "Average Distance To Sun: 1 AU",
+            info5: "Sidereal Period: 1 year"
         },
         initPosition: {
             x: 2.5833 + 0.75,
@@ -158,7 +161,8 @@ let entities = {
             info1: "Physical characteristics:",
             info2: "Mean radius: 3389.5km",
             info3: "Atmosphere:  Surface pressure 0.636 kPA",
-            info4: "Sidereal Period: 1.9 years"
+            info4: "Average Distance To Sun: 1.52 AU",
+            info5: "Sidereal Period: 1.9 years"
         },
         initPosition: {
             x: 3.9354 + 1,
@@ -623,7 +627,8 @@ let entities = {
             info1: "Physical characteristics:",
             info2: "Mean radius: 69911km",
             info3: "Atmosphere:  Surface pressure 20-200 kPA",
-            info4: "Sidereal Period: 11.9 years"
+            info4: "Average Distance To Sun: 5.20 AU",
+            info5: "Sidereal Period: 11.9 years"
         },
         initPosition: {
             x: 13.4433 * 1 + 1,
@@ -646,7 +651,8 @@ let entities = {
             info1: "Physical characteristics:",
             info2: "Mean radius: 58232km",
             info3: "Atmosphere:  Surface pressure 140 kPA",
-            info4: "Sidereal Period: 29.5 years"
+            info4: "Average Distance To Sun: 9.58 AU",
+            info5: "Sidereal Period: 29.5 years"
         },
         initPosition: {
             x: 24.7626 * 1 + 1,
@@ -686,7 +692,8 @@ let entities = {
             info1: "Physical characteristics:",
             info2: "Mean radius: 25362km",
             info3: "Atmosphere:  Surface pressure 130 kPA",
-            info4: "Sidereal Period: 84 years"
+            info4: "Average Distance To Sun: 19.2 AU",
+            info5: "Sidereal Period: 84 years"
         },
         initPosition: {
             x: 49.5769 * 1 + 1,
@@ -709,7 +716,8 @@ let entities = {
             info1: "Physical characteristics:",
             info2: "Mean radius: 24622km",
             info3: "Atmosphere:  Surface pressure 130 kPA",
-            info4: "Sidereal Period: 164.8 years"
+            info4: "Average Distance To Sun: 30.1 AU",
+            info5: "Sidereal Period: 164.8 years"
         },
         initPosition: {
             x: 77.6204 * 1 + 1,
