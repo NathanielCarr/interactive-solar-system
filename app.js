@@ -28,9 +28,9 @@ let entities = {
     sun: {
         type: "sun",
         name: "sun:",
-        info1:"Observation data:",
-        info2:"Visual brightness (V): -26.74",
-        info3:"Absolute magnitude: 4.83",
+        info1: "Observation data:",
+        info2: "Visual brightness (V): -26.74",
+        info3: "Absolute magnitude: 4.83",
         initPosition: {
             x: 0,
             y: 0,
@@ -61,9 +61,9 @@ let entities = {
     mercury: {
         type: "planet",
         name: "mercury",
-        info1:"Physical characteristics:",
-        info2:"Mean radius: 2439.7km",
-        info3:"Atmosphere:  Surface pressure <0.5 nPA",
+        info1: "Physical characteristics:",
+        info2: "Mean radius: 2439.7km",
+        info3: "Atmosphere:  Surface pressure <0.5 nPA",
         initPosition: {
             x: 1.5 + 0.25,
             y: 0,
@@ -81,9 +81,9 @@ let entities = {
     venus: {
         type: "planet",
         name: "venus",
-        info1:"Physical characteristics:",
-        info2:"Mean radius: 6051.8km",
-        info3:"Atmosphere:  Surface pressure 9.2 MPa",
+        info1: "Physical characteristics:",
+        info2: "Mean radius: 6051.8km",
+        info3: "Atmosphere:  Surface pressure 9.2 MPa",
         initPosition: {
             x: 1.8684 + 0.5,
             y: 0,
@@ -101,9 +101,9 @@ let entities = {
     earth: {
         type: "planet",
         name: "earth",
-        info1:"Physical characteristics:",
-        info2:"Mean radius: 6371km",
-        info3:"Atmosphere:  Surface pressure 101.325 kPa",
+        info1: "Physical characteristics:",
+        info2: "Mean radius: 6371km",
+        info3: "Atmosphere:  Surface pressure 101.325 kPa",
         initPosition: {
             x: 2.5833 + 0.75,
             y: 0,
@@ -120,10 +120,10 @@ let entities = {
     },
     earthMoon1: {
         type: "moon",
-        name:"moon",
-        info1:"Physical characteristics:",
-        info2:"Mean radius: 1737.4km",
-        info3:"Atmosphere:  Surface pressure <0.5 nPA",
+        name: "moon",
+        info1: "Physical characteristics:",
+        info2: "Mean radius: 1737.4km",
+        info3: "Atmosphere:  Surface pressure <0.5 nPA",
         initPosition: {
             x: 2.5833 + 0.75 + 0.3 + 0.1,
             y: 0,
@@ -140,9 +140,9 @@ let entities = {
     mars: {
         type: "planet",
         name: "mars",
-        info1:"Physical characteristics:",
-        info2:"Mean radius: 3389.5km",
-        info3:"Atmosphere:  Surface pressure 0.636 kPA",
+        info1: "Physical characteristics:",
+        info2: "Mean radius: 3389.5km",
+        info3: "Atmosphere:  Surface pressure 0.636 kPA",
         initPosition: {
             x: 3.9354 + 1,
             y: 0,
@@ -160,9 +160,9 @@ let entities = {
     asteroid1: {
         type: "asteroid",
         name: "asteroid",
-        info1:"Physical characteristics:",
-        info2:"its a rocky lump filled with hopes and dreams",
-        info3:"Atmosphere:  Surface pressure 0.0 kPA",
+        info1: "Physical characteristics:",
+        info2: "its a rocky lump filled with hopes and dreams",
+        info3: "Atmosphere:  Surface pressure 0.0 kPA",
         initPosition: {
             x: 3.9354 + 2.5,
             y: 0,
@@ -180,9 +180,9 @@ let entities = {
     asteroid2: {
         type: "asteroid",
         name: "asteroid",
-        info1:"Physical characteristics:",
-        info2:"its a rocky lump filled with hopes and dreams",
-        info3:"Atmosphere:  Surface pressure 0.0 kPA",
+        info1: "Physical characteristics:",
+        info2: "its a rocky lump filled with hopes and dreams",
+        info3: "Atmosphere:  Surface pressure 0.0 kPA",
         initPosition: {
             x: 3.9354 + 2.6,
             y: 0,
@@ -200,9 +200,9 @@ let entities = {
     asteroid3: {
         type: "asteroid",
         name: "asteroid",
-        info1:"Physical characteristics:",
-        info2:"its a rocky lump filled with hopes and dreams",
-        info3:"Atmosphere:  Surface pressure 0.0 kPA",
+        info1: "Physical characteristics:",
+        info2: "its a rocky lump filled with hopes and dreams",
+        info3: "Atmosphere:  Surface pressure 0.0 kPA",
         initPosition: {
             x: 3.9354 + 2.7,
             y: 0,
@@ -220,9 +220,9 @@ let entities = {
     asteroid4: {
         type: "asteroid",
         name: "asteroid",
-        info1:"Physical characteristics:",
-        info2:"its a rocky lump filled with hopes and dreams",
-        info3:"Atmosphere:  Surface pressure 0.0 kPA",
+        info1: "Physical characteristics:",
+        info2: "its a rocky lump filled with hopes and dreams",
+        info3: "Atmosphere:  Surface pressure 0.0 kPA",
         initPosition: {
             x: 3.9354 + 2.9,
             y: 0,
@@ -240,9 +240,9 @@ let entities = {
     asteroid5: {
         type: "asteroid",
         name: "asteroid",
-        info1:"Physical characteristics:",
-        info2:"its a rocky lump filled with hopes and dreams",
-        info3:"Atmosphere:  Surface pressure 0.0 kPA",
+        info1: "Physical characteristics:",
+        info2: "its a rocky lump filled with hopes and dreams",
+        info3: "Atmosphere:  Surface pressure 0.0 kPA",
         initPosition: {
             x: 3.9354 + 3.1,
             y: 0,
@@ -256,12 +256,13 @@ let entities = {
         daysPerOrbit: 650.98,
         synodicPeriod: 0.027,
         clickable: true
-    },asteroid6: {
+    },
+    asteroid6: {
         type: "asteroid",
         name: "asteroid",
-        info1:"Physical characteristics:",
-        info2:"its a rocky lump filled with hopes and dreams",
-        info3:"Atmosphere:  Surface pressure 0.0 kPA",
+        info1: "Physical characteristics:",
+        info2: "its a rocky lump filled with hopes and dreams",
+        info3: "Atmosphere:  Surface pressure 0.0 kPA",
         initPosition: {
             x: 3.9354 + 3.2,
             y: 0,
@@ -275,12 +276,13 @@ let entities = {
         daysPerOrbit: 425.98,
         synodicPeriod: 0.027,
         clickable: true
-    },asteroid7: {
+    },
+    asteroid7: {
         type: "asteroid",
         name: "asteroid",
-        info1:"Physical characteristics:",
-        info2:"its a rocky lump filled with hopes and dreams",
-        info3:"Atmosphere:  Surface pressure 0.0 kPA",
+        info1: "Physical characteristics:",
+        info2: "its a rocky lump filled with hopes and dreams",
+        info3: "Atmosphere:  Surface pressure 0.0 kPA",
         initPosition: {
             x: 3.9354 + 3.4,
             y: 0,
@@ -298,9 +300,9 @@ let entities = {
     asteroid8: {
         type: "asteroid",
         name: "asteroid",
-        info1:"Physical characteristics:",
-        info2:"its a rocky lump filled with hopes and dreams",
-        info3:"Atmosphere:  Surface pressure 0.0 kPA",
+        info1: "Physical characteristics:",
+        info2: "its a rocky lump filled with hopes and dreams",
+        info3: "Atmosphere:  Surface pressure 0.0 kPA",
         initPosition: {
             x: 3.9354 + 3.7,
             y: 0,
@@ -318,9 +320,9 @@ let entities = {
     asteroid9: {
         type: "asteroid",
         name: "asteroid",
-        info1:"Physical characteristics:",
-        info2:"its a rocky lump filled with hopes and dreams",
-        info3:"Atmosphere:  Surface pressure 0.0 kPA",
+        info1: "Physical characteristics:",
+        info2: "its a rocky lump filled with hopes and dreams",
+        info3: "Atmosphere:  Surface pressure 0.0 kPA",
         initPosition: {
             x: 3.9354 + 3.8,
             y: 0,
@@ -334,18 +336,19 @@ let entities = {
         daysPerOrbit: 635.98,
         synodicPeriod: 0.027,
         clickable: true
-    },asteroid10: {
+    },
+    asteroid10: {
         type: "asteroid",
         name: "asteroid",
-        info1:"Physical characteristics:",
-        info2:"its a rocky lump filled with hopes and dreams",
-        info3:"Atmosphere:  Surface pressure 0.0 kPA",
+        info1: "Physical characteristics:",
+        info2: "its a rocky lump filled with hopes and dreams",
+        info3: "Atmosphere:  Surface pressure 0.0 kPA",
         initPosition: {
             x: 3.9354 + 4,
             y: 0,
             z: 0
         },
-       
+
         radius: 0.02,
         texture: "assets/1K/moon.jpg",
         textureHD: "assets/HD/moon.jpg",
@@ -358,11 +361,11 @@ let entities = {
     asteroid12: {
         type: "asteroid",
         name: "asteroid",
-        info1:"Physical characteristics:",
-        info2:"its a rocky lump filled with hopes and dreams",
-        info3:"Atmosphere:  Surface pressure 0.0 kPA",
+        info1: "Physical characteristics:",
+        info2: "its a rocky lump filled with hopes and dreams",
+        info3: "Atmosphere:  Surface pressure 0.0 kPA",
         initPosition: {
-            x: 3.9354 + 2.5+1,
+            x: 3.9354 + 2.5 + 1,
             y: 0,
             z: 0
         },
@@ -378,11 +381,11 @@ let entities = {
     asteroid12: {
         type: "asteroid",
         name: "asteroid",
-        info1:"Physical characteristics:",
-        info2:"its a rocky lump filled with hopes and dreams",
-        info3:"Atmosphere:  Surface pressure 0.0 kPA",
+        info1: "Physical characteristics:",
+        info2: "its a rocky lump filled with hopes and dreams",
+        info3: "Atmosphere:  Surface pressure 0.0 kPA",
         initPosition: {
-            x: 3.9354 + 2.6+1,
+            x: 3.9354 + 2.6 + 1,
             y: 0,
             z: 0
         },
@@ -398,11 +401,11 @@ let entities = {
     asteroid13: {
         type: "asteroid",
         name: "asteroid",
-        info1:"Physical characteristics:",
-        info2:"its a rocky lump filled with hopes and dreams",
-        info3:"Atmosphere:  Surface pressure 0.0 kPA",
+        info1: "Physical characteristics:",
+        info2: "its a rocky lump filled with hopes and dreams",
+        info3: "Atmosphere:  Surface pressure 0.0 kPA",
         initPosition: {
-            x: 3.9354 + 2.7+1,
+            x: 3.9354 + 2.7 + 1,
             y: 0,
             z: 0
         },
@@ -418,11 +421,11 @@ let entities = {
     asteroid14: {
         type: "asteroid",
         name: "asteroid",
-        info1:"Physical characteristics:",
-        info2:"its a rocky lump filled with hopes and dreams",
-        info3:"Atmosphere:  Surface pressure 0.0 kPA",
+        info1: "Physical characteristics:",
+        info2: "its a rocky lump filled with hopes and dreams",
+        info3: "Atmosphere:  Surface pressure 0.0 kPA",
         initPosition: {
-            x: 3.9354 + 2.9+1,
+            x: 3.9354 + 2.9 + 1,
             y: 0,
             z: 0
         },
@@ -438,11 +441,11 @@ let entities = {
     asteroid15: {
         type: "asteroid",
         name: "asteroid",
-        info1:"Physical characteristics:",
-        info2:"its a rocky lump filled with hopes and dreams",
-        info3:"Atmosphere:  Surface pressure 0.0 kPA",
+        info1: "Physical characteristics:",
+        info2: "its a rocky lump filled with hopes and dreams",
+        info3: "Atmosphere:  Surface pressure 0.0 kPA",
         initPosition: {
-            x: 3.9354 + 3.1+1,
+            x: 3.9354 + 3.1 + 1,
             y: 0,
             z: 0
         },
@@ -454,14 +457,15 @@ let entities = {
         daysPerOrbit: 690.98,
         synodicPeriod: 0.027,
         clickable: true
-    },asteroid16: {
+    },
+    asteroid16: {
         type: "asteroid",
         name: "asteroid",
-        info1:"Physical characteristics:",
-        info2:"its a rocky lump filled with hopes and dreams",
-        info3:"Atmosphere:  Surface pressure 0.0 kPA",
+        info1: "Physical characteristics:",
+        info2: "its a rocky lump filled with hopes and dreams",
+        info3: "Atmosphere:  Surface pressure 0.0 kPA",
         initPosition: {
-            x: 3.9354 + 3.2+1,
+            x: 3.9354 + 3.2 + 1,
             y: 0,
             z: 0
         },
@@ -473,14 +477,15 @@ let entities = {
         daysPerOrbit: 412.98,
         synodicPeriod: 0.027,
         clickable: true
-    },asteroid17: {
+    },
+    asteroid17: {
         type: "asteroid",
         name: "asteroid",
-        info1:"Physical characteristics:",
-        info2:"its a rocky lump filled with hopes and dreams",
-        info3:"Atmosphere:  Surface pressure 0.0 kPA",
+        info1: "Physical characteristics:",
+        info2: "its a rocky lump filled with hopes and dreams",
+        info3: "Atmosphere:  Surface pressure 0.0 kPA",
         initPosition: {
-            x: 3.9354 + 3.4+1,
+            x: 3.9354 + 3.4 + 1,
             y: 0,
             z: 0
         },
@@ -496,11 +501,11 @@ let entities = {
     asteroid18: {
         type: "asteroid",
         name: "asteroid",
-        info1:"Physical characteristics:",
-        info2:"its a rocky lump filled with hopes and dreams",
-        info3:"Atmosphere:  Surface pressure 0.0 kPA",
+        info1: "Physical characteristics:",
+        info2: "its a rocky lump filled with hopes and dreams",
+        info3: "Atmosphere:  Surface pressure 0.0 kPA",
         initPosition: {
-            x: 3.9354 + 3.7+1,
+            x: 3.9354 + 3.7 + 1,
             y: 0,
             z: 0
         },
@@ -516,11 +521,11 @@ let entities = {
     asteroid19: {
         type: "asteroid",
         name: "asteroid",
-        info1:"Physical characteristics:",
-        info2:"its a rocky lump filled with hopes and dreams",
-        info3:"Atmosphere:  Surface pressure 0.0 kPA",
+        info1: "Physical characteristics:",
+        info2: "its a rocky lump filled with hopes and dreams",
+        info3: "Atmosphere:  Surface pressure 0.0 kPA",
         initPosition: {
-            x: 3.9354 + 3.8+1,
+            x: 3.9354 + 3.8 + 1,
             y: 0,
             z: 0
         },
@@ -532,18 +537,19 @@ let entities = {
         daysPerOrbit: 639.98,
         synodicPeriod: 0.027,
         clickable: true
-    },asteroid20: {
+    },
+    asteroid20: {
         type: "asteroid",
         name: "asteroid",
-        info1:"Physical characteristics:",
-        info2:"its a rocky lump filled with hopes and dreams",
-        info3:"Atmosphere:  Surface pressure 0.0 kPA",
+        info1: "Physical characteristics:",
+        info2: "its a rocky lump filled with hopes and dreams",
+        info3: "Atmosphere:  Surface pressure 0.0 kPA",
         initPosition: {
-            x: 3.9354 + 4+1,
+            x: 3.9354 + 4 + 1,
             y: 0,
             z: 0
         },
-       
+
         radius: 0.02,
         texture: "assets/1K/moon.jpg",
         textureHD: "assets/HD/moon.jpg",
@@ -553,15 +559,14 @@ let entities = {
         synodicPeriod: 0.027,
         clickable: true
     },
-    
     jupiter: {
         type: "planet",
         name: "jupiter",
-        info1:"Physical characteristics:",
-        info2:"Mean radius: 69911km",
-        info3:"Atmosphere:  Surface pressure 20-200 kPA",
+        info1: "Physical characteristics:",
+        info2: "Mean radius: 69911km",
+        info3: "Atmosphere:  Surface pressure 20-200 kPA",
         initPosition: {
-            x: 13.4433 * 1+ 1,
+            x: 13.4433 * 1 + 1,
             y: 0,
             z: 0
         },
@@ -577,9 +582,9 @@ let entities = {
     saturn: {
         type: "planet",
         name: "saturn",
-        info1:"Physical characteristics:",
-        info2:"Mean radius: 58232km",
-        info3:"Atmosphere:  Surface pressure 140 kPA",
+        info1: "Physical characteristics:",
+        info2: "Mean radius: 58232km",
+        info3: "Atmosphere:  Surface pressure 140 kPA",
         initPosition: {
             x: 24.7626 * 1 + 1,
             y: 0,
@@ -594,13 +599,29 @@ let entities = {
         synodicPeriod: 0.439,
         clickable: true
     },
-    
+    saturnRing: {
+        type: "ring",
+        name: "saturnRing",
+        initPosition: {
+            x: 24.7626 * 1 + 1,
+            y: 0,
+            z: 0
+        },
+        innerRadius: (0.8 + 0.6) * 3 / 4,
+        radius: 0.8 + 0.6,
+        angle: Math.PI / 4 * 3,
+        texture: "assets/1K/saturn_ringundef.png",
+        textureHD: "assets/HD/saturn_ringundef.png",
+        color: "0xCFC0A2",
+        orbits: "saturn",
+        clickable: false
+    },
     uranus: {
         type: "planet",
         name: "uranus",
-        info1:"Physical characteristics:",
-        info2:"Mean radius: 25362km",
-        info3:"Atmosphere:  Surface pressure 130 kPA",
+        info1: "Physical characteristics:",
+        info2: "Mean radius: 25362km",
+        info3: "Atmosphere:  Surface pressure 130 kPA",
         initPosition: {
             x: 49.5769 * 1 + 1,
             y: 0,
@@ -618,9 +639,9 @@ let entities = {
     neptune: {
         type: "planet",
         name: "neptune",
-        info1:"Physical characteristics:",
-        info2:"Mean radius: 24622km",
-        info3:"Atmosphere:  Surface pressure 130 kPA",
+        info1: "Physical characteristics:",
+        info2: "Mean radius: 24622km",
+        info3: "Atmosphere:  Surface pressure 130 kPA",
         initPosition: {
             x: 77.6204 * 1 + 1,
             y: 0,
@@ -652,7 +673,9 @@ let animationOrder = [
     "asteroid",
     "light"
 ];
-let entitiesArr = Object.values(entities).sort((a, b) => { return animationOrder.indexOf(b.type) - animationOrder.indexOf(a.type); });
+let entitiesArr = Object.values(entities).sort((a, b) => {
+    return animationOrder.indexOf(b.type) - animationOrder.indexOf(a.type);
+});
 
 //const CAMERA_START_POS = PLANET_PROPERTIES.NEPTUNE.SOLAR_DISTANCE * SOLAR_DISTANCE_SCALE + PLANET_PROPERTIES.NEPTUNE.NOSCALE_RADIUS + 100;
 
@@ -684,7 +707,7 @@ let direction = new THREE.Vector3();
 
 let cameraOrbitSpeed = 0;
 let speedMod = 1;
-let simspeed=1;
+let simspeed = 1;
 
 function resetCam(camera, targ) {
     camera.position.y = 125;
@@ -725,11 +748,11 @@ async function renderEntitiesArr(scene, textureLoader) {
                         console.error(err);
                         return undefined;
                     });
-                let material = texture === undefined
-                    ? new THREE.MeshBasicMaterial({
+                let material = texture === undefined ?
+                    new THREE.MeshBasicMaterial({
                         color: parseInt(entity.color)
-                    })
-                    : new THREE.MeshBasicMaterial({
+                    }) :
+                    new THREE.MeshBasicMaterial({
                         map: texture,
                         side: THREE.BackSide
                     });
@@ -748,11 +771,11 @@ async function renderEntitiesArr(scene, textureLoader) {
                         console.error(err);
                         return undefined;
                     });
-                let material = texture === undefined
-                    ? new THREE.MeshBasicMaterial({
+                let material = texture === undefined ?
+                    new THREE.MeshBasicMaterial({
                         color: parseInt(entity.color)
-                    })
-                    : new THREE.MeshBasicMaterial({
+                    }) :
+                    new THREE.MeshBasicMaterial({
                         map: texture
                     });
                 entity.mesh = new THREE.Mesh(
@@ -764,7 +787,7 @@ async function renderEntitiesArr(scene, textureLoader) {
                 objects.push(entity.mesh)
                 break;
             }
-            
+
             case ("moon"):
             case ("planet"): {
                 let geometry = new THREE.SphereGeometry(entity.radius, 32, 32);
@@ -773,11 +796,11 @@ async function renderEntitiesArr(scene, textureLoader) {
                         console.error(err);
                         return undefined;
                     });
-                let material = texture === undefined
-                    ? new THREE.MeshBasicMaterial({
+                let material = texture === undefined ?
+                    new THREE.MeshBasicMaterial({
                         color: parseInt(entity.color)
-                    })
-                    : new THREE.MeshPhongMaterial({
+                    }) :
+                    new THREE.MeshPhongMaterial({
                         map: texture
                     });
                 entity.mesh = new THREE.Mesh(
@@ -787,44 +810,70 @@ async function renderEntitiesArr(scene, textureLoader) {
                 entity.mesh.position.set(entity.initPosition.x, entity.initPosition.y, entity.initPosition.z);
                 objects.push(entity.mesh)
                 scene.add(entity.mesh);
-                if(entity.type=='planet'){
-                let orbit = new THREE.Line(new THREE.CircleGeometry(entity.initPosition.x, 90),
-                new THREE.MeshBasicMaterial({
-                  color: 0xffffff,
-                  transparent: true,
-                  opacity: .1,
-                  side: THREE.BackSide
-                })
-              );
-              orbit.geometry.vertices.shift();
-              orbit.rotation.x = THREE.Math.degToRad(90);
-              scene.add(orbit);
-            }
+                if (entity.type == 'planet') {
+                    let orbit = new THREE.Line(new THREE.CircleGeometry(entity.initPosition.x, 90),
+                        new THREE.MeshBasicMaterial({
+                            color: 0xffffff,
+                            transparent: true,
+                            opacity: .1,
+                            side: THREE.BackSide
+                        })
+                    );
+                    orbit.geometry.vertices.shift();
+                    orbit.rotation.x = THREE.Math.degToRad(90);
+                    scene.add(orbit);
+                }
                 break;
             }
-            case("asteroid"):
-            { for(i=0; i<1; i++){
-                let geometry = new THREE.SphereGeometry(entity.radius, 32, 32);
+            case ("ring"): {
+                let geometry = new THREE.RingGeometry(entity.innerRadius, entity.radius, 32);
                 let texture = await asyncLoadTexture(textureLoader, entity.texture)
                     .catch((err) => {
                         console.error(err);
                         return undefined;
                     });
-                let material = texture === undefined
-                    ? new THREE.MeshBasicMaterial({
-                        color: parseInt(entity.color)
-                    })
-                    : new THREE.MeshPhongMaterial({
-                        map: texture
+                let material = texture === undefined ?
+                    new THREE.MeshBasicMaterial({
+                        color: parseInt(entity.color),
+                        side: THREE.DoubleSide
+                    }) :
+                    new THREE.MeshPhongMaterial({
+                        map: texture,
+                        side: THREE.DoubleSide
                     });
                 entity.mesh = new THREE.Mesh(
                     geometry,
                     material
-                )
-                entity.mesh.position.set(entity.initPosition.x+(i*0.2), entity.initPosition.y, entity.initPosition.z);
-                objects.push(entity.mesh)
+                );
+                // entity.mesh.rotation.x = THREE.Math.degToRad(90);
+                entity.mesh.rotation.x = entity.angle;
+                entity.mesh.position.set(entity.initPosition.x, entity.initPosition.y, entity.initPosition.z);
                 scene.add(entity.mesh);
+                break;
             }
+            case ("asteroid"): {
+                for (i = 0; i < 1; i++) {
+                    let geometry = new THREE.SphereGeometry(entity.radius, 32, 32);
+                    let texture = await asyncLoadTexture(textureLoader, entity.texture)
+                        .catch((err) => {
+                            console.error(err);
+                            return undefined;
+                        });
+                    let material = texture === undefined ?
+                        new THREE.MeshBasicMaterial({
+                            color: parseInt(entity.color)
+                        }) :
+                        new THREE.MeshPhongMaterial({
+                            map: texture
+                        });
+                    entity.mesh = new THREE.Mesh(
+                        geometry,
+                        material
+                    )
+                    entity.mesh.position.set(entity.initPosition.x + (i * 0.2), entity.initPosition.y, entity.initPosition.z);
+                    objects.push(entity.mesh)
+                    scene.add(entity.mesh);
+                }
                 break;
             }
             case ("light"): {
@@ -837,9 +886,9 @@ async function renderEntitiesArr(scene, textureLoader) {
                     case ("point"): {
                         entity.light = new THREE.PointLight(parseInt(entity.color), entity.intensity, entity.distance);
                         entity.light.position.set(entity.initPosition.x, entity.initPosition.y, entity.initPosition.z);
-                        let geometry = entity.covered
-                            ? new THREE.SphereGeometry(entity.radius, 8, 8)
-                            : new THREE.SphereGeometry(entity.radius, 32, 32);
+                        let geometry = entity.covered ?
+                            new THREE.SphereGeometry(entity.radius, 8, 8) :
+                            new THREE.SphereGeometry(entity.radius, 32, 32);
                         let mesh = new THREE.MeshBasicMaterial({
                             color: parseInt(entity.color)
                         })
@@ -880,11 +929,11 @@ async function main() {
 
 
     //HUD/UI elements
-    let uielements=[];
+    let uielements = [];
     // We will use 2D canvas element to render our HUD.  
     let hudCanvas = document.createElement('canvas');
-    hudCanvas.width = window.innerWidth*2;
-    hudCanvas.height = window.innerHeight*2;
+    hudCanvas.width = window.innerWidth * 2;
+    hudCanvas.height = window.innerHeight * 2;
     let hudBitmap = hudCanvas.getContext('2d');
     hudBitmap.font = "Normal 100px Courier New";
     hudBitmap.textAlign = 'left';
@@ -897,7 +946,9 @@ async function main() {
     //create meterial by usuing the 2d graphics we just renderd
     let hudTexture = new THREE.Texture(hudCanvas);
     hudTexture.needsUpdate = true;
-    let material = new THREE.MeshBasicMaterial({ map: hudTexture });
+    let material = new THREE.MeshBasicMaterial({
+        map: hudTexture
+    });
     material.transparent = true;
     let planeGeometry = new THREE.PlaneGeometry(window.innerWidth, window.innerHeight);
     let plane = new THREE.Mesh(planeGeometry, material);
@@ -905,7 +956,7 @@ async function main() {
     //dat gui for the demo 
 
     //TODO replace this with a custom menu, or even just a css button
-    
+
     // Render the entitiesArr.
     await renderEntitiesArr(scene, textureLoader);
     // Associate the entities with the entities that orbit them.
@@ -922,22 +973,23 @@ async function main() {
     let controls = new THREE.PointerLockControls(camera, renderer.domElement);
     let blocker = document.getElementById('blocker');
     let instructions = document.getElementById('instructions');
-    let nextbutton =  document.getElementById('next-button');
-    let previousbutton =  document.getElementById('previous-button');
+    let nextbutton = document.getElementById('next-button');
+    let previousbutton = document.getElementById('previous-button');
     let simspeedtext = document.getElementById('simspeed-text');
     let lockedCam = true;
-    nextbutton.style.display="block";
-    previousbutton.style.display="block";
-    simspeedtext.style.display="block";
+    nextbutton.style.display = "block";
+    previousbutton.style.display = "block";
+    simspeedtext.style.display = "block";
     instructions.addEventListener('click', function () {
         if (lockedCam) {
             controls.lock();
         }
     }, false);
-    function updatehud(entity){
-        csp=entity.name;
+
+    function updatehud(entity) {
+        csp = entity.name;
         target = entity.mesh;
-        hudBitmap.clearRect(0, 0, window.innerWidth*2, window.innerHeight*2);
+        hudBitmap.clearRect(0, 0, window.innerWidth * 2, window.innerHeight * 2);
         //hudBitmap.fillStyle = "rgba(20,139,224,0.25)";
         //hudBitmap.fillRect((window.innerWidth / 12), (window.innerHeight / 16),window.innerWidth/2,window.innerHeight/5)
         hudBitmap.fillStyle = "rgba(245,245,245,0.95)";
@@ -945,61 +997,59 @@ async function main() {
         hudBitmap.fillText(entity.name, window.innerWidth / 12, window.innerHeight / 10);
         hudBitmap.font = "Normal 60px Courier New";
         hudBitmap.textAlign = 'left';
-        hudBitmap.fillText(entity.info1, window.innerWidth / 12, 1.2*window.innerHeight / 8);
-        hudBitmap.fillText(entity.info2, window.innerWidth / 12, 1.5*(window.innerHeight / 8));
-        hudBitmap.fillText(entity.info3, window.innerWidth / 12, 1.8*(window.innerHeight / 8));
+        hudBitmap.fillText(entity.info1, window.innerWidth / 12, 1.2 * window.innerHeight / 8);
+        hudBitmap.fillText(entity.info2, window.innerWidth / 12, 1.5 * (window.innerHeight / 8));
+        hudBitmap.fillText(entity.info3, window.innerWidth / 12, 1.8 * (window.innerHeight / 8));
         //hudBitmap.fillText(entity., window.innerWidth / 12, 4*(window.innerHeight / 8));
         hudTexture.needsUpdate = true;
     }
     nextbutton.addEventListener('click', function () {
-        let count=0;
+        let count = 0;
         for (let entity of entitiesArr) {
             if (entity.mesh != null) {
-            if(entity.name==csp){
-                if(csp=="asteroid"){//if its an asteroid we jump stright to juipter
-                    entity=entitiesArr[27];
-                    updatehud(entity);
-                    break;
-                }
-                else if(csp=="sun:"){//if its an asteroid we jump stright to juipter
-                    entity=entitiesArr[22];
-                    updatehud(entity);
-                    break;
-                } else {
-                    entity=entitiesArr[count+1];
-                    updatehud(entity);
-                    break;
+                if (entity.name == csp) {
+                    if (csp == "asteroid") { //if its an asteroid we jump stright to juipter
+                        entity = entitiesArr[27];
+                        updatehud(entity);
+                        break;
+                    } else if (csp == "sun:") { //if its an asteroid we jump stright to juipter
+                        entity = entitiesArr[22];
+                        updatehud(entity);
+                        break;
+                    } else {
+                        entity = entitiesArr[count + 1];
+                        updatehud(entity);
+                        break;
+                    }
                 }
             }
+            count += 1;
         }
-        count+=1;
-    }
     });
     previousbutton.addEventListener('click', function () {
         console.log(entitiesArr);
-        let count=0;
+        let count = 0;
         for (let entity of entitiesArr) {
             if (entity.mesh != null) {
-            if(entity.name==csp){
-                if(csp=="asteroid"){//if its an asteroid we jump stright to mars
-                    entity=entitiesArr[25];
-                    updatehud(entity);
-                    break;
-                }
-                else if(csp=="sun:"){//if its the sun we jump stright to neptune
-                    entity=entitiesArr[29];
-                    updatehud(entity);
-                    break;
-                } else {
-                    entity=entitiesArr[count-1];
-                    updatehud(entity);
-                    break;
+                if (entity.name == csp) {
+                    if (csp == "asteroid") { //if its an asteroid we jump stright to mars
+                        entity = entitiesArr[25];
+                        updatehud(entity);
+                        break;
+                    } else if (csp == "sun:") { //if its the sun we jump stright to neptune
+                        entity = entitiesArr[29];
+                        updatehud(entity);
+                        break;
+                    } else {
+                        entity = entitiesArr[count - 1];
+                        updatehud(entity);
+                        break;
 
+                    }
                 }
             }
+            count += 1;
         }
-        count+=1;
-    }
     });
 
     controls.addEventListener('lock', function () {
@@ -1063,35 +1113,35 @@ async function main() {
                 break;
             case 190:
                 SYNODIC_SPEED_MODIFIER *= 2;
-                DAYS_PER_MS*=2;
-                simspeed*=2;
-                simspeedtext.innerText="Sim Speed:"+simspeed;
-               // hudBitmap.font = "Normal 50px Courier New";
-               // hudBitmap.fillText('Simulation Speed '+simspeed, window.innerWidth / 12, 19.5* (window.innerHeight / 10));
-               // hudTexture.needsUpdate = true;
-             //   if(orbitControls.autoRotateSpeed<1){
-              //      if(orbitControls.autoRotateSpeed>=0.5){
-               //         orbitControls.autoRotateSpeed=1;
+                DAYS_PER_MS *= 2;
+                simspeed *= 2;
+                simspeedtext.innerText = "Sim Speed:" + simspeed;
+                // hudBitmap.font = "Normal 50px Courier New";
+                // hudBitmap.fillText('Simulation Speed '+simspeed, window.innerWidth / 12, 19.5* (window.innerHeight / 10));
+                // hudTexture.needsUpdate = true;
+                //   if(orbitControls.autoRotateSpeed<1){
+                //      if(orbitControls.autoRotateSpeed>=0.5){
+                //         orbitControls.autoRotateSpeed=1;
                 //    }else if(orbitControls.autoRotateSpeed==0){
-                 //       orbitControls.autoRotateSpeed=0.125;
-                  //  }else{
-                   //     orbitControls.autoRotateSpeed*=2;
-                    //}  
-               // }
+                //       orbitControls.autoRotateSpeed=0.125;
+                //  }else{
+                //     orbitControls.autoRotateSpeed*=2;
+                //}  
+                // }
                 break;
             case 188:
                 SYNODIC_SPEED_MODIFIER /= 2;
-                DAYS_PER_MS/=2;
-                simspeed/=2;
-                simspeedtext.innerText="Sim Speed:"+simspeed;
-              //  hudBitmap.font = "Normal 50px Courier New";
+                DAYS_PER_MS /= 2;
+                simspeed /= 2;
+                simspeedtext.innerText = "Sim Speed:" + simspeed;
+                //  hudBitmap.font = "Normal 50px Courier New";
                 //hudBitmap.fillText('Simulation Speed '+simspeed, window.innerWidth / 12, 19.5* (window.innerHeight / 10));
-              //  hudTexture.needsUpdate = true;
+                //  hudTexture.needsUpdate = true;
                 //if(orbitControls.autoRotateSpeed<0.125){
-                 //   orbitControls.autoRotateSpeed=0;
+                //   orbitControls.autoRotateSpeed=0;
                 //}else{
-                 //   orbitControls.autoRotateSpeed/=2
-               // }
+                //   orbitControls.autoRotateSpeed/=2
+                // }
                 break;
             case 16: //shift
                 speedMod = 1;
@@ -1109,7 +1159,7 @@ async function main() {
                 //resetCam(camera, planets[].mesh.position);
                 moveForward, moveBackward, moveLeft, moveRight = false;
                 orbiting = true;
-                csp=entitiesArr[1].name;//set the current selected planet to the sun
+                csp = entitiesArr[1].name; //set the current selected planet to the sun
                 break;
             case 51:
                 controls.unlock();
@@ -1120,25 +1170,25 @@ async function main() {
                 break;
         }
     }
-    window.onmousemove=(evt)=>{
-        mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-        mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-         if (intersects.length != 0) {
-             for (let entity of entitiesArr) {
-                 if (entity.mesh != null) {
-                     let minPosX = entity.mesh.position.x - entity.radius;
-                     let maxPosX = entity.mesh.position.x + entity.radius;
-                     let minPosY = entity.mesh.position.y - entity.radius;
-                     let maxPosY = entity.mesh.position.y + entity.radius;
-                     let minPosZ = entity.mesh.position.z - entity.radius;
-                     let maxPosZ = entity.mesh.position.z + entity.radius;
-                     if (minPosX <= intersects[0].point.x && maxPosX >= intersects[0].point.x && minPosZ <= intersects[0].point.z && maxPosZ >= intersects[0].point.z) {
+    window.onmousemove = (evt) => {
+        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+        if (intersects.length != 0) {
+            for (let entity of entitiesArr) {
+                if (entity.mesh != null) {
+                    let minPosX = entity.mesh.position.x - entity.radius;
+                    let maxPosX = entity.mesh.position.x + entity.radius;
+                    let minPosY = entity.mesh.position.y - entity.radius;
+                    let maxPosY = entity.mesh.position.y + entity.radius;
+                    let minPosZ = entity.mesh.position.z - entity.radius;
+                    let maxPosZ = entity.mesh.position.z + entity.radius;
+                    if (minPosX <= intersects[0].point.x && maxPosX >= intersects[0].point.x && minPosZ <= intersects[0].point.z && maxPosZ >= intersects[0].point.z) {
                         //poutline();
-                         break;
-                     }
-                 }
-             }
-         }
+                        break;
+                    }
+                }
+            }
+        }
     };
 
     // function poutline(){
@@ -1184,18 +1234,20 @@ async function main() {
 
     window.onclick = (evt) => {
         mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-        mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
         //find the intererections
         raycaster.setFromCamera(mouse, camera);
         let intersectables = entitiesArr
             .filter((entity) => {
                 return entity.clickable;
             })
-            .map((entity) => { return entity.mesh; });
+            .map((entity) => {
+                return entity.mesh;
+            });
         intersects = raycaster.intersectObjects(intersectables, false);
         if (intersects.length != 0) {
             for (let entity of entitiesArr) {
-                if (entity.mesh != null) {
+                if (entity.mesh != null && entity.clickable === true) {
                     let minPosX = entity.mesh.position.x - entity.radius;
                     let maxPosX = entity.mesh.position.x + entity.radius;
                     let minPosY = entity.mesh.position.y - entity.radius;
@@ -1227,8 +1279,12 @@ async function main() {
 
     // Move to a position that will get every entity in view.
     let furthestPlanet = entitiesArr
-        .filter((e) => { return e.type === "planet" ; })
-        .sort((a, b) => { return b.mesh.position.length() - a.mesh.position.length() })[0];
+        .filter((e) => {
+            return e.type === "planet";
+        })
+        .sort((a, b) => {
+            return b.mesh.position.length() - a.mesh.position.length()
+        })[0];
     camera.position.set(furthestPlanet.mesh.position.length() * 2, furthestPlanet.mesh.position.length(), furthestPlanet.mesh.position.length() * 2);
 
     // Look at the sun.
@@ -1241,6 +1297,7 @@ async function main() {
     orbitControls.autoRotateSpeed = cameraOrbitSpeed;
     // Start animating.
     let lastTick = Date.now();
+
     function animate() {
         requestAnimationFrame(animate);
 
@@ -1250,7 +1307,7 @@ async function main() {
         lastTick = time;
         for (let entity of entitiesArr) {
             // Orbit this entity, if this entity orbits.
-            if (entity.orbits !== undefined) {
+            if (entity.orbits !== undefined && entity.daysPerOrbit !== undefined) {
                 rotateAboutPivot(entity.mesh, entities[entity.orbits].mesh.position, new THREE.Vector3(0, 1, 0), 2 * Math.PI * daysPassed * (1 / entity.daysPerOrbit));
                 // Orbit every planet that orbits this entity (DFS) appropriately.
                 let orbiterStack = [...(entity.orbiters || [])];
@@ -1304,15 +1361,14 @@ async function main() {
 
             if (moveLeft || moveRight) velocity.x -= direction.x * speedMod * 1200.0 * delta;
 
-            controls.moveRight(- velocity.x * delta);
+            controls.moveRight(-velocity.x * delta);
 
-            controls.moveForward(- velocity.z * delta);
+            controls.moveForward(-velocity.z * delta);
 
             controls.getObject().position.y -= (velocity.y * delta);
 
             prevTime = time;
-        }
-        else if (orbiting) {
+        } else if (orbiting) {
             if (target != null) {
                 orbitControls.target = target.position;
             }
@@ -1321,7 +1377,7 @@ async function main() {
         //poutline();
         renderer.render(scene, camera);
         renderer.render(hudscene, cameraHUD);
-        
+
     }
     animate();
 }
