@@ -27,7 +27,7 @@ let entities = {
     },
     sun: {
         type: "sun",
-        name: "sun:",
+        name: "sun",
         info1:"Observation data:",
         info2:"Visual brightness (V): -26.74",
         info3:"Absolute magnitude: 4.83",
@@ -961,7 +961,7 @@ async function main() {
                     updatehud(entity);
                     break;
                 }
-                else if(csp=="sun:"){//if its an asteroid we jump stright to juipter
+                else if(csp=="sun"){//if its an asteroid we jump stright to juipter
                     entity=entitiesArr[22];
                     updatehud(entity);
                     break;
@@ -986,7 +986,7 @@ async function main() {
                     updatehud(entity);
                     break;
                 }
-                else if(csp=="sun:"){//if its the sun we jump stright to neptune
+                else if(csp=="sun"){//if its the sun we jump stright to neptune
                     entity=entitiesArr[29];
                     updatehud(entity);
                     break;
