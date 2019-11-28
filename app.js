@@ -977,6 +977,9 @@ async function main() {
     let pausebutton = document.getElementById('pause-button');
     let simspeedtext = document.getElementById('simspeed-text');
     let lockedCam = true;
+
+    orbitControls.enablePan = false;
+
     nextbutton.style.display = "block";
     previousbutton.style.display = "block";
     pausebutton.style.display = "block";
