@@ -1,5 +1,5 @@
 // All distances are in kilometres.
-let DAYS_PER_MS = (0.1* Math.pow(10, 0.25));
+let DAYS_PER_MS = (0.1 * Math.pow(10, 0.25));
 let SYNODIC_SPEED_MODIFIER = 1 * Math.pow(10, 0.25);
 let objects = [];
 let intersects = [];
@@ -28,9 +28,9 @@ let entities = {
     sun: {
         type: "sun",
         name: "sun",
-        info1:"Observation data:",
-        info2:"Visual brightness (V): -26.74",
-        info3:"Absolute magnitude: 4.83",
+        info1: "Observation data:",
+        info2: "Visual brightness (V): -26.74",
+        info3: "Absolute magnitude: 4.83",
         initPosition: {
             x: 0,
             y: 0,
@@ -130,7 +130,7 @@ let entities = {
             z: 0
         },
         radius: 0.04,
-        texture: "assets/1k/moon.jpg",
+        texture: "assets/1K/moon.jpg",
         textureHD: "assets/HD/moon.jpg",
         color: "0x979392",
         orbits: "earth",
@@ -610,8 +610,8 @@ let entities = {
         innerRadius: (0.8 + 0.6) * 3 / 4,
         radius: 0.8 + 0.6,
         angle: Math.PI / 4 * 3,
-        texture: "assets/1K/saturn_ringundef.png",
-        textureHD: "assets/HD/saturn_ringundef.png",
+        texture: "assets/1K/saturn_ring.png",
+        textureHD: "assets/HD/saturn_ring.png",
         color: "0xCFC0A2",
         orbits: "saturn",
         clickable: false
@@ -972,15 +972,15 @@ async function main() {
     let controls = new THREE.PointerLockControls(camera, renderer.domElement);
     let blocker = document.getElementById('blocker');
     let instructions = document.getElementById('instructions');
-    let nextbutton =  document.getElementById('next-button');
-    let previousbutton =  document.getElementById('previous-button');
-    let pausebutton =  document.getElementById('pause-button');
+    let nextbutton = document.getElementById('next-button');
+    let previousbutton = document.getElementById('previous-button');
+    let pausebutton = document.getElementById('pause-button');
     let simspeedtext = document.getElementById('simspeed-text');
     let lockedCam = true;
-    nextbutton.style.display="block";
-    previousbutton.style.display="block";
-    pausebutton.style.display="block";
-    simspeedtext.style.display="block";
+    nextbutton.style.display = "block";
+    previousbutton.style.display = "block";
+    pausebutton.style.display = "block";
+    simspeedtext.style.display = "block";
     instructions.addEventListener('click', function () {
         if (lockedCam) {
             controls.lock();
@@ -998,9 +998,9 @@ async function main() {
         hudBitmap.fillText(entity.name, window.innerWidth / 12, window.innerHeight / 10);
         hudBitmap.font = "Normal 60px Courier New";
         hudBitmap.textAlign = 'left';
-        hudBitmap.fillText(entity.info1, window.innerWidth / 12, 1.4*window.innerHeight / 8);
-        hudBitmap.fillText(entity.info2, window.innerWidth / 12, 1.9*(window.innerHeight / 8));
-        hudBitmap.fillText(entity.info3, window.innerWidth / 12, 2.4*(window.innerHeight / 8));
+        hudBitmap.fillText(entity.info1, window.innerWidth / 12, 1.4 * window.innerHeight / 8);
+        hudBitmap.fillText(entity.info2, window.innerWidth / 12, 1.9 * (window.innerHeight / 8));
+        hudBitmap.fillText(entity.info3, window.innerWidth / 12, 2.4 * (window.innerHeight / 8));
         //hudBitmap.fillText(entity., window.innerWidth / 12, 4*(window.innerHeight / 8));
         hudTexture.needsUpdate = true;
     }
@@ -1008,44 +1008,44 @@ async function main() {
         let count = 0;
         for (let entity of entitiesArr) {
             if (entity.mesh != null) {
-            if(entity.name==csp){
-                if(csp=="asteroid"){//if its an asteroid we jump stright to juipter
-                    entity=entitiesArr[27];
-                    updatehud(entity);
-                    break;
+                if (entity.name == csp) {
+                    if (csp == "asteroid") { //if its an asteroid we jump stright to juipter
+                        entity = entitiesArr[27];
+                        updatehud(entity);
+                        break;
+                    } else if (csp == "sun") { //if its an asteroid we jump stright to juipter
+                        entity = entitiesArr[22];
+                        updatehud(entity);
+                        break;
+                    } else {
+                        entity = entitiesArr[count + 1];
+                        updatehud(entity);
+                        break;
+                    }
                 }
-                else if(csp=="sun"){//if its an asteroid we jump stright to juipter
-                    entity=entitiesArr[22];
-                    updatehud(entity);
-                    break;
-                } else {
-                    entity=entitiesArr[count+1];
-                    updatehud(entity);
-                    break;
-                }
+                count += 1;
             }
-            count += 1;
         }
     });
+
     previousbutton.addEventListener('click', function () {
         console.log(entitiesArr);
         let count = 0;
         for (let entity of entitiesArr) {
             if (entity.mesh != null) {
-            if(entity.name==csp){
-                if(csp=="asteroid"){//if its an asteroid we jump stright to mars
-                    entity=entitiesArr[25];
-                    updatehud(entity);
-                    break;
-                }
-                else if(csp=="sun"){//if its the sun we jump stright to neptune
-                    entity=entitiesArr[29];
-                    updatehud(entity);
-                    break;
-                } else {
-                    entity=entitiesArr[count-1];
-                    updatehud(entity);
-                    break;
+                if (entity.name == csp) {
+                    if (csp == "asteroid") { //if its an asteroid we jump stright to mars
+                        entity = entitiesArr[25];
+                        updatehud(entity);
+                        break;
+                    } else if (csp == "sun") { //if its the sun we jump stright to neptune
+                        entity = entitiesArr[29];
+                        updatehud(entity);
+                        break;
+                    } else {
+                        entity = entitiesArr[count - 1];
+                        updatehud(entity);
+                        break;
 
                     }
                 }
@@ -1053,18 +1053,19 @@ async function main() {
             count += 1;
         }
     });
-    pausebutton.addEventListener('click',function(){ 
-        if(simspeed!=0){
+    pausebutton.addEventListener('click', function () {
+        if (simspeed != 0) {
             SYNODIC_SPEED_MODIFIER = 0;
-            DAYS_PER_MS=0;
-            simspeed=0;
-        }else{
+            DAYS_PER_MS = 0;
+            simspeed = 0;
+        } else {
             SYNODIC_SPEED_MODIFIER = 1 * Math.pow(10, 0.25);
-            DAYS_PER_MS=0.1 * Math.pow(10, 0.25);
-            simspeed=1;
+            DAYS_PER_MS = 0.1 * Math.pow(10, 0.25);
+            simspeed = 1;
         }
-       
-        simspeedtext.innerText="Sim Speed:"+simspeed;});
+
+        simspeedtext.innerText = "Sim Speed:" + simspeed;
+    });
 
     controls.addEventListener('lock', function () {
         if (lockedCam) {
