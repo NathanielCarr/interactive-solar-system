@@ -1,4 +1,3 @@
-// All distances are in kilometres.
 const ASTEROID_TEXTURES = [
     "assets/1K/asteroid_1.png",
     "assets/1K/asteroid_2.png",
@@ -7,14 +6,9 @@ const ASTEROID_TEXTURES = [
     "assets/1K/asteroid_5.png",
     "assets/1K/asteroid_6.png",
 ]
-let DAYS_PER_MS = (0.1 * Math.pow(10, 0.25));
-let SYNODIC_SPEED_MODIFIER = 1 * Math.pow(10, 0.25);
-let forceBasicMaterial = true;
-let objects = [];
-let intersects = [];
-let intersected;
-let csp;
-let psp;
+const CAMERA_ORBIT_SPEED = 0;
+
+// The entities to be rendered.
 let entities = {
     artificialLight: {
         type: "light",
@@ -38,7 +32,6 @@ let entities = {
         },
         texture: "assets/1K/stars_milky_way.jpg",
         textureHD: "assets/HD/stars_milky_way.jpg",
-        color: "0x010102",
         clickable: false
     },
     sun: {
@@ -58,7 +51,6 @@ let entities = {
         tilt: THREE.Math.degToRad(7.25),
         texture: "assets/1K/sun.jpg",
         textureHD: "assets/HD/sun.jpg",
-        color: "0xF18828",
         daysPerOrbit: 0,
         synodicPeriod: 26.6,
         clickable: true
@@ -96,7 +88,6 @@ let entities = {
         tilt: THREE.Math.degToRad(0.03),
         texture: "assets/1K/mercury.jpg",
         textureHD: "assets/HD/mercury.jpg",
-        color: "0x848383",
         orbits: "sun",
         daysPerOrbit: 87.97,
         orbitalInclineVector: new THREE.Vector3(0, 1, Math.tan(THREE.Math.degToRad(3.38))),
@@ -122,7 +113,6 @@ let entities = {
         tilt: THREE.Math.degToRad(2.64),
         texture: "assets/1K/venus_surface.jpg",
         textureHD: "assets/HD/venus_surface.jpg",
-        color: "0xC77328",
         orbits: "sun",
         daysPerOrbit: 224.70,
         orbitalInclineVector: new THREE.Vector3(0, 1, Math.tan(THREE.Math.degToRad(3.86))),
@@ -148,7 +138,6 @@ let entities = {
         tilt: THREE.Math.degToRad(23.44),
         texture: "assets/1K/earth_daymap.jpg",
         textureHD: "assets/HD/earth_daymap.jpg",
-        color: "0x3D567F",
         orbits: "sun",
         daysPerOrbit: 365.26,
         orbitalInclineVector: new THREE.Vector3(0, 1, Math.tan(THREE.Math.degToRad(7.155))),
@@ -173,7 +162,6 @@ let entities = {
         tilt: THREE.Math.degToRad(6.68),
         texture: "assets/1K/moon.jpg",
         textureHD: "assets/HD/moon.jpg",
-        color: "0x979392",
         orbits: "earth",
         daysPerOrbit: 27.322,
         orbitalInclineVector: new THREE.Vector3(0, 1, Math.tan(THREE.Math.degToRad(5.09))),
@@ -198,7 +186,6 @@ let entities = {
         tilt: THREE.Math.degToRad(25.19),
         texture: "assets/1K/mars.jpg",
         textureHD: "assets/HD/mars.jpg",
-        color: "0xB76247",
         orbits: "sun",
         daysPerOrbit: 686.98,
         orbitalInclineVector: new THREE.Vector3(0, 1, Math.tan(THREE.Math.degToRad(5.65))),
@@ -224,7 +211,6 @@ let entities = {
         tilt: THREE.Math.degToRad(3.13),
         texture: "assets/1K/jupiter.jpg",
         textureHD: "assets/HD/jupiter.jpg",
-        color: "0xA6A095",
         orbits: "sun",
         daysPerOrbit: 4332.82,
         orbitalInclineVector: new THREE.Vector3(0, 1, Math.tan(THREE.Math.degToRad(6.09))),
@@ -250,7 +236,6 @@ let entities = {
         tilt: THREE.Math.degToRad(26.73),
         texture: "assets/1K/saturn.jpg",
         textureHD: "assets/HD/saturn.jpg",
-        color: "0xCFC0A2",
         orbits: "sun",
         daysPerOrbit: 10755.70,
         orbitalInclineVector: new THREE.Vector3(0, 1, Math.tan(THREE.Math.degToRad(5.51))),
@@ -270,7 +255,6 @@ let entities = {
         tilt: THREE.Math.degToRad(26.73),
         texture: "assets/1K/saturn_ring.png",
         textureHD: "assets/HD/saturn_ring.png",
-        color: "0xCFC0A2",
         orbits: "saturn",
         clickable: false
     },
@@ -293,7 +277,6 @@ let entities = {
         tilt: THREE.Math.degToRad(82.23),
         texture: "assets/1K/uranus.jpg",
         textureHD: "assets/HD/uranus.jpg",
-        color: "0x9BCBD2",
         orbits: "sun",
         daysPerOrbit: 30687.15,
         orbitalInclineVector: new THREE.Vector3(0, 1, Math.tan(THREE.Math.degToRad(6.48))),
@@ -319,7 +302,6 @@ let entities = {
         tilt: THREE.Math.degToRad(28.32),
         texture: "assets/1K/neptune.jpg",
         textureHD: "assets/HD/neptune.jpg",
-        color: "0x364FA8",
         orbits: "sun",
         daysPerOrbit: 60190.03,
         orbitalInclineVector: new THREE.Vector3(0, 1, Math.tan(THREE.Math.degToRad(6.43))),
@@ -334,6 +316,8 @@ let entities = {
         clickable: false
     }
 };
+
+// The order in which the types should be animated.
 let animationOrder = [
     "skybox",
     "sun",
@@ -345,8 +329,11 @@ let animationOrder = [
     "ring",
     "line"
 ];
+
+// An array of all the entities.
 let entitiesArr;
 
+// Load the texture using NodeJS Promises.
 async function asyncLoadTexture(textureLoader, url) {
     return new Promise((resolve, reject) => {
         textureLoader.load(url, (texture) => {
@@ -355,33 +342,6 @@ async function asyncLoadTexture(textureLoader, url) {
             reject(error);
         });
     });
-}
-
-let orbiting = false;
-
-let moveForward = false;
-
-let moveBackward = false;
-
-let moveLeft = false;
-
-let moveRight = false;
-
-let prevTime = performance.now();
-
-let velocity = new THREE.Vector3();
-
-let direction = new THREE.Vector3();
-
-let cameraOrbitSpeed = 0;
-let speedMod = 1;
-let simspeed = 1;
-
-function resetCam(camera, targ) {
-    camera.position.y = 125;
-    camera.position.z = 125;
-    camera.position.x = CAMERA_START_POS;
-    camera.lookAt(targ);
 }
 
 /**
@@ -406,6 +366,7 @@ function rotateAboutPivot(subjectMesh, pivotPosition, axis, radians) {
     );
 }
 
+// Generate a requested number of asteroids with random properties from given ranges.
 function generateAsteroids(count, textureChoices, minRadius, maxRadius, minDistance, maxDistance, minDaysPerOrbit, maxDaysPerOrbit, minAngle, maxAngle, minSynodicPeriod, maxSynodicPeriod) {
     for (let i = 0; i < count; i++) {
         let textureChoice = Math.round(Math.random() * (textureChoices.length - 1));
@@ -429,12 +390,14 @@ function generateAsteroids(count, textureChoices, minRadius, maxRadius, minDista
     }
 }
 
+// Render the list of entities.
 async function renderEntitiesArr(scene, textureLoader) {
     for (let entity of entitiesArr) {
+        // Type-dependent rendering.
         switch (entity.type) {
             case ("skybox"): {
                 let geometry = new THREE.SphereGeometry(500 / 2, 64, 64)
-                let texture = await asyncLoadTexture(textureLoader, entity.textureHD)
+                let texture = entity.preloadedTexture || await asyncLoadTexture(textureLoader, entity.textureHD)
                     .catch((err) => {
                         console.error(err);
                         return undefined;
@@ -453,7 +416,7 @@ async function renderEntitiesArr(scene, textureLoader) {
             }
             case ("sun"): {
                 let geometry = new THREE.SphereGeometry(entity.radius, 32, 32);
-                let texture = await asyncLoadTexture(textureLoader, entity.texture)
+                let texture = entity.preloadedTexture || await asyncLoadTexture(textureLoader, entity.texture)
                     .catch((err) => {
                         console.error(err);
                         return undefined;
@@ -470,7 +433,6 @@ async function renderEntitiesArr(scene, textureLoader) {
                     entity.mesh.rotation.x = entity.tilt;
                 }
                 scene.add(entity.mesh);
-                objects.push(entity.mesh)
                 break;
             }
             case ("asteroid"):
@@ -492,13 +454,12 @@ async function renderEntitiesArr(scene, textureLoader) {
                 if (entity.tilt !== undefined) {
                     entity.mesh.rotation.x = entity.tilt;
                 }
-                objects.push(entity.mesh)
                 scene.add(entity.mesh);
                 break;
             }
             case ("planet"): {
                 // Add an orbital line for this planet.
-                entities[`orbitalLine_${entity.name}`] = {
+                let orbitalLine = {
                     type: "line",
                     name: `orbitalLine_${entity.name}`,
                     mesh: new THREE.Line(
@@ -511,10 +472,12 @@ async function renderEntitiesArr(scene, textureLoader) {
                         })
                     )
                 };
-                entities[`orbitalLine_${entity.name}`].mesh.geometry.vertices.shift();
-                entities[`orbitalLine_${entity.name}`].mesh.rotation.x = THREE.Math.degToRad(90) + Math.atan(entity.orbitalInclineVector.z);
-                scene.add(entities[`orbitalLine_${entity.name}`].mesh);
+                orbitalLine.mesh.geometry.vertices.shift();
+                orbitalLine.mesh.rotation.x = THREE.Math.degToRad(90) + Math.atan(entity.orbitalInclineVector.z);
+                scene.add(orbitalLine.mesh);
+                entities[`orbitalLine_${entity.name}`] = orbitalLine;
 
+                // Add the planet.
                 let geometry = new THREE.SphereGeometry(entity.radius, 32, 32);
                 let texture = entity.preloadedTexture || await asyncLoadTexture(textureLoader, entity.texture)
                     .catch((err) => {
@@ -532,7 +495,6 @@ async function renderEntitiesArr(scene, textureLoader) {
                 if (entity.tilt !== undefined) {
                     entity.mesh.rotation.x = entity.tilt;
                 }
-                objects.push(entity.mesh)
                 scene.add(entity.mesh);
                 break;
             }
@@ -543,7 +505,7 @@ async function renderEntitiesArr(scene, textureLoader) {
                         console.error(err);
                         return undefined;
                     });
-                let material = // Vertex/fragment shader code to place the texture in a ring. Ref: https://codepen.io/prisoner849/pen/wvwVMEo?editors=0010
+                let material = // Ref: https://codepen.io/prisoner849/pen/wvwVMEo?editors=0010
                     new THREE.ShaderMaterial({
                         side: THREE.DoubleSide,
                         uniforms: {
@@ -606,7 +568,7 @@ async function renderEntitiesArr(scene, textureLoader) {
                     case ("point"): {
                         entity.light = new THREE.PointLight(parseInt(entity.color), entity.intensity, entity.distance);
                         entity.light.position.set(entity.initPosition.x, entity.initPosition.y, entity.initPosition.z);
-                        let geometry = entity.covered ?
+                        let geometry = entity.covered ? // Covered lights have no reason to have a high tri count.
                             new THREE.SphereGeometry(entity.radius, 8, 8) :
                             new THREE.SphereGeometry(entity.radius, 32, 32);
                         let mesh = new THREE.MeshBasicMaterial({
@@ -623,54 +585,79 @@ async function renderEntitiesArr(scene, textureLoader) {
     }
 }
 
-function setArtificialLighting(artificialLightingOn) {
-    for (let light of entitiesArr.filter((entity) => {
-            return entity.type === "light";
-        })) {
-        if (light.name === "artificialLight") {
-            light.light.intensity = artificialLightingOn ? light.intensity : 0;
-        } else {
-            light.light.intensity = artificialLightingOn ? 0 : light.intensity;
-        }
-    }
-}
-
+// The main function.
 async function main() {
+    // State variables.
+    let state = {
+        paused: false,
+        artificialLightingOn: false,
+        orbitalLineOn: true,
+        asteroidsOn: true,
+        synodicSpeedModifier: 1 * Math.pow(10, 0, 25),
+        daysPerMs: 0.1 * Math.pow(10, 0.25),
+        selectedPlanetName: "sun",
+        simulationSpeed: 1,
+        lockedCam: true,
+        orbiting: false,
+        direction: new THREE.Vector3(),
+        velocity: new THREE.Vector3(),
+        speedMod: 1,
+        moveForward: false,
+        moveBackward: false,
+        moveLeft: false,
+        moveRight: false
+    };
 
-    //vars for the mouse click vector
-    let raycaster = new THREE.Raycaster();
-    let mouse = new THREE.Vector2();
-    // Set up the textureLoader.
+    // Get a textureLoader.
     let textureLoader = new THREE.TextureLoader();
+
+    // X, Z position variable for the mouse location.
+    let mouse = new THREE.Vector2();
+
+    // A raycaster to find the object the mouse has clicked.
+    let raycaster = new THREE.Raycaster();
+
     // Set up the renderer.
     let renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.autoClear = false;
     document.body.appendChild(renderer.domElement);
+
     // Set up the camera.
     let camera = new THREE.PerspectiveCamera(20, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.set(0, 0, 0);
     camera.up = new THREE.Vector3(0, 1, 0);
+
     // Set up the scene to show darkness until the entitiesArr are rendered.
     let scene = new THREE.Scene();
     scene.background = new THREE.Color(0x000000);
     renderer.render(scene, camera);
-    //HUD/UI elements
-    let uielements = [];
-    // We will use 2D canvas element to render our HUD.  
-    let hudCanvas = document.createElement('canvas');
+
+    // Set up listener to redraw the scene on resize.
+    window.onresize = () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.render(scene, camera);
+    };
+
+    // HUD/UI elements (for displaying floating text in front of scene).
+    let hudCanvas = document.createElement('canvas'); // We will use 2D canvas element to render our HUD.  
     hudCanvas.width = window.innerWidth * 2;
     hudCanvas.height = window.innerHeight * 2;
+
+    // Define the formatting for the HUD.
     let hudBitmap = hudCanvas.getContext('2d');
     hudBitmap.font = "Normal 100px Courier New";
     hudBitmap.textAlign = 'left';
     hudBitmap.fillStyle = "rgba(245,245,245,0.95)";
-    hudBitmap.fillText('The Solar System', window.innerWidth / 12, window.innerHeight / 8);
-    //hudBitmap.font = "Normal 50px Courier New";
-    //hudBitmap.fillText('Simulation Speed 1', window.innerWidth / 12, 19.5* (window.innerHeight / 10));
+    hudBitmap.fillText('THE SOLAR SYSTEM', window.innerWidth / 12, window.innerHeight / 8);
+
+    // Define the camera for the HUD.
     let cameraHUD = new THREE.OrthographicCamera(-window.innerWidth / 2, window.innerWidth / 2, window.innerHeight / 2, -window.innerHeight / 2, 0, 30);
     hudscene = new THREE.Scene();
-    //create meterial by usuing the 2d graphics we just renderd
+
+    // Create material by using the 2d graphics we just rendered.
     let hudTexture = new THREE.Texture(hudCanvas);
     hudTexture.needsUpdate = true;
     let material = new THREE.MeshBasicMaterial({
@@ -681,204 +668,10 @@ async function main() {
     let plane = new THREE.Mesh(planeGeometry, material);
     hudscene.add(plane);
 
-    let paused = false;
-    let artificialLightingOn = false;
-    let orbitalLineOn = true;
-    let asteroidsOn = true;
-
-    // GUI options.
-    let gui = new dat.GUI();
-    let guiControllers = {};
-    let guivars = {
-        "Next Planet": () => {
-            // Get all clickable entitites, then sort them from closest to the origin to furthest.
-            let candidates = entitiesArr.filter((entity) => {
-                return entity.clickable;
-            });
-            candidates.sort((a, b) => {
-                return a.initPosition.x - b.initPosition.x;
-            });
-
-            // Get the index of the plant currently selected. Default: -1.
-            let cpsIndex = candidates.findIndex((entity) => {
-                return entity.name == csp;
-            });
-
-            // Get the next planet.
-            cpsIndex = (((cpsIndex + 1) % candidates.length) + candidates.length) % candidates.length;
-            updatehud(candidates[cpsIndex]);
-            csp = candidates[cpsIndex].name;
-        },
-        "Prev. Planet": () => {
-            // Get all clickable entitites, then sort them from closest to the origin to furthest.
-            let candidates = entitiesArr.filter((entity) => {
-                return entity.clickable;
-            });
-            candidates.sort((a, b) => {
-                return a.initPosition.x - b.initPosition.x;
-            });
-
-            // Get the index of the plant currently selected. Default: 1.
-            let cpsIndex = candidates.findIndex((entity) => {
-                return entity.name == csp;
-            });
-            cpsIndex = cpsIndex == -1 ? 1 : cpsIndex;
-
-            // Get the next planet.
-            cpsIndex = (((cpsIndex - 1) % candidates.length) + candidates.length) % candidates.length;
-            updatehud(candidates[cpsIndex]);
-            csp = candidates[cpsIndex].name;
-        },
-        "Pause": () => {
-            if (paused) {
-                // Update the speed.
-                SYNODIC_SPEED_MODIFIER = 1 * Math.pow(10, 0.25);
-                DAYS_PER_MS = 0.1 * Math.pow(10, 0.25);
-                simspeed = 1;
-
-                // Overwrite Continue option.
-                guiControllers["Pause"].name("Pause");
-            } else {
-                // Update the speed.
-                SYNODIC_SPEED_MODIFIER = 0;
-                DAYS_PER_MS = 0;
-                simspeed = 0;
-
-                // Overwrite Pause option.
-                guiControllers["Pause"].name("Continue");
-            }
-
-            paused = !paused;
-
-        },
-        "Slower": () => {
-            SYNODIC_SPEED_MODIFIER /= 2;
-            DAYS_PER_MS /= 2;
-            simspeed /= 2;
-        },
-        "Faster": () => {
-            SYNODIC_SPEED_MODIFIER *= 2;
-            DAYS_PER_MS *= 2;
-            simspeed *= 2;
-        },
-        "Orbit Outline Off": () => {
-            if (orbitalLineOn) {
-                // Overwrite Orbit Outline Off option.
-                guiControllers["Orbit Outline Off"].name("Orbit Outline On");
-            } else {
-                // Overwrite Orbit Outline On option.
-                guiControllers["Orbit Outline Off"].name("Orbit Outline Off");
-            }
-            orbitalLineOn = !orbitalLineOn;
-
-            // Update the opacity of the orbitals lines.
-            for (let line of entitiesArr.filter((entity) => {
-                    return entity.type == "line";
-                })) {
-                line.mesh.visible = orbitalLineOn;
-            }
-
-            // Render the scene.
-            renderer.render(scene, camera);
-        },
-        "Asteroids Off": () => {
-            if (asteroidsOn) {
-                // Overwrite Asteroids Off option.
-                guiControllers["Asteroids Off"].name("Asteroids On");
-            } else {
-                // Overwrite Asteroids On option.
-                guiControllers["Asteroids Off"].name("Asteroids Off");
-            }
-            asteroidsOn = !asteroidsOn;
-
-            for (let asteroid of entitiesArr.filter((entity) => {
-                    return entity.type == "asteroid";
-                })) {
-                asteroid.mesh.visible = asteroidsOn;
-            }
-
-            // Render the scene.
-            renderer.render(scene, camera);
-        },
-        "Artificial Lighting": () => {
-            if (artificialLightingOn) {
-                // Overwrite Realistic Lighting option.
-                guiControllers["Artificial Lighting"].name("Artificial Lighting");
-            } else {
-                // Overwrite Artificial Lighting option.
-                guiControllers["Artificial Lighting"].name("Realistic Lighting");
-            }
-
-            // Toggle forced illumination.
-            artificialLightingOn = !artificialLightingOn;
-            setArtificialLighting(artificialLightingOn);
-
-            // Render the scene.
-            renderer.render(scene, camera);
-        }
-    }
-    guiControllers["Next Planet"] = gui.add(guivars, "Next Planet");
-    guiControllers["Prev. Planet"] = gui.add(guivars, "Prev. Planet");
-    guiControllers["Pause"] = gui.add(guivars, "Pause");
-    guiControllers["Slower"] = gui.add(guivars, "Slower");
-    guiControllers["Faster"] = gui.add(guivars, "Faster");
-    guiControllers["Orbit Outline Off"] = gui.add(guivars, "Orbit Outline Off");
-    guiControllers["Asteroids Off"] = gui.add(guivars, "Asteroids Off");
-    guiControllers["Artificial Lighting"] = gui.add(guivars, "Artificial Lighting");
-
-    // Preload all the textures for the asteroids.
-    let texturePromises = [];
-    for (let texture of ASTEROID_TEXTURES) {
-        texturePromises.push(asyncLoadTexture(textureLoader, texture));
-    }
-    let preLoadedTextures = await Promise.all(texturePromises);
-
-    // Generate the asteroids.
-    generateAsteroids(75, preLoadedTextures, 0.03, 0.005,
-        entities.mars.initPosition.x + entities.mars.radius + 0.01,
-        entities.jupiter.initPosition.x - entities.jupiter.radius - 0.01,
-        100, 1000, -10, 10, 10, 1000);
-
-    // Order the entitites for animation.
-    entitiesArr = Object.values(entities).sort((a, b) => {
-        return animationOrder.indexOf(b.type) - animationOrder.indexOf(a.type);
-    });
-
-    // Render the entitiesArr, and associate the entities with the entities that orbit them.
-    await renderEntitiesArr(scene, textureLoader);
-    for (let entity of entitiesArr) {
-        if (entity.orbits !== undefined) {
-            entities[entity.orbits].orbiters = entities[entity.orbits].orbiters || [];
-            entities[entity.orbits].orbiters.push(entity);
-        }
-    }
-
-    // Order the entitites for animation.
-    entitiesArr = Object.values(entities).sort((a, b) => {
-        return animationOrder.indexOf(b.type) - animationOrder.indexOf(a.type);
-    });
-
-    // Set forced illumination to false.
-    setArtificialLighting(artificialLightingOn);
-
-    // Render the scene.
-    renderer.render(scene, camera);
-
-    // Setup camera
-    let orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
-    let controls = new THREE.PointerLockControls(camera, renderer.domElement);
-    let blocker = document.getElementById('blocker');
-    let instructions = document.getElementById('instructions');
-    let lockedCam = true;
-    instructions.addEventListener('click', function () {
-        if (lockedCam) {
-            controls.lock();
-        }
-    }, false);
-
+    // Update the HUD with the information on a planet.
     function updatehud(entity) {
-        csp = entity.name;
-        guivars.target = entity.mesh;
+        state.selectedPlanetName = entity.name;
+        guiFunctions.target = entity.mesh;
         hudBitmap.clearRect(0, 0, window.innerWidth * 2, window.innerHeight * 2);
         hudBitmap.fillStyle = "rgba(245,245,245,0.95)";
         hudBitmap.font = "Normal 100px Courier New";
@@ -894,148 +687,320 @@ async function main() {
         hudTexture.needsUpdate = true;
     }
 
-    controls.addEventListener('lock', function () {
-        if (lockedCam) {
+    // Set up GUI options.
+    let gui = new dat.GUI();
+    let guiControllers = {};
+    let guiFunctions = {
+        "Next Planet": () => {
+            // Get all clickable entitites, then sort them from closest to the origin to furthest.
+            let candidates = entitiesArr.filter((entity) => {
+                return entity.clickable;
+            });
+            candidates.sort((a, b) => {
+                return a.initPosition.x - b.initPosition.x;
+            });
+
+            // Get the index of the plant currently selected. Default: -1.
+            let cpsIndex = candidates.findIndex((entity) => {
+                return entity.name == state.selectedPlanetName;
+            });
+
+            // Get the next planet.
+            cpsIndex = (((cpsIndex + 1) % candidates.length) + candidates.length) % candidates.length;
+            updatehud(candidates[cpsIndex]);
+            state.selectedPlanetName = candidates[cpsIndex].name;
+        },
+        "Prev. Planet": () => {
+            // Get all clickable entitites, then sort them from closest to the origin to furthest.
+            let candidates = entitiesArr.filter((entity) => {
+                return entity.clickable;
+            });
+            candidates.sort((a, b) => {
+                return a.initPosition.x - b.initPosition.x;
+            });
+
+            // Get the index of the plant currently selected. Default: 1.
+            let cpsIndex = candidates.findIndex((entity) => {
+                return entity.name == state.selectedPlanetName;
+            });
+            cpsIndex = cpsIndex == -1 ? 1 : cpsIndex;
+
+            // Get the next planet.
+            cpsIndex = (((cpsIndex - 1) % candidates.length) + candidates.length) % candidates.length;
+            updatehud(candidates[cpsIndex]);
+            state.selectedPlanetName = candidates[cpsIndex].name;
+        },
+        "Pause": () => {
+            if (state.paused) {
+                // Overwrite Continue option.
+                guiControllers["Pause"].name("Pause");
+            } else {
+                // Overwrite Pause option.
+                guiControllers["Pause"].name("Continue");
+            }
+
+            state.paused = !state.paused;
+
+        },
+        "Slower": () => {
+            state.synodicSpeedModifier /= 2;
+            state.daysPerMs /= 2;
+            state.simulationSpeed /= 2;
+        },
+        "Faster": () => {
+            state.synodicSpeedModifier *= 2;
+            state.daysPerMs *= 2;
+            state.simulationSpeed *= 2;
+        },
+        "Orbit Outline Off": () => {
+            if (state.orbitalLineOn) {
+                // Overwrite Orbit Outline Off option.
+                guiControllers["Orbit Outline Off"].name("Orbit Outline On");
+            } else {
+                // Overwrite Orbit Outline On option.
+                guiControllers["Orbit Outline Off"].name("Orbit Outline Off");
+            }
+            state.orbitalLineOn = !state.orbitalLineOn;
+
+            // Update the opacity of the orbitals lines.
+            for (let line of entitiesArr.filter((entity) => {
+                    return entity.type == "line";
+                })) {
+                line.mesh.visible = state.orbitalLineOn;
+            }
+
+            // Render the scene.
+            renderer.render(scene, camera);
+        },
+        "Asteroids Off": () => {
+            if (state.asteroidsOn) {
+                // Overwrite Asteroids Off option.
+                guiControllers["Asteroids Off"].name("Asteroids On");
+            } else {
+                // Overwrite Asteroids On option.
+                guiControllers["Asteroids Off"].name("Asteroids Off");
+            }
+            state.asteroidsOn = !state.asteroidsOn;
+
+            for (let asteroid of entitiesArr.filter((entity) => {
+                    return entity.type == "asteroid";
+                })) {
+                asteroid.mesh.visible = state.asteroidsOn;
+            }
+
+            // Render the scene.
+            renderer.render(scene, camera);
+        },
+        "Artificial Lighting": () => {
+            if (state.artificialLightingOn) {
+                // Overwrite Realistic Lighting option.
+                guiControllers["Artificial Lighting"].name("Artificial Lighting");
+            } else {
+                // Overwrite Artificial Lighting option.
+                guiControllers["Artificial Lighting"].name("Realistic Lighting");
+            }
+
+            // Toggle artificial lighting.
+            state.artificialLightingOn = !state.artificialLightingOn;
+            for (let light of entitiesArr.filter((entity) => {
+                    return entity.type === "light";
+                })) {
+                if (light.name === "artificialLight") {
+                    light.light.intensity = state.artificialLightingOn ? light.intensity : 0;
+                } else {
+                    light.light.intensity = state.artificialLightingOn ? 0 : light.intensity;
+                }
+            }
+
+            // Render the scene.
+            renderer.render(scene, camera);
+        }
+    }
+    guiControllers["Next Planet"] = gui.add(guiFunctions, "Next Planet");
+    guiControllers["Prev. Planet"] = gui.add(guiFunctions, "Prev. Planet");
+    guiControllers["Pause"] = gui.add(guiFunctions, "Pause");
+    guiControllers["Slower"] = gui.add(guiFunctions, "Slower");
+    guiControllers["Faster"] = gui.add(guiFunctions, "Faster");
+    guiControllers["Orbit Outline Off"] = gui.add(guiFunctions, "Orbit Outline Off");
+    guiControllers["Asteroids Off"] = gui.add(guiFunctions, "Asteroids Off");
+    guiControllers["Artificial Lighting"] = gui.add(guiFunctions, "Artificial Lighting");
+
+    // Preload all the textures for the asteroids at once.
+    let texturePromises = [];
+    for (let texture of ASTEROID_TEXTURES) {
+        texturePromises.push(asyncLoadTexture(textureLoader, texture));
+    }
+    let preLoadedTextures = await Promise.all(texturePromises);
+
+    // Randomly generate 75 asteroids.
+    generateAsteroids(75, preLoadedTextures, 0.03, 0.005,
+        entities.mars.initPosition.x + entities.mars.radius + 0.01,
+        entities.jupiter.initPosition.x - entities.jupiter.radius - 0.01,
+        100, 1000, -10, 10, 10, 1000);
+
+    // Reorder the entitites for animation.
+    entitiesArr = Object.values(entities).sort((a, b) => {
+        return animationOrder.indexOf(b.type) - animationOrder.indexOf(a.type);
+    });
+
+    // Render the entitiesArr, and associate the entities with the entities that orbit them.
+    await renderEntitiesArr(scene, textureLoader);
+    for (let entity of entitiesArr) {
+        if (entity.orbits !== undefined) {
+            entities[entity.orbits].orbiters = entities[entity.orbits].orbiters || [];
+            entities[entity.orbits].orbiters.push(entity);
+        }
+    }
+
+    // Reorder the entitites for animation.
+    entitiesArr = Object.values(entities).sort((a, b) => {
+        return animationOrder.indexOf(b.type) - animationOrder.indexOf(a.type);
+    });
+
+    // Initially turn off artificial lighting.
+    entities.artificialLight.light.intensity = 0;
+
+    // Render the scene.
+    renderer.render(scene, camera);
+
+    // Set up the camera.
+    let orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
+    orbitControls.autoRotate = false;
+    orbitControls.autoRotateSpeed = CAMERA_ORBIT_SPEED;
+    let pointerControls = new THREE.PointerLockControls(camera, renderer.domElement);
+    let blocker = document.getElementById('blocker');
+    let instructions = document.getElementById('instructions');
+    instructions.addEventListener('click', () => {
+        if (state.lockedCam) {
+            pointerControls.lock();
+        }
+    }, false);
+    pointerControls.addEventListener('lock', () => {
+        if (state.lockedCam) {
             instructions.style.display = 'none';
             blocker.style.display = 'none';
         }
     });
-
-    controls.addEventListener('unlock', function () {
-        if (lockedCam) {
+    pointerControls.addEventListener('unlock', () => {
+        if (state.lockedCam) {
             blocker.style.display = 'block';
             instructions.style.display = '';
         }
     });
+    scene.add(pointerControls.getObject());
 
-    scene.add(controls.getObject());
-
-    let onKeyDown = function (event) {
-
-        switch (event.keyCode) {
-            case 38: // up
-            case 87: // w
-                moveForward = true;
-                break;
-            case 37: // left
-            case 65: // a
-                moveLeft = true;
-                break;
-            case 40: // down
-            case 83: // s
-                moveBackward = true;
-                break;
-            case 39: // right
-            case 68: // d
-                moveRight = true;
-                break;
-            case 16: //shift
-                speedMod = 3;
-                break;
+    // Listen for keydown events.
+    document.addEventListener('keydown', (event) => {
+        if (!state.lockedCam) {
+            switch (event.keyCode) {
+                case 38: // Up
+                case 87: // W
+                    state.moveForward = true;
+                    break;
+                case 37: // Left
+                case 65: // A
+                    state.moveLeft = true;
+                    break;
+                case 40: // Down
+                case 83: // S
+                    state.moveBackward = true;
+                    break;
+                case 39: // Right
+                case 68: // D
+                    state.moveRight = true;
+                    break;
+                case 16: // Shift
+                    state.speedMod = 3;
+                    break;
+            }
         }
-    };
+    }, false);
 
-    let onKeyUp = function (event) {
-        switch (event.keyCode) {
-            case 38: // up
-            case 87: // w
-                moveForward = false;
-                break;
-            case 37: // left
-            case 65: // a
-                moveLeft = false;
-                break;
-            case 40: // down
-            case 83: // s
-                moveBackward = false;
-                break;
-            case 39: // right
-            case 68: // d
-                moveRight = false;
-                break;
-            case 190:
-                SYNODIC_SPEED_MODIFIER *= 2;
-                DAYS_PER_MS *= 2;
-                simspeed *= 2;
-
-                break;
-            case 188:
-                SYNODIC_SPEED_MODIFIER /= 2;
-                DAYS_PER_MS /= 2;
-                simspeed /= 2;
-
-                break;
-            case 16: //shift
-                speedMod = 1;
-                break;
-            case 49:
-                controls.lock();
-                lockedCam = true;
-                // resetCam(camera, entities.sun.mesh.position);
-                moveForward, moveBackward, moveLeft, moveRight = false;
-                orbiting = false;
-                break;
-            case 50:
-                controls.unlock();
-                lockedCam = false;
-                //resetCam(camera, planets[].mesh.position);
-                moveForward, moveBackward, moveLeft, moveRight = false;
-                orbiting = true;
-                csp = entitiesArr[1].name; //set the current selected planet to the sun
-                break;
-            case 51:
-                controls.unlock();
-                lockedCam = false;
-                moveForward, moveBackward, moveLeft, moveRight = false;
-                //resetCam(camera, planets[1].mesh.position);
-                orbiting = true;
-                break;
+    // Listen for keyup events.
+    document.addEventListener('keyup', (event) => {
+        if (!state.lockedCam) {
+            switch (event.keyCode) {
+                case 38: // Up
+                case 87: // W
+                    state.moveForward = false;
+                    break;
+                case 37: // Left
+                case 65: // A
+                    state.moveLeft = false;
+                    break;
+                case 40: // Down
+                case 83: // S
+                    state.moveBackward = false;
+                    break;
+                case 39: // Right
+                case 68: // D
+                    state.moveRight = false;
+                    break;
+                case 190: // Period
+                    state.synodicSpeedModifier *= 2;
+                    state.daysPerMs *= 2;
+                    state.simulationSpeed *= 2;
+                    break;
+                case 188: // Comma
+                    state.synodicSpeedModifier /= 2;
+                    state.daysPerMs /= 2;
+                    state.simulationSpeed /= 2;
+                    break;
+                case 16: // Shift
+                    state.speedMod = 1;
+                    break;
+                case 49: // 1
+                    pointerControls.lock();
+                    state.lockedCam = true;
+                    state.moveForward, state.moveBackward, state.moveLeft, state.moveRight = false;
+                    state.orbiting = false;
+                    break;
+                case 50: // 2
+                    pointerControls.unlock();
+                    state.lockedCam = false;
+                    state.moveForward, state.moveBackward, state.moveLeft, state.moveRight = false;
+                    state.orbiting = true;
+                    state.selectedPlanetName = "sun";
+                    break;
+            }
         }
-    }
+    }, false);
 
-    window.onclick = (evt) => {
-        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-        //find the intererections
-        raycaster.setFromCamera(mouse, camera);
-        let intersectables = entitiesArr
-            .filter((entity) => {
-                return entity.clickable;
-            })
-            .map((entity) => {
-                return entity.mesh;
-            });
-        intersects = raycaster.intersectObjects(intersectables, false);
-        if (intersects.length != 0) {
-            for (let entity of entitiesArr) {
-                if (entity.mesh != null && entity.clickable === true) {
-                    let minPosX = entity.mesh.position.x - entity.radius;
-                    let maxPosX = entity.mesh.position.x + entity.radius;
-                    let minPosY = entity.mesh.position.y - entity.radius;
-                    let maxPosY = entity.mesh.position.y + entity.radius;
-                    let minPosZ = entity.mesh.position.z - entity.radius;
-                    let maxPosZ = entity.mesh.position.z + entity.radius;
-                    if (minPosX <= intersects[0].point.x && maxPosX >= intersects[0].point.x && minPosZ <= intersects[0].point.z && maxPosZ >= intersects[0].point.z) {
-                        console.log("Planet found, it's ", entity.name);
-                        updatehud(entity);
-                        break;
+    // Listen for onclick events.
+    window.onclick = (event) => {
+        if (!state.lockedCam) {
+            // Find the point that was clicked.
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+            // Find which planet the mouse pointer intersected.
+            raycaster.setFromCamera(mouse, camera);
+            let intersectables = entitiesArr
+                .filter((entity) => {
+                    return entity.clickable;
+                })
+                .map((entity) => {
+                    return entity.mesh;
+                });
+
+            let intersects = raycaster.intersectObjects(intersectables, false);
+            if (intersects.length != 0) {
+                for (let entity of entitiesArr) {
+                    if (entity.mesh != null && entity.clickable === true) {
+                        let minPosX = entity.mesh.position.x - entity.radius;
+                        let maxPosX = entity.mesh.position.x + entity.radius;
+                        let minPosY = entity.mesh.position.y - entity.radius;
+                        let maxPosY = entity.mesh.position.y + entity.radius;
+                        let minPosZ = entity.mesh.position.z - entity.radius;
+                        let maxPosZ = entity.mesh.position.z + entity.radius;
+                        if (minPosX <= intersects[0].point.x && maxPosX >= intersects[0].point.x && minPosY <= intersects[0].point.y && maxPosY >= intersects[0].point.y && minPosZ <= intersects[0].point.z && maxPosZ >= intersects[0].point.z) {
+                            updatehud(entity);
+                            break;
+                        }
                     }
                 }
             }
         }
-
-    };
-
-    document.addEventListener('keydown', onKeyDown, false);
-
-    document.addEventListener('keyup', onKeyUp, false);
-
-    // Set up listener to redraw the scene on resize.
-    window.onresize = () => {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.render(scene, camera);
     };
 
     // Move to a position that will get every entity in view.
@@ -1049,23 +1014,21 @@ async function main() {
     camera.position.set(furthestPlanet.mesh.position.length() * 2, furthestPlanet.mesh.position.length(), furthestPlanet.mesh.position.length() * 2);
 
     // Look at the sun.
-    camera.lookAt(entities.sun.mesh.position);
-    // Look at the sun.
-    guivars.target = null;
+    camera.lookAt(entities[state.selectedPlanetName].mesh.position);
+
+    // Render the scene.
     renderer.render(scene, camera);
 
-    orbitControls.autoRotate = false;
-    orbitControls.autoRotateSpeed = cameraOrbitSpeed;
     // Start animating.
     let lastTick = Date.now();
+    let lastTickPerformance = performance.now();
 
     function animate() {
         requestAnimationFrame(animate);
 
         // Animate the entitiesArr.
         let time = Date.now();
-        let daysPassed = (time - lastTick) * DAYS_PER_MS;
-        lastTick = time;
+        let daysPassed = (time - lastTick) * state.daysPerMs;
         for (let entity of entitiesArr) {
             // Orbit this entity, if this entity orbits.
             if (entity.orbits !== undefined && entity.daysPerOrbit !== undefined) {
@@ -1075,16 +1038,17 @@ async function main() {
                 while (orbiterStack.length > 0) {
                     let orbiter = orbiterStack.pop();
                     rotateAboutPivot(orbiter.mesh, entities[entity.orbits].mesh.position, entity.orbitalInclineVector, 2 * Math.PI * daysPassed * (1 / entity.daysPerOrbit));
-                    // rotateAboutPivot(orbiter.mesh, entities[entity.orbits].mesh.position, new THREE.Vector3(0, 1, 0), 2 * Math.PI * daysPassed * (1 / entity.daysPerOrbit));
                     for (orbiter of orbiter.orbiters || []) {
                         orbiterStack.push();
                     }
                 }
             }
+
             // Apply the synodic spin.
             if (entity.synodicPeriod !== undefined) {
-                entity.mesh.rotateY(daysPassed * SYNODIC_SPEED_MODIFIER / entity.synodicPeriod);
+                entity.mesh.rotateY(daysPassed * state.synodicSpeedModifier / entity.synodicPeriod);
             }
+
             // If there is a fixed rotation, apply it.
             if (entity.rotationProperties !== undefined) {
                 entity.mesh.rotateX(time / entity.rotationProperties.x);
@@ -1092,54 +1056,50 @@ async function main() {
                 entity.mesh.rotateZ(time / entity.rotationProperties.z);
             }
         }
-        if (controls.isLocked === true && !orbiting) {
-            time = performance.now();
 
-            let delta = (time - prevTime) / 1000;
+        if (pointerControls.isLocked && !state.orbiting) {
+            let timePerformance = performance.now();
+            let deltaTime = (timePerformance - lastTickPerformance) / 1000;
 
-            velocity.x = 0;
+            state.velocity.x = 0;
+            state.velocity.y = 0;
+            state.velocity.z = 0;
 
-            velocity.y = 0;
+            camera.getWorldDirection(state.direction);
 
-            velocity.z = 0;
+            state.direction.z = Number(state.moveForward) - Number(state.moveBackward);
+            state.direction.x = Number(state.moveRight) - Number(state.moveLeft);
+            state.direction.normalize(); // This ensures consistent movements in all state.directions
 
-            camera.getWorldDirection(direction);
-
-            direction.z = Number(moveForward) - Number(moveBackward);
-
-            //direction.y = Number(moveForward) - Number(moveBackward);
-
-            direction.x = Number(moveRight) - Number(moveLeft);
-
-            direction.normalize(); // this ensures consistent movements in all directions
-
-            if (moveForward) {
-                velocity.y -= direction.y * 600.0 * speedMod * delta;
-                velocity.z -= direction.z * 600.0 * speedMod * delta;
-            } else if (moveBackward) {
-                velocity.y += direction.y * 600.0 * speedMod * delta;
-                velocity.z -= direction.z * 600.0 * speedMod * delta;
+            if (state.moveForward) {
+                state.velocity.y -= state.direction.y * 600.0 * state.speedMod * deltaTime;
+                state.velocity.z -= state.direction.z * 600.0 * state.speedMod * deltaTime;
+            } else if (state.moveBackward) {
+                state.velocity.y += state.direction.y * 600.0 * state.speedMod * deltaTime;
+                state.velocity.z -= state.direction.z * 600.0 * state.speedMod * deltaTime;
             }
+            if (state.moveLeft || state.moveRight)  {
+                state.velocity.x -= state.direction.x * state.speedMod * 600.0 * deltaTime;
+            }
+            pointerControls.moveRight(-state.velocity.x * deltaTime);
+            pointerControls.moveForward(-state.velocity.z * deltaTime);
+            pointerControls.getObject().position.y -= (state.velocity.y * deltaTime);
 
-            if (moveLeft || moveRight) velocity.x -= direction.x * speedMod * 600.0 * delta;
+            lastTickPerformance = timePerformance;
 
-            controls.moveRight(-velocity.x * delta);
-
-            controls.moveForward(-velocity.z * delta);
-
-            controls.getObject().position.y -= (velocity.y * delta);
-
-            prevTime = time;
-        } else if (orbiting) {
-            if (guivars.target != null) {
-                orbitControls.target = guivars.target.position;
+        } else if (state.orbiting) {
+            if (state.selectedPlanetName !== null) {
+                orbitControls.target = entities[state.selectedPlanetName].mesh.position;
             }
             orbitControls.update();
         }
-        //poutline();
+
+        // Render the scene and hud scene.
         renderer.render(scene, camera);
         renderer.render(hudscene, cameraHUD);
 
+        // Update the last tick time.
+        lastTick = time;
     }
     animate();
 }
