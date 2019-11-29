@@ -891,78 +891,82 @@ async function main() {
 
     // Listen for keydown events.
     document.addEventListener('keydown', (event) => {
-        if (!state.lockedCam) {
-            switch (event.keyCode) {
-                case 38: // Up
-                case 87: // W
+        switch (event.keyCode) {
+            case 38: // Up
+            case 87: // W
+                if (!state.lockedCam)
                     state.moveForward = true;
-                    break;
-                case 37: // Left
-                case 65: // A
+                break;
+            case 37: // Left
+            case 65: // A
+                if (!state.lockedCam)
                     state.moveLeft = true;
-                    break;
-                case 40: // Down
-                case 83: // S
+                break;
+            case 40: // Down
+            case 83: // S
+                if (!state.lockedCam)
                     state.moveBackward = true;
-                    break;
-                case 39: // Right
-                case 68: // D
+                break;
+            case 39: // Right
+            case 68: // D
+                if (!state.lockedCam)
                     state.moveRight = true;
-                    break;
-                case 16: // Shift
-                    state.speedMod = 3;
-                    break;
-            }
+                break;
+            case 16: // Shift
+                state.speedMod = 3;
+                break;
         }
     }, false);
 
     // Listen for keyup events.
     document.addEventListener('keyup', (event) => {
-        if (!state.lockedCam) {
-            switch (event.keyCode) {
-                case 38: // Up
-                case 87: // W
+        switch (event.keyCode) {
+            case 38: // Up
+            case 87: // W
+                if (!state.lockedCam)
                     state.moveForward = false;
-                    break;
-                case 37: // Left
-                case 65: // A
+                break;
+            case 37: // Left
+            case 65: // A
+                if (!state.lockedCam)
                     state.moveLeft = false;
-                    break;
-                case 40: // Down
-                case 83: // S
+                break;
+            case 40: // Down
+            case 83: // S
+                if (!state.lockedCam)
                     state.moveBackward = false;
-                    break;
-                case 39: // Right
-                case 68: // D
+                break;
+            case 39: // Right
+            case 68: // D
+                if (!state.lockedCam)
                     state.moveRight = false;
-                    break;
-                case 190: // Period
-                    state.synodicSpeedModifier *= 2;
-                    state.daysPerMs *= 2;
-                    state.simulationSpeed *= 2;
-                    break;
-                case 188: // Comma
-                    state.synodicSpeedModifier /= 2;
-                    state.daysPerMs /= 2;
-                    state.simulationSpeed /= 2;
-                    break;
-                case 16: // Shift
-                    state.speedMod = 1;
-                    break;
-                case 49: // 1
-                    pointerControls.lock();
-                    state.lockedCam = true;
-                    state.moveForward, state.moveBackward, state.moveLeft, state.moveRight = false;
-                    state.orbiting = false;
-                    break;
-                case 50: // 2
-                    pointerControls.unlock();
-                    state.lockedCam = false;
-                    state.moveForward, state.moveBackward, state.moveLeft, state.moveRight = false;
-                    state.orbiting = true;
-                    state.selectedPlanetName = "sun";
-                    break;
-            }
+                break;
+            case 190: // Period
+                state.synodicSpeedModifier *= 2;
+                state.daysPerMs *= 2;
+                state.simulationSpeed *= 2;
+                break;
+            case 188: // Comma
+                state.synodicSpeedModifier /= 2;
+                state.daysPerMs /= 2;
+                state.simulationSpeed /= 2;
+                break;
+            case 16: // Shift
+                state.speedMod = 1;
+                break;
+            case 49: // 1
+                pointerControls.lock();
+                state.lockedCam = true;
+                state.moveForward, state.moveBackward, state.moveLeft, state.moveRight = false;
+                state.orbiting = false;
+                break;
+            case 50: // 2
+                pointerControls.unlock();
+                state.lockedCam = false;
+                state.moveForward, state.moveBackward, state.moveLeft, state.moveRight = false;
+                state.orbiting = true;
+                state.selectedPlanetName = "sun";
+                break;
         }
     }, false);
 
@@ -1078,7 +1082,7 @@ async function main() {
                 state.velocity.y += state.direction.y * 600.0 * state.speedMod * deltaTime;
                 state.velocity.z -= state.direction.z * 600.0 * state.speedMod * deltaTime;
             }
-            if (state.moveLeft || state.moveRight)  {
+            if (state.moveLeft || state.moveRight) {
                 state.velocity.x -= state.direction.x * state.speedMod * 600.0 * deltaTime;
             }
             pointerControls.moveRight(-state.velocity.x * deltaTime);
