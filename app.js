@@ -156,408 +156,6 @@ let entities = {
         synodicPeriod: 1.027,
         clickable: true
     },
-    asteroid1: {
-        type: "asteroid",
-        name: "asteroid",
-        info1: "Physical characteristics:",
-        info2: "its a rocky lump filled with hopes and dreams",
-        info3: "Atmosphere:  Surface pressure 0.0 kPA",
-        initPosition: {
-            x: 3.9354 + 2.5,
-            y: 0,
-            z: 0
-        },
-        radius: 0.02,
-        texture: "assets/1K/moon.jpg",
-        textureHD: "assets/HD/moon.jpg",
-        color: "0xB76247",
-        orbits: "sun",
-        daysPerOrbit: 616.98,
-        synodicPeriod: 1.027,
-        clickable: true
-    },
-    asteroid2: {
-        type: "asteroid",
-        name: "asteroid",
-        info1: "Physical characteristics:",
-        info2: "its a rocky lump filled with hopes and dreams",
-        info3: "Atmosphere:  Surface pressure 0.0 kPA",
-        initPosition: {
-            x: 3.9354 + 2.6,
-            y: 0,
-            z: 0
-        },
-        radius: 0.02,
-        texture: "assets/1K/moon.jpg",
-        textureHD: "assets/HD/moon.jpg",
-        color: "0xB76247",
-        orbits: "sun",
-        daysPerOrbit: 626.98,
-        synodicPeriod: 1.027,
-        clickable: true
-    },
-    asteroid3: {
-        type: "asteroid",
-        name: "asteroid",
-        info1: "Physical characteristics:",
-        info2: "its a rocky lump filled with hopes and dreams",
-        info3: "Atmosphere:  Surface pressure 0.0 kPA",
-        initPosition: {
-            x: 3.9354 + 2.7,
-            y: 0,
-            z: 0
-        },
-        radius: 0.02,
-        texture: "assets/1K/moon.jpg",
-        textureHD: "assets/HD/moon.jpg",
-        color: "0xB76247",
-        orbits: "sun",
-        daysPerOrbit: 450.98,
-        synodicPeriod: 0.027,
-        clickable: true
-    },
-    asteroid4: {
-        type: "asteroid",
-        name: "asteroid",
-        info1: "Physical characteristics:",
-        info2: "its a rocky lump filled with hopes and dreams",
-        info3: "Atmosphere:  Surface pressure 0.0 kPA",
-        initPosition: {
-            x: 3.9354 + 2.9,
-            y: 0,
-            z: 0
-        },
-        radius: 0.02,
-        texture: "assets/1K/moon.jpg",
-        textureHD: "assets/HD/moon.jpg",
-        color: "0xB76247",
-        orbits: "sun",
-        daysPerOrbit: 450.98,
-        synodicPeriod: 0.027,
-        clickable: true
-    },
-    asteroid5: {
-        type: "asteroid",
-        name: "asteroid",
-        info1: "Physical characteristics:",
-        info2: "its a rocky lump filled with hopes and dreams",
-        info3: "Atmosphere:  Surface pressure 0.0 kPA",
-        initPosition: {
-            x: 3.9354 + 3.1,
-            y: 0,
-            z: 0
-        },
-        radius: 0.02,
-        texture: "assets/1K/moon.jpg",
-        textureHD: "assets/HD/moon.jpg",
-        color: "0xB76247",
-        orbits: "sun",
-        daysPerOrbit: 650.98,
-        synodicPeriod: 0.027,
-        clickable: true
-    },
-    asteroid6: {
-        type: "asteroid",
-        name: "asteroid",
-        info1: "Physical characteristics:",
-        info2: "its a rocky lump filled with hopes and dreams",
-        info3: "Atmosphere:  Surface pressure 0.0 kPA",
-        initPosition: {
-            x: 3.9354 + 3.2,
-            y: 0,
-            z: 0
-        },
-        radius: 0.02,
-        texture: "assets/1K/moon.jpg",
-        textureHD: "assets/HD/moon.jpg",
-        color: "0xB76247",
-        orbits: "sun",
-        daysPerOrbit: 425.98,
-        synodicPeriod: 0.027,
-        clickable: true
-    },
-    asteroid7: {
-        type: "asteroid",
-        name: "asteroid",
-        info1: "Physical characteristics:",
-        info2: "its a rocky lump filled with hopes and dreams",
-        info3: "Atmosphere:  Surface pressure 0.0 kPA",
-        initPosition: {
-            x: 3.9354 + 3.4,
-            y: 0,
-            z: 0
-        },
-        radius: 0.02,
-        texture: "assets/1K/moon.jpg",
-        textureHD: "assets/HD/moon.jpg",
-        color: "0xB76247",
-        orbits: "sun",
-        daysPerOrbit: 665.98,
-        synodicPeriod: 0.027,
-        clickable: true
-    },
-    asteroid8: {
-        type: "asteroid",
-        name: "asteroid",
-        info1: "Physical characteristics:",
-        info2: "its a rocky lump filled with hopes and dreams",
-        info3: "Atmosphere:  Surface pressure 0.0 kPA",
-        initPosition: {
-            x: 3.9354 + 3.7,
-            y: 0,
-            z: 0
-        },
-        radius: 0.02,
-        texture: "assets/1K/moon.jpg",
-        textureHD: "assets/HD/moon.jpg",
-        color: "0xB76247",
-        orbits: "sun",
-        daysPerOrbit: 365.98,
-        synodicPeriod: 0.027,
-        clickable: true
-    },
-    asteroid9: {
-        type: "asteroid",
-        name: "asteroid",
-        info1: "Physical characteristics:",
-        info2: "its a rocky lump filled with hopes and dreams",
-        info3: "Atmosphere:  Surface pressure 0.0 kPA",
-        initPosition: {
-            x: 3.9354 + 3.8,
-            y: 0,
-            z: 0
-        },
-        radius: 0.02,
-        texture: "assets/1K/moon.jpg",
-        textureHD: "assets/HD/moon.jpg",
-        color: "0xB76247",
-        orbits: "sun",
-        daysPerOrbit: 635.98,
-        synodicPeriod: 0.027,
-        clickable: true
-    },
-    asteroid10: {
-        type: "asteroid",
-        name: "asteroid",
-        info1: "Physical characteristics:",
-        info2: "its a rocky lump filled with hopes and dreams",
-        info3: "Atmosphere:  Surface pressure 0.0 kPA",
-        initPosition: {
-            x: 3.9354 + 4,
-            y: 0,
-            z: 0
-        },
-
-        radius: 0.02,
-        texture: "assets/1K/moon.jpg",
-        textureHD: "assets/HD/moon.jpg",
-        color: "0xB76247",
-        orbits: "sun",
-        daysPerOrbit: 520.98,
-        synodicPeriod: 0.027,
-        clickable: true
-    },
-    asteroid12: {
-        type: "asteroid",
-        name: "asteroid",
-        info1: "Physical characteristics:",
-        info2: "its a rocky lump filled with hopes and dreams",
-        info3: "Atmosphere:  Surface pressure 0.0 kPA",
-        initPosition: {
-            x: 3.9354 + 2.5 + 1,
-            y: 0,
-            z: 0
-        },
-        radius: 0.02,
-        texture: "assets/1K/moon.jpg",
-        textureHD: "assets/HD/moon.jpg",
-        color: "0xB76247",
-        orbits: "sun",
-        daysPerOrbit: 619.98,
-        synodicPeriod: 1.027,
-        clickable: true
-    },
-    asteroid12: {
-        type: "asteroid",
-        name: "asteroid",
-        info1: "Physical characteristics:",
-        info2: "its a rocky lump filled with hopes and dreams",
-        info3: "Atmosphere:  Surface pressure 0.0 kPA",
-        initPosition: {
-            x: 3.9354 + 2.6 + 1,
-            y: 0,
-            z: 0
-        },
-        radius: 0.02,
-        texture: "assets/1K/moon.jpg",
-        textureHD: "assets/HD/moon.jpg",
-        color: "0xB76247",
-        orbits: "sun",
-        daysPerOrbit: 606.98,
-        synodicPeriod: 1.027,
-        clickable: true
-    },
-    asteroid13: {
-        type: "asteroid",
-        name: "asteroid",
-        info1: "Physical characteristics:",
-        info2: "its a rocky lump filled with hopes and dreams",
-        info3: "Atmosphere:  Surface pressure 0.0 kPA",
-        initPosition: {
-            x: 3.9354 + 2.7 + 1,
-            y: 0,
-            z: 0
-        },
-        radius: 0.02,
-        texture: "assets/1K/moon.jpg",
-        textureHD: "assets/HD/moon.jpg",
-        color: "0xB76247",
-        orbits: "sun",
-        daysPerOrbit: 425.98,
-        synodicPeriod: 0.027,
-        clickable: true
-    },
-    asteroid14: {
-        type: "asteroid",
-        name: "asteroid",
-        info1: "Physical characteristics:",
-        info2: "its a rocky lump filled with hopes and dreams",
-        info3: "Atmosphere:  Surface pressure 0.0 kPA",
-        initPosition: {
-            x: 3.9354 + 2.9 + 1,
-            y: 0,
-            z: 0
-        },
-        radius: 0.02,
-        texture: "assets/1K/moon.jpg",
-        textureHD: "assets/HD/moon.jpg",
-        color: "0xB76247",
-        orbits: "sun",
-        daysPerOrbit: 430.98,
-        synodicPeriod: 0.027,
-        clickable: true
-    },
-    asteroid15: {
-        type: "asteroid",
-        name: "asteroid",
-        info1: "Physical characteristics:",
-        info2: "its a rocky lump filled with hopes and dreams",
-        info3: "Atmosphere:  Surface pressure 0.0 kPA",
-        initPosition: {
-            x: 3.9354 + 3.1 + 1,
-            y: 0,
-            z: 0
-        },
-        radius: 0.02,
-        texture: "assets/1K/moon.jpg",
-        textureHD: "assets/HD/moon.jpg",
-        color: "0xB76247",
-        orbits: "sun",
-        daysPerOrbit: 690.98,
-        synodicPeriod: 0.027,
-        clickable: true
-    },
-    asteroid16: {
-        type: "asteroid",
-        name: "asteroid",
-        info1: "Physical characteristics:",
-        info2: "its a rocky lump filled with hopes and dreams",
-        info3: "Atmosphere:  Surface pressure 0.0 kPA",
-        initPosition: {
-            x: 3.9354 + 3.2 + 1,
-            y: 0,
-            z: 0
-        },
-        radius: 0.02,
-        texture: "assets/1K/moon.jpg",
-        textureHD: "assets/HD/moon.jpg",
-        color: "0xB76247",
-        orbits: "sun",
-        daysPerOrbit: 412.98,
-        synodicPeriod: 0.027,
-        clickable: true
-    },
-    asteroid17: {
-        type: "asteroid",
-        name: "asteroid",
-        info1: "Physical characteristics:",
-        info2: "its a rocky lump filled with hopes and dreams",
-        info3: "Atmosphere:  Surface pressure 0.0 kPA",
-        initPosition: {
-            x: 3.9354 + 3.4 + 1,
-            y: 0,
-            z: 0
-        },
-        radius: 0.02,
-        texture: "assets/1K/moon.jpg",
-        textureHD: "assets/HD/moon.jpg",
-        color: "0xB76247",
-        orbits: "sun",
-        daysPerOrbit: 635.98,
-        synodicPeriod: 0.027,
-        clickable: true
-    },
-    asteroid18: {
-        type: "asteroid",
-        name: "asteroid",
-        info1: "Physical characteristics:",
-        info2: "its a rocky lump filled with hopes and dreams",
-        info3: "Atmosphere:  Surface pressure 0.0 kPA",
-        initPosition: {
-            x: 3.9354 + 3.7 + 1,
-            y: 0,
-            z: 0
-        },
-        radius: 0.02,
-        texture: "assets/1K/moon.jpg",
-        textureHD: "assets/HD/moon.jpg",
-        color: "0xB76247",
-        orbits: "sun",
-        daysPerOrbit: 375.98,
-        synodicPeriod: 0.027,
-        clickable: true
-    },
-    asteroid19: {
-        type: "asteroid",
-        name: "asteroid",
-        info1: "Physical characteristics:",
-        info2: "its a rocky lump filled with hopes and dreams",
-        info3: "Atmosphere:  Surface pressure 0.0 kPA",
-        initPosition: {
-            x: 3.9354 + 3.8 + 1,
-            y: 0,
-            z: 0
-        },
-        radius: 0.02,
-        texture: "assets/1K/moon.jpg",
-        textureHD: "assets/HD/moon.jpg",
-        color: "0xB76247",
-        orbits: "sun",
-        daysPerOrbit: 639.98,
-        synodicPeriod: 0.027,
-        clickable: true
-    },
-    asteroid20: {
-        type: "asteroid",
-        name: "asteroid",
-        info1: "Physical characteristics:",
-        info2: "its a rocky lump filled with hopes and dreams",
-        info3: "Atmosphere:  Surface pressure 0.0 kPA",
-        initPosition: {
-            x: 3.9354 + 4 + 1,
-            y: 0,
-            z: 0
-        },
-
-        radius: 0.02,
-        texture: "assets/1K/moon.jpg",
-        textureHD: "assets/HD/moon.jpg",
-        color: "0xB76247",
-        orbits: "sun",
-        daysPerOrbit: 427.98,
-        synodicPeriod: 0.027,
-        clickable: true
-    },
     jupiter: {
         type: "planet",
         name: "jupiter",
@@ -957,52 +555,36 @@ async function main() {
             console.log(guivars.target)
             updatehud(guivars.target);
         },
-        nextPlanet: function() {
-            let count = 0;
-            for (let entity of entitiesArr) {
-                if (entity.mesh != null) {
-                    if (entity.name == csp) {
-                        if (csp == "asteroid") { //if its an asteroid we jump stright to juipter
-                            entity = entitiesArr[27];
-                            updatehud(entity);
-                            break;
-                        } else if (csp == "sun") { //if its an asteroid we jump stright to juipter
-                            entity = entitiesArr[22];
-                            updatehud(entity);
-                            break;
-                        } else {
-                            entity = entitiesArr[count + 1];
-                            updatehud(entity);
-                            break;
-                        }
-                    }
-                    count += 1;
-                }
-            }
+        nextPlanet:  () => {
+            // Get all clickable entitites, then sort them from closest to the origin to furthest.
+            let candidates = entitiesArr.filter((entity) => { return entity.clickable; });
+            candidates.sort((a, b) => {
+                return a.initPosition.x - b.initPosition.x;
+            });
+
+            // Get the index of the plant currently selected. Default: -1.
+            let cspIndex = candidates.findIndex((entity) => { return entity.name == csp; });
+
+            // Get the next planet.
+            cspIndex = (((cpsIndex + 1) % candidates.length) + candidates.length) % candidates.length;
+            updatehud(candidates[cspIndex]);
+            csp = candidates[cspIndex].name;
         },
-        previousPlanet: function(){
-            let count = 0;
-            for (let entity of entitiesArr) {
-                if (entity.mesh != null) {
-                    if (entity.name == csp) {
-                        if (csp == "asteroid") { //if its an asteroid we jump stright to mars
-                            entity = entitiesArr[25];
-                            updatehud(entity);
-                            break;
-                        } else if (csp == "sun") { //if its the sun we jump stright to neptune
-                            entity = entitiesArr[29];
-                            updatehud(entity);
-                            break;
-                        } else {
-                            entity = entitiesArr[count - 1];
-                            updatehud(entity);
-                            break;``
-    
-                        }
-                    }
-                }
-                count += 1;
-            }
+        previousPlanet: () => {
+            // Get all clickable entitites, then sort them from closest to the origin to furthest.
+            let candidates = entitiesArr.filter((entity) => { return entity.clickable; });
+            candidates.sort((a, b) => {
+                return a.initPosition.x - b.initPosition.x;
+            });
+
+            // Get the index of the plant currently selected. Default: 1.
+            let cspIndex = candidates.findIndex((entity) => { return entity.name == csp; });
+            cpsIndex = cspIndex == -1 ? 1 : cspIndex;
+
+            // Get the next planet.
+            cspIndex = (((cpsIndex - 1) % candidates.length) + candidates.length) % candidates.length;
+            updatehud(candidates[cspIndex]);
+            csp = candidates[cspIndex].name;
         },
         pausebutton: function() {
             if (simspeed != 0) {
@@ -1037,7 +619,7 @@ async function main() {
         
     }
     var gui = new dat.GUI();
-    gui.add(guivars,"target",{Sun:entities.sun, Mercury:entities.mercury , Venus:entities.venus, Earth:entities.earth, Mars:entities.mars,Jupiter:entities.jupiter,Staurn:entities.saturn,Uranus:entities.uranus, Neptune:entities.neptune});
+    //gui.add(guivars,"target",{None:null,Sun:entities.sun, Mercury:entities.mercury , Venus:entities.venus, Earth:entities.earth, Mars:entities.mars,Jupiter:entities.jupiter,Staurn:entities.saturn,Uranus:entities.uranus, Neptune:entities.neptune});
     gui.add(guivars,"targetselect");
     gui.add(guivars,"nextPlanet");
     gui.add(guivars,"previousPlanet");
@@ -1244,7 +826,7 @@ async function main() {
             return e.type === "planet";
         })
         .sort((a, b) => {
-            return b.mesh.position.length() - a.mesh.position.length()
+            return b.mesh.position.length() - a.mesh.position.length();
         })[0];
     camera.position.set(furthestPlanet.mesh.position.length() * 2, furthestPlanet.mesh.position.length(), furthestPlanet.mesh.position.length() * 2);
 
