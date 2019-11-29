@@ -45,9 +45,11 @@ let entities = {
     sun: {
         type: "sun",
         name: "sun",
-        info1: "Observation data:",
-        info2: "Visual brightness (V): -26.74",
-        info3: "Absolute magnitude: 4.83",
+        info: {
+            info1: "Observation data:",
+            info2: "Visual brightness (V): -26.74",
+            info3: "Absolute magnitude: 4.83"  
+        },
         initPosition: {
             x: 0,
             y: 0,
@@ -79,9 +81,13 @@ let entities = {
     mercury: {
         type: "planet",
         name: "mercury",
-        info1: "Physical characteristics:",
-        info2: "Mean radius: 2439.7km",
-        info3: "Atmosphere:  Surface pressure <0.5 nPA",
+        info: {
+            info1: "Physical characteristics:",
+            info2: "Mean radius: 2439.7km",
+            info3: "Atmosphere:  Surface pressure <0.5 nPA",
+            info4: "Average Distance To Sun:  0.387 AU",
+            info5: "Sidereal Period: 88 days",
+        },
         initPosition: {
             x: 1.5 + 0.25,
             y: 0,
@@ -101,9 +107,13 @@ let entities = {
     venus: {
         type: "planet",
         name: "venus",
-        info1: "Physical characteristics:",
-        info2: "Mean radius: 6051.8km",
-        info3: "Atmosphere:  Surface pressure 9.2 MPa",
+        info: {
+            info1: "Physical characteristics:",
+            info2: "Mean radius: 6051.8km",
+            info3: "Atmosphere:  Surface pressure 9.2 MPa",
+            info4: "Average Distance To Sun: 0.722 Au",
+            info5: "Sidereal Period: 225 days"
+        },
         initPosition: {
             x: 1.8684 + 0.5,
             y: 0,
@@ -123,9 +133,13 @@ let entities = {
     earth: {
         type: "planet",
         name: "earth",
-        info1: "Physical characteristics:",
-        info2: "Mean radius: 6371km",
-        info3: "Atmosphere:  Surface pressure 101.325 kPa",
+        info: {
+            info1: "Physical characteristics:",
+            info2: "Mean radius: 6371km",
+            info3: "Atmosphere:  Surface pressure 101.325 kPa",
+            info4: "Average Distance To Sun: 1 AU",
+            info5: "Sidereal Period: 1 year"
+        },
         initPosition: {
             x: 2.5833 + 0.75,
             y: 0,
@@ -145,9 +159,12 @@ let entities = {
     earthMoon1: {
         type: "moon",
         name: "moon",
-        info1: "Physical characteristics:",
-        info2: "Mean radius: 1737.4km",
-        info3: "Atmosphere:  Surface pressure <0.5 nPA",
+        info: {
+            info1: "Physical characteristics:",
+            info2: "Mean radius: 1737.4km",
+            info3: "Atmosphere:  Surface pressure <0.5 nPA",
+            info4: "Sidereal Month: 27 days"
+        },
         initPosition: {
             x: 2.5833 + 0.75 + 0.3 + 0.1,
             y: 0,
@@ -166,9 +183,13 @@ let entities = {
     mars: {
         type: "planet",
         name: "mars",
-        info1: "Physical characteristics:",
-        info2: "Mean radius: 3389.5km",
-        info3: "Atmosphere:  Surface pressure 0.636 kPA",
+        info: {
+            info1: "Physical characteristics:",
+            info2: "Mean radius: 3389.5km",
+            info3: "Atmosphere:  Surface pressure 0.636 kPA",
+            info4: "Average Distance To Sun: 1.52 AU",
+            info5: "Sidereal Period: 1.9 years"
+        },
         initPosition: {
             x: 3.9354 + 1,
             y: 0,
@@ -188,9 +209,13 @@ let entities = {
     jupiter: {
         type: "planet",
         name: "jupiter",
-        info1: "Physical characteristics:",
-        info2: "Mean radius: 69911km",
-        info3: "Atmosphere:  Surface pressure 20-200 kPA",
+        info: {
+            info1: "Physical characteristics:",
+            info2: "Mean radius: 69911km",
+            info3: "Atmosphere:  Surface pressure 20-200 kPA",
+            info4: "Average Distance To Sun: 5.20 AU",
+            info5: "Sidereal Period: 11.9 years"
+        },
         initPosition: {
             x: 13.4433 * 1 + 1,
             y: 0,
@@ -210,9 +235,13 @@ let entities = {
     saturn: {
         type: "planet",
         name: "saturn",
-        info1: "Physical characteristics:",
-        info2: "Mean radius: 58232km",
-        info3: "Atmosphere:  Surface pressure 140 kPA",
+        info: {
+            info1: "Physical characteristics:",
+            info2: "Mean radius: 58232km",
+            info3: "Atmosphere:  Surface pressure 140 kPA",
+            info4: "Average Distance To Sun: 9.58 AU",
+            info5: "Sidereal Period: 29.5 years"
+        },
         initPosition: {
             x: 24.7626 * 1 + 1,
             y: 0,
@@ -249,9 +278,13 @@ let entities = {
     uranus: {
         type: "planet",
         name: "uranus",
-        info1: "Physical characteristics:",
-        info2: "Mean radius: 25362km",
-        info3: "Atmosphere:  Surface pressure 130 kPA",
+        info: {
+            info1: "Physical characteristics:",
+            info2: "Mean radius: 25362km",
+            info3: "Atmosphere:  Surface pressure 130 kPA",
+            info4: "Average Distance To Sun: 19.2 AU",
+            info5: "Sidereal Period: 84 years"
+        },
         initPosition: {
             x: 49.5769 * 1 + 1,
             y: 0,
@@ -271,9 +304,13 @@ let entities = {
     neptune: {
         type: "planet",
         name: "neptune",
-        info1: "Physical characteristics:",
-        info2: "Mean radius: 24622km",
-        info3: "Atmosphere:  Surface pressure 130 kPA",
+        info: {
+            info1: "Physical characteristics:",
+            info2: "Mean radius: 24622km",
+            info3: "Atmosphere:  Surface pressure 130 kPA",
+            info4: "Average Distance To Sun: 30.1 AU",
+            info5: "Sidereal Period: 164.8 years"
+        },
         initPosition: {
             x: 77.6204 * 1 + 1,
             y: 0,
@@ -715,9 +752,14 @@ async function main() {
         hudBitmap.fillText(entity.name, window.innerWidth / 12, window.innerHeight / 10);
         hudBitmap.font = "Normal 60px Courier New";
         hudBitmap.textAlign = 'left';
-        hudBitmap.fillText(entity.info1, window.innerWidth / 12, 1.4 * window.innerHeight / 8);
-        hudBitmap.fillText(entity.info2, window.innerWidth / 12, 1.9 * (window.innerHeight / 8));
-        hudBitmap.fillText(entity.info3, window.innerWidth / 12, 2.4 * (window.innerHeight / 8));
+        count = 0;
+        let infos = Object.values(entity.info)
+        for (let inf of infos){
+            hudBitmap.fillText(inf, window.innerWidth / 12, (1.4 + (0.5 * count)) * (window.innerHeight / 8));
+            count += 1;
+        }
+        //hudBitmap.fillText(entity.info2, window.innerWidth / 12, 1.9 * (window.innerHeight / 8));
+        //hudBitmap.fillText(entity.info3, window.innerWidth / 12, 2.4 * (window.innerHeight / 8));
         //hudBitmap.fillText(entity., window.innerWidth / 12, 4*(window.innerHeight / 8));
         hudTexture.needsUpdate = true;
     }
