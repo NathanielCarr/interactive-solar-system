@@ -867,6 +867,7 @@ async function main() {
     let orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
     orbitControls.autoRotate = false;
     orbitControls.autoRotateSpeed = CAMERA_ORBIT_SPEED;
+    orbitControls.enablePan = false;
     let pointerControls = new THREE.PointerLockControls(camera, renderer.domElement);
     let blocker = document.getElementById('blocker');
     let instructions = document.getElementById('instructions');
