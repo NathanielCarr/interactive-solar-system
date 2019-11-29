@@ -47,7 +47,7 @@ let entities = {
         info: {
             info1: "Observation data:",
             info2: "Visual brightness (V): -26.74",
-            info3: "Absolute magnitude: 4.83"  
+            info3: "Absolute magnitude: 4.83"
         },
         initPosition: {
             x: 0,
@@ -500,6 +500,20 @@ async function renderEntitiesArr(scene, textureLoader) {
                 break;
             }
             case ("planet"): {
+                // Add an orbital line for this planet.
+                let orbitalLine = new THREE.Line(
+                    new THREE.CircleGeometry(entity.initPosition.x, 100),
+                    new THREE.MeshBasicMaterial({
+                        color: 0xffffff,
+                        transparent: true,
+                        opacity: .1,
+                        side: THREE.BackSide
+                    })
+                );
+                orbitalLine.geometry.vertices.shift();
+                orbitalLine.rotation.x = THREE.Math.degToRad(90) + Math.atan(entity.orbitalInclineVector.z);
+                scene.add(orbitalLine);
+
                 let geometry = new THREE.SphereGeometry(entity.radius, 32, 32);
                 let texture = entity.preloadedTexture || await asyncLoadTexture(textureLoader, entity.texture)
                     .catch((err) => {
@@ -519,20 +533,6 @@ async function renderEntitiesArr(scene, textureLoader) {
                 }
                 objects.push(entity.mesh)
                 scene.add(entity.mesh);
-
-                // Add an orbital line for this planet.
-                let orbitalLine = new THREE.Line(
-                    new THREE.CircleGeometry(entity.initPosition.x, 90),
-                    new THREE.MeshBasicMaterial({
-                        color: 0xffffff,
-                        transparent: true,
-                        opacity: .1,
-                        side: THREE.BackSide
-                    })
-                );
-                orbitalLine.geometry.vertices.shift();
-                orbitalLine.rotation.x = THREE.Math.degToRad(90) + Math.atan(entity.orbitalInclineVector.z);
-                scene.add(orbitalLine);
                 break;
             }
             case ("ring"): {
@@ -623,7 +623,9 @@ async function renderEntitiesArr(scene, textureLoader) {
 }
 
 function forceIlluminate(forceIllumination) {
-    for (let light of entitiesArr.filter((entity) => { return entity.type === "light"; })) {
+    for (let light of entitiesArr.filter((entity) => {
+            return entity.type === "light";
+        })) {
         if (light.name === "forceIlluminateLight") {
             light.light.intensity = forceIllumination ? light.intensity : 0;
         } else {
@@ -633,7 +635,7 @@ function forceIlluminate(forceIllumination) {
 }
 
 async function main() {
-    
+
     //vars for the mouse click vector
     let raycaster = new THREE.Raycaster();
     let mouse = new THREE.Vector2();
@@ -679,16 +681,20 @@ async function main() {
     hudscene.add(plane);
 
     //dat gui for the demo 
-    let guivars=  {
-        "Next Planet":  () => {
+    let guivars = {
+        "Next Planet": () => {
             // Get all clickable entitites, then sort them from closest to the origin to furthest.
-            let candidates = entitiesArr.filter((entity) => { return entity.clickable; });
+            let candidates = entitiesArr.filter((entity) => {
+                return entity.clickable;
+            });
             candidates.sort((a, b) => {
                 return a.initPosition.x - b.initPosition.x;
             });
 
             // Get the index of the plant currently selected. Default: -1.
-            let cpsIndex = candidates.findIndex((entity) => { return entity.name == csp; });
+            let cpsIndex = candidates.findIndex((entity) => {
+                return entity.name == csp;
+            });
 
             // Get the next planet.
             cpsIndex = (((cpsIndex + 1) % candidates.length) + candidates.length) % candidates.length;
@@ -697,13 +703,17 @@ async function main() {
         },
         "Prev. Planet": () => {
             // Get all clickable entitites, then sort them from closest to the origin to furthest.
-            let candidates = entitiesArr.filter((entity) => { return entity.clickable; });
+            let candidates = entitiesArr.filter((entity) => {
+                return entity.clickable;
+            });
             candidates.sort((a, b) => {
                 return a.initPosition.x - b.initPosition.x;
             });
 
             // Get the index of the plant currently selected. Default: 1.
-            let cpsIndex = candidates.findIndex((entity) => { return entity.name == csp; });
+            let cpsIndex = candidates.findIndex((entity) => {
+                return entity.name == csp;
+            });
             cpsIndex = cpsIndex == -1 ? 1 : cpsIndex;
 
             // Get the next planet.
@@ -721,35 +731,32 @@ async function main() {
                 DAYS_PER_MS = 0.1 * Math.pow(10, 0.25);
                 simspeed = 1;
             }
-    
-            simspeedtext.innerText = "Sim Speed:" + simspeed;
         },
         "Slower": () => {
             SYNODIC_SPEED_MODIFIER /= 2;
             DAYS_PER_MS /= 2;
             simspeed /= 2;
-            simspeedtext.innerText = "Sim Speed:" + simspeed;},
+        },
         "Faster": () => {
-                SYNODIC_SPEED_MODIFIER *= 2;
-                DAYS_PER_MS *= 2;
-                simspeed *= 2;
-                simspeedtext.innerText = "Sim Speed:" + simspeed;
+            SYNODIC_SPEED_MODIFIER *= 2;
+            DAYS_PER_MS *= 2;
+            simspeed *= 2;
         },
         "Orbit Outline": () => {
 
         },
         "Realistic / Artificial Lighting": () => {
 
-        } 
+        }
     }
     let gui = new dat.GUI();
-    gui.add(guivars,"Next Planet");
-    gui.add(guivars,"Prev. Planet");
-    gui.add(guivars,"Pause / Continue");
-    gui.add(guivars,"Slower");
-    gui.add(guivars,"Faster");
-    gui.add(guivars,"Orbit Outline");
-    gui.add(guivars,"Realistic / Artificial Lighting");
+    gui.add(guivars, "Next Planet");
+    gui.add(guivars, "Prev. Planet");
+    gui.add(guivars, "Pause / Continue");
+    gui.add(guivars, "Slower");
+    gui.add(guivars, "Faster");
+    gui.add(guivars, "Orbit Outline");
+    gui.add(guivars, "Realistic / Artificial Lighting");
 
     // Preload all the textures for the asteroids.
     let texturePromises = [];
@@ -789,10 +796,7 @@ async function main() {
     let controls = new THREE.PointerLockControls(camera, renderer.domElement);
     let blocker = document.getElementById('blocker');
     let instructions = document.getElementById('instructions');
-    //let nextbutton = document.getElementById('next-button');
-    let simspeedtext = document.getElementById('simspeed-text');
     let lockedCam = true;
-    simspeedtext.style.display = "block";
     instructions.addEventListener('click', function () {
         if (lockedCam) {
             controls.lock();
@@ -812,7 +816,7 @@ async function main() {
         hudBitmap.textAlign = 'left';
         count = 0;
         let infos = Object.values(entity.info)
-        for (let inf of infos){
+        for (let inf of infos) {
             hudBitmap.fillText(inf, window.innerWidth / 12, (1.6 + (0.8 * count)) * (window.innerHeight / 8));
             count += 1;
         }
@@ -885,15 +889,13 @@ async function main() {
                 SYNODIC_SPEED_MODIFIER *= 2;
                 DAYS_PER_MS *= 2;
                 simspeed *= 2;
-                simspeedtext.innerText = "Sim Speed:" + simspeed;
-         
+
                 break;
             case 188:
                 SYNODIC_SPEED_MODIFIER /= 2;
                 DAYS_PER_MS /= 2;
                 simspeed /= 2;
-                simspeedtext.innerText = "Sim Speed:" + simspeed;
-                
+
                 break;
             case 16: //shift
                 speedMod = 1;
