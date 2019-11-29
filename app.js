@@ -870,6 +870,7 @@ async function main() {
     orbitControls.autoRotate = false;
     orbitControls.autoRotateSpeed = CAMERA_ORBIT_SPEED;
     orbitControls.enablePan = false;
+    orbitControls.enabled = false;
     let pointerControls = new THREE.PointerLockControls(camera, renderer.domElement);
     let blocker = document.getElementById('blocker');
     let instructions = document.getElementById('instructions');
@@ -961,6 +962,7 @@ async function main() {
                 pointerControls.lock();
                 state.lockedCam = true;
                 state.moveForward, state.moveBackward, state.moveLeft, state.moveRight = false;
+                orbitControls.enabled = false;
                 state.orbiting = false;
                 break;
             case 50: // 2
@@ -968,6 +970,7 @@ async function main() {
                 state.lockedCam = false;
                 state.moveForward, state.moveBackward, state.moveLeft, state.moveRight = false;
                 state.orbiting = true;
+                orbitControls.enabled = true;
                 state.selectedPlanetName = "sun";
                 break;
         }
