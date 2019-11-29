@@ -9,6 +9,7 @@ const ASTEROID_TEXTURES = [
 ]
 let DAYS_PER_MS = (0.1 * Math.pow(10, 0.25));
 let SYNODIC_SPEED_MODIFIER = 1 * Math.pow(10, 0.25);
+let forceBasicMaterial = true;
 let objects = [];
 let intersects = [];
 let intersected;
@@ -16,6 +17,14 @@ let target;
 let csp;
 let psp;
 let entities = {
+    forceIlluminateLight: {
+        type: "light",
+        lightType: "ambient",
+        name: "forceIlluminateLight",
+        color: "0xFFFFFF",
+        intensity: 1,
+        clickable: false
+    },
     skybox: {
         type: "skybox",
         initPosition: {
@@ -45,6 +54,7 @@ let entities = {
             z: 0
         },
         radius: 1,
+        tilt: THREE.Math.degToRad(7.25),
         texture: "assets/1K/sun.jpg",
         textureHD: "assets/HD/sun.jpg",
         color: "0xF18828",
@@ -78,6 +88,7 @@ let entities = {
             z: 0
         },
         radius: 0.15,
+        tilt: THREE.Math.degToRad(0.03),
         texture: "assets/1K/mercury.jpg",
         textureHD: "assets/HD/mercury.jpg",
         color: "0x848383",
@@ -98,6 +109,7 @@ let entities = {
             z: 0
         },
         radius: 0.3,
+        tilt: THREE.Math.degToRad(2.64),
         texture: "assets/1K/venus_surface.jpg",
         textureHD: "assets/HD/venus_surface.jpg",
         color: "0xC77328",
@@ -118,6 +130,7 @@ let entities = {
             z: 0
         },
         radius: 0.3,
+        tilt: THREE.Math.degToRad(23.44),
         texture: "assets/1K/earth_daymap.jpg",
         textureHD: "assets/HD/earth_daymap.jpg",
         color: "0x3D567F",
@@ -138,6 +151,7 @@ let entities = {
             z: 0
         },
         radius: 0.04,
+        tilt: THREE.Math.degToRad(6.68),
         texture: "assets/1K/moon.jpg",
         textureHD: "assets/HD/moon.jpg",
         color: "0x979392",
@@ -157,6 +171,7 @@ let entities = {
             z: 0
         },
         radius: 0.25,
+        tilt: THREE.Math.degToRad(25.19),
         texture: "assets/1K/mars.jpg",
         textureHD: "assets/HD/mars.jpg",
         color: "0xB76247",
@@ -177,6 +192,7 @@ let entities = {
             z: 0
         },
         radius: 0.9,
+        tilt: THREE.Math.degToRad(3.13),
         texture: "assets/1K/jupiter.jpg",
         textureHD: "assets/HD/jupiter.jpg",
         color: "0xA6A095",
@@ -197,6 +213,7 @@ let entities = {
             z: 0
         },
         radius: 0.8,
+        tilt: THREE.Math.degToRad(26.73),
         texture: "assets/1K/saturn.jpg",
         textureHD: "assets/HD/saturn.jpg",
         color: "0xCFC0A2",
@@ -213,9 +230,9 @@ let entities = {
             y: 0,
             z: 0
         },
-        innerRadius: (0.8 + 0.6) * 3 / 4,
+        innerRadius: (0.8 + 0.6) * 3 / 7,
         radius: 0.8 + 0.6,
-        angle: Math.PI / 4 * 3,
+        tilt: THREE.Math.degToRad(26.73),
         texture: "assets/1K/saturn_ring.png",
         textureHD: "assets/HD/saturn_ring.png",
         color: "0xCFC0A2",
@@ -234,6 +251,7 @@ let entities = {
             z: 0
         },
         radius: 0.6,
+        tilt: THREE.Math.degToRad(82.23),
         texture: "assets/1K/uranus.jpg",
         textureHD: "assets/HD/uranus.jpg",
         color: "0x9BCBD2",
@@ -254,6 +272,7 @@ let entities = {
             z: 0
         },
         radius: 0.6,
+        tilt: THREE.Math.degToRad(28.32),
         texture: "assets/1K/neptune.jpg",
         textureHD: "assets/HD/neptune.jpg",
         color: "0x364FA8",
@@ -377,14 +396,10 @@ async function renderEntitiesArr(scene, textureLoader) {
                         console.error(err);
                         return undefined;
                     });
-                let material = texture === undefined ?
-                    new THREE.MeshBasicMaterial({
-                        color: parseInt(entity.color)
-                    }) :
-                    new THREE.MeshBasicMaterial({
-                        map: texture,
-                        side: THREE.BackSide
-                    });
+                let material = new THREE.MeshBasicMaterial({
+                    map: texture,
+                    side: THREE.BackSide
+                });
                 entity.mesh = new THREE.Mesh(
                     geometry,
                     material
@@ -400,24 +415,44 @@ async function renderEntitiesArr(scene, textureLoader) {
                         console.error(err);
                         return undefined;
                     });
-                let material = texture === undefined ?
-                    new THREE.MeshBasicMaterial({
-                        color: parseInt(entity.color)
-                    }) :
-                    new THREE.MeshBasicMaterial({
-                        map: texture
-                    });
+                let material = new THREE.MeshBasicMaterial({
+                    map: texture
+                });
                 entity.mesh = new THREE.Mesh(
                     geometry,
                     material
                 )
                 entity.mesh.position.set(entity.initPosition.x, entity.initPosition.y, entity.initPosition.z);
+                if (entity.tilt !== undefined) {
+                    entity.mesh.rotation.x = entity.tilt;
+                }
                 scene.add(entity.mesh);
                 objects.push(entity.mesh)
                 break;
             }
             case ("asteroid"):
-            case ("moon"):
+            case ("moon"): {
+                let geometry = new THREE.SphereGeometry(entity.radius, 32, 32);
+                let texture = entity.preloadedTexture || await asyncLoadTexture(textureLoader, entity.texture)
+                    .catch((err) => {
+                        console.error(err);
+                        return undefined;
+                    });
+                let material = new THREE.MeshPhongMaterial({
+                    map: texture
+                });
+                entity.mesh = new THREE.Mesh(
+                    geometry,
+                    material
+                )
+                entity.mesh.position.set(entity.initPosition.x, entity.initPosition.y, entity.initPosition.z);
+                if (entity.tilt !== undefined) {
+                    entity.mesh.rotation.x = entity.tilt;
+                }
+                objects.push(entity.mesh)
+                scene.add(entity.mesh);
+                break;
+            }
             case ("planet"): {
                 let geometry = new THREE.SphereGeometry(entity.radius, 32, 32);
                 let texture = entity.preloadedTexture || await asyncLoadTexture(textureLoader, entity.texture)
@@ -425,33 +460,32 @@ async function renderEntitiesArr(scene, textureLoader) {
                         console.error(err);
                         return undefined;
                     });
-                let material = texture === undefined ?
-                    new THREE.MeshBasicMaterial({
-                        color: parseInt(entity.color)
-                    }) :
-                    new THREE.MeshPhongMaterial({
-                        map: texture
-                    });
+                let material = new THREE.MeshPhongMaterial({
+                    map: texture
+                });
                 entity.mesh = new THREE.Mesh(
                     geometry,
                     material
                 )
                 entity.mesh.position.set(entity.initPosition.x, entity.initPosition.y, entity.initPosition.z);
+                if (entity.tilt !== undefined) {
+                    entity.mesh.rotation.x = entity.tilt;
+                }
                 objects.push(entity.mesh)
                 scene.add(entity.mesh);
-                if (entity.type == 'planet') {
-                    let orbit = new THREE.Line(new THREE.CircleGeometry(entity.initPosition.x, 90),
-                        new THREE.MeshBasicMaterial({
-                            color: 0xffffff,
-                            transparent: true,
-                            opacity: .1,
-                            side: THREE.BackSide
-                        })
-                    );
-                    orbit.geometry.vertices.shift();
-                    orbit.rotation.x = THREE.Math.degToRad(90);
-                    scene.add(orbit);
-                }
+
+                // Add an orbital line for this planet.
+                let orbitalLine = new THREE.Line(new THREE.CircleGeometry(entity.initPosition.x, 90),
+                    new THREE.MeshBasicMaterial({
+                        color: 0xffffff,
+                        transparent: true,
+                        opacity: .1,
+                        side: THREE.BackSide
+                    })
+                );
+                orbitalLine.geometry.vertices.shift();
+                orbitalLine.rotation.x = THREE.Math.degToRad(90);
+                scene.add(orbitalLine);
                 break;
             }
             case ("ring"): {
@@ -461,50 +495,59 @@ async function renderEntitiesArr(scene, textureLoader) {
                         console.error(err);
                         return undefined;
                     });
-                let material = texture === undefined ?
-                    new THREE.MeshBasicMaterial({
-                        color: parseInt(entity.color),
-                        side: THREE.DoubleSide
-                    }) :
-                    new THREE.MeshPhongMaterial({
-                        map: texture,
-                        side: THREE.DoubleSide
-                    });
+                let material = // Vertex/fragment shader code to place the texture in a ring. Ref: https://codepen.io/prisoner849/pen/wvwVMEo?editors=0010
+                    new THREE.ShaderMaterial({
+                        side: THREE.DoubleSide,
+                        uniforms: {
+                            texture: {
+                                value: texture
+                            },
+                            innerRadius: {
+                                value: entity.innerRadius
+                            },
+                            outerRadius: {
+                                value: entity.radius
+                            }
+                        },
+                        vertexShader: `
+                          varying vec3 vPos;
+                          void main() {
+                            vPos = position;
+                            vec3 viewPosition = (modelViewMatrix * vec4(position, 1.)).xyz;
+                            gl_Position = projectionMatrix * vec4(viewPosition, 1.);
+                          }
+                        `,
+                        fragmentShader: `
+                          uniform sampler2D texture;
+                          uniform float innerRadius;
+                          uniform float outerRadius;
+                          varying vec3 vPos;
+                          vec4 color() {
+                            vec2 uv = vec2(0);
+                            uv.x = (length(vPos) - innerRadius) / (outerRadius - innerRadius);
+                            if (uv.x < 0.0 || uv.x > 1.0) {
+                              discard;
+                            }
+                            vec4 pixel = texture2D(texture, uv);
+                            return pixel;
+                          }
+                          void main() {
+                            gl_FragColor = color();
+                          }
+                        `,
+                        transparent: true
+                    })
                 entity.mesh = new THREE.Mesh(
                     geometry,
                     material
                 );
-                // entity.mesh.rotation.x = THREE.Math.degToRad(90);
-                entity.mesh.rotation.x = entity.angle;
+                if (entity.tilt !== undefined) {
+                    entity.mesh.rotation.x = Math.PI / 2 + entity.tilt;
+                }
                 entity.mesh.position.set(entity.initPosition.x, entity.initPosition.y, entity.initPosition.z);
                 scene.add(entity.mesh);
                 break;
             }
-            // case ("asteroid"): {
-            //     for (i = 0; i < 1; i++) {
-            //         let geometry = new THREE.SphereGeometry(entity.radius, 32, 32);
-            //         let texture = await asyncLoadTexture(textureLoader, entity.texture)
-            //             .catch((err) => {
-            //                 console.error(err);
-            //                 return undefined;
-            //             });
-            //         let material = texture === undefined ?
-            //             new THREE.MeshBasicMaterial({
-            //                 color: parseInt(entity.color)
-            //             }) :
-            //             new THREE.MeshPhongMaterial({
-            //                 map: texture
-            //             });
-            //         entity.mesh = new THREE.Mesh(
-            //             geometry,
-            //             material
-            //         )
-            //         entity.mesh.position.set(entity.initPosition.x, entity.initPosition.y, entity.initPosition.z);
-            //         objects.push(entity.mesh)
-            //         scene.add(entity.mesh);
-            //     }
-            //     break;
-            // }
             case ("light"): {
                 switch (entity.lightType) {
                     case ("ambient"): {
@@ -528,6 +571,16 @@ async function renderEntitiesArr(scene, textureLoader) {
                 }
                 break;
             }
+        }
+    }
+}
+
+function forceIlluminate(forceIllumination) {
+    for (let light of entitiesArr.filter((entity) => { return entity.type === "light"; })) {
+        if (light.name === "forceIlluminateLight") {
+            light.light.intensity = forceIllumination ? light.intensity : 0;
+        } else {
+            light.light.intensity = forceIllumination ? 0 : light.intensity;
         }
     }
 }
@@ -602,15 +655,19 @@ async function main() {
         return animationOrder.indexOf(b.type) - animationOrder.indexOf(a.type);
     });
 
-    // Render the entitiesArr.
+    // Render the entitiesArr, and associate the entities with the entities that orbit them.
     await renderEntitiesArr(scene, textureLoader);
-    // Associate the entities with the entities that orbit them.
     for (let entity of entitiesArr) {
         if (entity.orbits !== undefined) {
             entities[entity.orbits].orbiters = entities[entity.orbits].orbiters || [];
             entities[entity.orbits].orbiters.push(entity);
         }
     }
+
+    // Set forced illumination to false.
+    forceIlluminate(false);
+
+    // Render the scene.
     renderer.render(scene, camera);
 
     // Setup camera
