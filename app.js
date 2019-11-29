@@ -94,6 +94,7 @@ let entities = {
         color: "0x848383",
         orbits: "sun",
         daysPerOrbit: 87.97,
+        orbitalInclineVector: new THREE.Vector3(0, 1, Math.tan(THREE.Math.degToRad(3.38))),
         synodicPeriod: 175.940,
         clickable: true
     },
@@ -115,6 +116,7 @@ let entities = {
         color: "0xC77328",
         orbits: "sun",
         daysPerOrbit: 224.70,
+        orbitalInclineVector: new THREE.Vector3(0, 1, Math.tan(THREE.Math.degToRad(3.86))),
         synodicPeriod: -116.750,
         clickable: true
     },
@@ -136,6 +138,7 @@ let entities = {
         color: "0x3D567F",
         orbits: "sun",
         daysPerOrbit: 365.26,
+        orbitalInclineVector: new THREE.Vector3(0, 1, Math.tan(THREE.Math.degToRad(7.155))),
         synodicPeriod: 1,
         clickable: true
     },
@@ -157,6 +160,7 @@ let entities = {
         color: "0x979392",
         orbits: "earth",
         daysPerOrbit: 27.322,
+        orbitalInclineVector: new THREE.Vector3(0, 1, Math.tan(THREE.Math.degToRad(5.09))),
         clickable: true
     },
     mars: {
@@ -177,6 +181,7 @@ let entities = {
         color: "0xB76247",
         orbits: "sun",
         daysPerOrbit: 686.98,
+        orbitalInclineVector: new THREE.Vector3(0, 1, Math.tan(THREE.Math.degToRad(5.65))),
         synodicPeriod: 1.027,
         clickable: true
     },
@@ -198,6 +203,7 @@ let entities = {
         color: "0xA6A095",
         orbits: "sun",
         daysPerOrbit: 4332.82,
+        orbitalInclineVector: new THREE.Vector3(0, 1, Math.tan(THREE.Math.degToRad(6.09))),
         synodicPeriod: 0.414,
         clickable: true
     },
@@ -219,6 +225,7 @@ let entities = {
         color: "0xCFC0A2",
         orbits: "sun",
         daysPerOrbit: 10755.70,
+        orbitalInclineVector: new THREE.Vector3(0, 1, Math.tan(THREE.Math.degToRad(5.51))),
         synodicPeriod: 0.439,
         clickable: true
     },
@@ -257,6 +264,7 @@ let entities = {
         color: "0x9BCBD2",
         orbits: "sun",
         daysPerOrbit: 30687.15,
+        orbitalInclineVector: new THREE.Vector3(0, 1, Math.tan(THREE.Math.degToRad(6.48))),
         synodicPeriod: -0.718,
         clickable: true
     },
@@ -278,6 +286,7 @@ let entities = {
         color: "0x364FA8",
         orbits: "sun",
         daysPerOrbit: 60190.03,
+        orbitalInclineVector: new THREE.Vector3(0, 1, Math.tan(THREE.Math.degToRad(6.43))),
         synodicPeriod: 0.671,
         clickable: true
     },
@@ -364,7 +373,7 @@ function rotateAboutPivot(subjectMesh, pivotPosition, axis, radians) {
     );
 }
 
-function generateAsteroids(count, textureChoices, minRadius, maxRadius, minDistance, maxDistance, minDaysPerOrbit, maxDaysPerOrbit, minSynodicPeriod, maxSynodicPeriod) {
+function generateAsteroids(count, textureChoices, minRadius, maxRadius, minDistance, maxDistance, minDaysPerOrbit, maxDaysPerOrbit, minAngle, maxAngle, minSynodicPeriod, maxSynodicPeriod) {
     for (let i = 0; i < count; i++) {
         let textureChoice = Math.round(Math.random() * (textureChoices.length - 1));
         entities[`asteroid_${i}`] = {
@@ -372,13 +381,14 @@ function generateAsteroids(count, textureChoices, minRadius, maxRadius, minDista
             name: `asteroid_${i}`,
             clickable: false,
             initPosition: {
-                x: parseFloat((Math.random() * (maxDistance - minDistance) + minDistance).toFixed(4)),
+                x: (Math.random() * (maxDistance - minDistance) + minDistance),
                 y: 0,
                 z: 0
             },
             radius: Math.random() * (maxRadius - minRadius) + minRadius,
             orbits: "sun",
             daysPerOrbit: Math.random() * (maxDaysPerOrbit - minDaysPerOrbit) + minDaysPerOrbit,
+            orbitalInclineVector: new THREE.Vector3(0, 1, Math.tan(THREE.Math.degToRad((Math.random() * (maxAngle - minAngle) + minAngle)))),
             synodicPeriod: Math.random() * (maxSynodicPeriod - minSynodicPeriod) + minSynodicPeriod,
             preloadedTexture: textureChoices[textureChoice],
             color: "0xB76247"
@@ -475,7 +485,8 @@ async function renderEntitiesArr(scene, textureLoader) {
                 scene.add(entity.mesh);
 
                 // Add an orbital line for this planet.
-                let orbitalLine = new THREE.Line(new THREE.CircleGeometry(entity.initPosition.x, 90),
+                let orbitalLine = new THREE.Line(
+                    new THREE.CircleGeometry(entity.initPosition.x, 90),
                     new THREE.MeshBasicMaterial({
                         color: 0xffffff,
                         transparent: true,
@@ -484,7 +495,7 @@ async function renderEntitiesArr(scene, textureLoader) {
                     })
                 );
                 orbitalLine.geometry.vertices.shift();
-                orbitalLine.rotation.x = THREE.Math.degToRad(90);
+                orbitalLine.rotation.x = THREE.Math.degToRad(90) + Math.atan(entity.orbitalInclineVector.z);
                 scene.add(orbitalLine);
                 break;
             }
@@ -648,7 +659,7 @@ async function main() {
     generateAsteroids(75, preLoadedTextures, 0.03, 0.005,
         entities.mars.initPosition.x + entities.mars.radius + 0.01,
         entities.jupiter.initPosition.x - entities.jupiter.radius - 0.01,
-        100, 1000, 10, 1000);
+        100, 1000, -10, 10, 10, 1000);
 
     // Order the entitites for animation.
     entitiesArr = Object.values(entities).sort((a, b) => {
@@ -1026,12 +1037,13 @@ async function main() {
         for (let entity of entitiesArr) {
             // Orbit this entity, if this entity orbits.
             if (entity.orbits !== undefined && entity.daysPerOrbit !== undefined) {
-                rotateAboutPivot(entity.mesh, entities[entity.orbits].mesh.position, new THREE.Vector3(0, 1, 0), 2 * Math.PI * daysPassed * (1 / entity.daysPerOrbit));
+                rotateAboutPivot(entity.mesh, entities[entity.orbits].mesh.position, entity.orbitalInclineVector, 2 * Math.PI * daysPassed * (1 / entity.daysPerOrbit));
                 // Orbit every planet that orbits this entity (DFS) appropriately.
                 let orbiterStack = [...(entity.orbiters || [])];
                 while (orbiterStack.length > 0) {
                     let orbiter = orbiterStack.pop();
-                    rotateAboutPivot(orbiter.mesh, entities[entity.orbits].mesh.position, new THREE.Vector3(0, 1, 0), 2 * Math.PI * daysPassed * (1 / entity.daysPerOrbit));
+                    rotateAboutPivot(orbiter.mesh, entities[entity.orbits].mesh.position, entity.orbitalInclineVector, 2 * Math.PI * daysPassed * (1 / entity.daysPerOrbit));
+                    // rotateAboutPivot(orbiter.mesh, entities[entity.orbits].mesh.position, new THREE.Vector3(0, 1, 0), 2 * Math.PI * daysPassed * (1 / entity.daysPerOrbit));
                     for (orbiter of orbiter.orbiters || []) {
                         orbiterStack.push();
                     }
