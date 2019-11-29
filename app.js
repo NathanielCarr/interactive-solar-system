@@ -740,7 +740,18 @@ async function main() {
         },
         "Realistic / Artificial Lighting": () => {
 
-        } 
+        },
+        "Disable Asteroids":()=>{
+            let Asteroids = entitiesArr.filter((entity) => { return entity.type="asteroid"; });
+            for(let asteroid of Asteroids ){
+                if(asteroid.mesh.visable==True){
+                    asteroid.mesh.visable=false;
+                }else{
+                    asteroid.mesh.visable=true;
+                }
+            }
+
+        }
     }
     let gui = new dat.GUI();
     gui.add(guivars,"Next Planet");
@@ -750,6 +761,7 @@ async function main() {
     gui.add(guivars,"Faster");
     gui.add(guivars,"Orbit Outline");
     gui.add(guivars,"Realistic / Artificial Lighting");
+    gui.add(guivars,"Disable Asteroids");
 
     // Preload all the textures for the asteroids.
     let texturePromises = [];
