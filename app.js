@@ -894,22 +894,22 @@ async function main() {
         switch (event.keyCode) {
             case 38: // Up
             case 87: // W
-                if (!state.lockedCam)
+                if (state.lockedCam)
                     state.moveForward = true;
                 break;
             case 37: // Left
             case 65: // A
-                if (!state.lockedCam)
+                if (state.lockedCam)
                     state.moveLeft = true;
                 break;
             case 40: // Down
             case 83: // S
-                if (!state.lockedCam)
+                if (state.lockedCam)
                     state.moveBackward = true;
                 break;
             case 39: // Right
             case 68: // D
-                if (!state.lockedCam)
+                if (state.lockedCam)
                     state.moveRight = true;
                 break;
             case 16: // Shift
@@ -923,22 +923,22 @@ async function main() {
         switch (event.keyCode) {
             case 38: // Up
             case 87: // W
-                if (!state.lockedCam)
+                if (state.lockedCam)
                     state.moveForward = false;
                 break;
             case 37: // Left
             case 65: // A
-                if (!state.lockedCam)
+                if (state.lockedCam)
                     state.moveLeft = false;
                 break;
             case 40: // Down
             case 83: // S
-                if (!state.lockedCam)
+                if (state.lockedCam)
                     state.moveBackward = false;
                 break;
             case 39: // Right
             case 68: // D
-                if (!state.lockedCam)
+                if (state.lockedCam)
                     state.moveRight = false;
                 break;
             case 190: // Period
