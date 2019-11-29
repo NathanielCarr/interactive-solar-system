@@ -684,6 +684,7 @@ async function main() {
     let paused = false;
     let artificialLightingOn = false;
     let orbitalLineOn = true;
+    let asteroidsOn = true;
 
     // GUI options.
     let gui = new dat.GUI();
@@ -768,14 +769,32 @@ async function main() {
                 // Overwrite Orbit Outline On option.
                 guiControllers["Orbit Outline Off"].name("Orbit Outline Off");
             }
-
             orbitalLineOn = !orbitalLineOn;
 
             // Update the opacity of the orbitals lines.
             for (let line of entitiesArr.filter((entity) => {
                     return entity.type == "line";
                 })) {
-                    line.mesh.visible = orbitalLineOn;
+                line.mesh.visible = orbitalLineOn;
+            }
+
+            // Render the scene.
+            renderer.render(scene, camera);
+        },
+        "Asteroids Off": () => {
+            if (asteroidsOn) {
+                // Overwrite Asteroids Off option.
+                guiControllers["Asteroids Off"].name("Asteroids On");
+            } else {
+                // Overwrite Asteroids On option.
+                guiControllers["Asteroids Off"].name("Asteroids Off");
+            }
+            asteroidsOn = !asteroidsOn;
+
+            for (let asteroid of entitiesArr.filter((entity) => {
+                    return entity.type == "asteroid";
+                })) {
+                asteroid.mesh.visible = asteroidsOn;
             }
 
             // Render the scene.
@@ -804,6 +823,7 @@ async function main() {
     guiControllers["Slower"] = gui.add(guivars, "Slower");
     guiControllers["Faster"] = gui.add(guivars, "Faster");
     guiControllers["Orbit Outline Off"] = gui.add(guivars, "Orbit Outline Off");
+    guiControllers["Asteroids Off"] = gui.add(guivars, "Asteroids Off");
     guiControllers["Artificial Lighting"] = gui.add(guivars, "Artificial Lighting");
 
     // Preload all the textures for the asteroids.
