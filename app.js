@@ -16,10 +16,10 @@ let intersected;
 let csp;
 let psp;
 let entities = {
-    forceIlluminateLight: {
+    artificialLight: {
         type: "light",
         lightType: "ambient",
-        name: "forceIlluminateLight",
+        name: "artificialLight",
         color: "0xFFFFFF",
         intensity: 1,
         clickable: false
@@ -342,13 +342,10 @@ let animationOrder = [
     "moon",
     "asteroid",
     "light",
-    "ring"
+    "ring",
+    "line"
 ];
-let entitiesArr = Object.values(entities).sort((a, b) => {
-    return animationOrder.indexOf(b.type) - animationOrder.indexOf(a.type);
-});
-
-//const CAMERA_START_POS = PLANET_PROPERTIES.NEPTUNE.SOLAR_DISTANCE * SOLAR_DISTANCE_SCALE + PLANET_PROPERTIES.NEPTUNE.NOSCALE_RADIUS + 100;
+let entitiesArr;
 
 async function asyncLoadTexture(textureLoader, url) {
     return new Promise((resolve, reject) => {
@@ -501,18 +498,22 @@ async function renderEntitiesArr(scene, textureLoader) {
             }
             case ("planet"): {
                 // Add an orbital line for this planet.
-                let orbitalLine = new THREE.Line(
-                    new THREE.CircleGeometry(entity.initPosition.x, 100),
-                    new THREE.MeshBasicMaterial({
-                        color: 0xffffff,
-                        transparent: true,
-                        opacity: .1,
-                        side: THREE.BackSide
-                    })
-                );
-                orbitalLine.geometry.vertices.shift();
-                orbitalLine.rotation.x = THREE.Math.degToRad(90) + Math.atan(entity.orbitalInclineVector.z);
-                scene.add(orbitalLine);
+                entities[`orbitalLine_${entity.name}`] = {
+                    type: "line",
+                    name: `orbitalLine_${entity.name}`,
+                    mesh: new THREE.Line(
+                        new THREE.CircleGeometry(entity.initPosition.x, 100),
+                        new THREE.MeshBasicMaterial({
+                            color: 0xffffff,
+                            transparent: true,
+                            opacity: .1,
+                            side: THREE.BackSide
+                        })
+                    )
+                };
+                entities[`orbitalLine_${entity.name}`].mesh.geometry.vertices.shift();
+                entities[`orbitalLine_${entity.name}`].mesh.rotation.x = THREE.Math.degToRad(90) + Math.atan(entity.orbitalInclineVector.z);
+                scene.add(entities[`orbitalLine_${entity.name}`].mesh);
 
                 let geometry = new THREE.SphereGeometry(entity.radius, 32, 32);
                 let texture = entity.preloadedTexture || await asyncLoadTexture(textureLoader, entity.texture)
@@ -622,14 +623,14 @@ async function renderEntitiesArr(scene, textureLoader) {
     }
 }
 
-function forceIlluminate(forceIllumination) {
+function setArtificialLighting(artificialLightingOn) {
     for (let light of entitiesArr.filter((entity) => {
             return entity.type === "light";
         })) {
-        if (light.name === "forceIlluminateLight") {
-            light.light.intensity = forceIllumination ? light.intensity : 0;
+        if (light.name === "artificialLight") {
+            light.light.intensity = artificialLightingOn ? light.intensity : 0;
         } else {
-            light.light.intensity = forceIllumination ? 0 : light.intensity;
+            light.light.intensity = artificialLightingOn ? 0 : light.intensity;
         }
     }
 }
@@ -680,7 +681,13 @@ async function main() {
     let plane = new THREE.Mesh(planeGeometry, material);
     hudscene.add(plane);
 
-    //dat gui for the demo 
+    let paused = false;
+    let artificialLightingOn = false;
+    let orbitalLineOn = true;
+
+    // GUI options.
+    let gui = new dat.GUI();
+    let guiControllers = {};
     let guivars = {
         "Next Planet": () => {
             // Get all clickable entitites, then sort them from closest to the origin to furthest.
@@ -721,16 +728,27 @@ async function main() {
             updatehud(candidates[cpsIndex]);
             csp = candidates[cpsIndex].name;
         },
-        "Pause / Continue": () => {
-            if (simspeed != 0) {
-                SYNODIC_SPEED_MODIFIER = 0;
-                DAYS_PER_MS = 0;
-                simspeed = 0;
-            } else {
+        "Pause": () => {
+            if (paused) {
+                // Update the speed.
                 SYNODIC_SPEED_MODIFIER = 1 * Math.pow(10, 0.25);
                 DAYS_PER_MS = 0.1 * Math.pow(10, 0.25);
                 simspeed = 1;
+
+                // Overwrite Continue option.
+                guiControllers["Pause"].name("Pause");
+            } else {
+                // Update the speed.
+                SYNODIC_SPEED_MODIFIER = 0;
+                DAYS_PER_MS = 0;
+                simspeed = 0;
+
+                // Overwrite Pause option.
+                guiControllers["Pause"].name("Continue");
             }
+
+            paused = !paused;
+
         },
         "Slower": () => {
             SYNODIC_SPEED_MODIFIER /= 2;
@@ -742,21 +760,51 @@ async function main() {
             DAYS_PER_MS *= 2;
             simspeed *= 2;
         },
-        "Orbit Outline": () => {
+        "Orbit Outline Off": () => {
+            if (orbitalLineOn) {
+                // Overwrite Orbit Outline Off option.
+                guiControllers["Orbit Outline Off"].name("Orbit Outline On");
+            } else {
+                // Overwrite Orbit Outline On option.
+                guiControllers["Orbit Outline Off"].name("Orbit Outline Off");
+            }
 
+            orbitalLineOn = !orbitalLineOn;
+
+            // Update the opacity of the orbitals lines.
+            for (let line of entitiesArr.filter((entity) => {
+                    return entity.type == "line";
+                })) {
+                    line.mesh.visible = orbitalLineOn;
+            }
+
+            // Render the scene.
+            renderer.render(scene, camera);
         },
-        "Realistic / Artificial Lighting": () => {
+        "Artificial Lighting": () => {
+            if (artificialLightingOn) {
+                // Overwrite Realistic Lighting option.
+                guiControllers["Artificial Lighting"].name("Artificial Lighting");
+            } else {
+                // Overwrite Artificial Lighting option.
+                guiControllers["Artificial Lighting"].name("Realistic Lighting");
+            }
 
+            // Toggle forced illumination.
+            artificialLightingOn = !artificialLightingOn;
+            setArtificialLighting(artificialLightingOn);
+
+            // Render the scene.
+            renderer.render(scene, camera);
         }
     }
-    let gui = new dat.GUI();
-    gui.add(guivars, "Next Planet");
-    gui.add(guivars, "Prev. Planet");
-    gui.add(guivars, "Pause / Continue");
-    gui.add(guivars, "Slower");
-    gui.add(guivars, "Faster");
-    gui.add(guivars, "Orbit Outline");
-    gui.add(guivars, "Realistic / Artificial Lighting");
+    guiControllers["Next Planet"] = gui.add(guivars, "Next Planet");
+    guiControllers["Prev. Planet"] = gui.add(guivars, "Prev. Planet");
+    guiControllers["Pause"] = gui.add(guivars, "Pause");
+    guiControllers["Slower"] = gui.add(guivars, "Slower");
+    guiControllers["Faster"] = gui.add(guivars, "Faster");
+    guiControllers["Orbit Outline Off"] = gui.add(guivars, "Orbit Outline Off");
+    guiControllers["Artificial Lighting"] = gui.add(guivars, "Artificial Lighting");
 
     // Preload all the textures for the asteroids.
     let texturePromises = [];
@@ -785,8 +833,13 @@ async function main() {
         }
     }
 
+    // Order the entitites for animation.
+    entitiesArr = Object.values(entities).sort((a, b) => {
+        return animationOrder.indexOf(b.type) - animationOrder.indexOf(a.type);
+    });
+
     // Set forced illumination to false.
-    forceIlluminate(false);
+    setArtificialLighting(artificialLightingOn);
 
     // Render the scene.
     renderer.render(scene, camera);
@@ -807,11 +860,9 @@ async function main() {
         csp = entity.name;
         guivars.target = entity.mesh;
         hudBitmap.clearRect(0, 0, window.innerWidth * 2, window.innerHeight * 2);
-        //hudBitmap.fillStyle = "rgba(20,139,224,0.25)";
-        //hudBitmap.fillRect((window.innerWidth / 12), (window.innerHeight / 16),window.innerWidth/2,window.innerHeight/5)
         hudBitmap.fillStyle = "rgba(245,245,245,0.95)";
         hudBitmap.font = "Normal 100px Courier New";
-        hudBitmap.fillText(entity.name.ToUpperCase(), window.innerWidth / 12, window.innerHeight / 10);
+        hudBitmap.fillText(entity.name.toUpperCase(), window.innerWidth / 12, window.innerHeight / 10);
         hudBitmap.font = "Normal 60px Courier New";
         hudBitmap.textAlign = 'left';
         count = 0;
@@ -820,9 +871,6 @@ async function main() {
             hudBitmap.fillText(inf, window.innerWidth / 12, (1.6 + (0.8 * count)) * (window.innerHeight / 8));
             count += 1;
         }
-        //hudBitmap.fillText(entity.info2, window.innerWidth / 12, 1.9 * (window.innerHeight / 8));
-        //hudBitmap.fillText(entity.info3, window.innerWidth / 12, 2.4 * (window.innerHeight / 8));
-        //hudBitmap.fillText(entity., window.innerWidth / 12, 4*(window.innerHeight / 8));
         hudTexture.needsUpdate = true;
     }
 
