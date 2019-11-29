@@ -144,7 +144,7 @@ let entities = {
         synodicPeriod: 1,
         clickable: true
     },
-    earthMoon1: {
+    moon: {
         type: "moon",
         name: "moon",
         info: {
