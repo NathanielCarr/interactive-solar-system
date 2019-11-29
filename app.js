@@ -144,7 +144,7 @@ let entities = {
         synodicPeriod: 1,
         clickable: true
     },
-    earthMoon1: {
+    moon: {
         type: "moon",
         name: "moon",
         info: {
@@ -605,7 +605,9 @@ async function main() {
         moveForward: false,
         moveBackward: false,
         moveLeft: false,
-        moveRight: false
+        moveRight: false,
+        lastTick: Date.now(),
+        lastTickPerformance: performance.now()
     };
 
     // Get a textureLoader.
@@ -1025,46 +1027,47 @@ async function main() {
     renderer.render(scene, camera);
 
     // Start animating.
-    let lastTick = Date.now();
-    let lastTickPerformance = performance.now();
-
     function animate() {
         requestAnimationFrame(animate);
 
-        // Animate the entitiesArr.
         let time = Date.now();
-        let daysPassed = (time - lastTick) * state.daysPerMs;
-        for (let entity of entitiesArr) {
-            // Orbit this entity, if this entity orbits.
-            if (entity.orbits !== undefined && entity.daysPerOrbit !== undefined) {
-                rotateAboutPivot(entity.mesh, entities[entity.orbits].mesh.position, entity.orbitalInclineVector, 2 * Math.PI * daysPassed * (1 / entity.daysPerOrbit));
-                // Orbit every planet that orbits this entity (DFS) appropriately.
-                let orbiterStack = [...(entity.orbiters || [])];
-                while (orbiterStack.length > 0) {
-                    let orbiter = orbiterStack.pop();
-                    rotateAboutPivot(orbiter.mesh, entities[entity.orbits].mesh.position, entity.orbitalInclineVector, 2 * Math.PI * daysPassed * (1 / entity.daysPerOrbit));
-                    for (orbiter of orbiter.orbiters || []) {
-                        orbiterStack.push();
+        let timePerformance = performance.now();
+
+        if (!state.paused) {
+
+            // Animate the entitiesArr.
+            let daysPassed = (time - state.lastTick) * state.daysPerMs;
+            for (let entity of entitiesArr) {
+                // Orbit this entity, if this entity orbits.
+                if (entity.orbits !== undefined && entity.daysPerOrbit !== undefined) {
+                    rotateAboutPivot(entity.mesh, entities[entity.orbits].mesh.position, entity.orbitalInclineVector, 2 * Math.PI * daysPassed * (1 / entity.daysPerOrbit));
+                    // Orbit every planet that orbits this entity (DFS) appropriately.
+                    let orbiterStack = [...(entity.orbiters || [])];
+                    while (orbiterStack.length > 0) {
+                        let orbiter = orbiterStack.pop();
+                        rotateAboutPivot(orbiter.mesh, entities[entity.orbits].mesh.position, entity.orbitalInclineVector, 2 * Math.PI * daysPassed * (1 / entity.daysPerOrbit));
+                        for (orbiter of orbiter.orbiters || []) {
+                            orbiterStack.push();
+                        }
                     }
                 }
-            }
 
-            // Apply the synodic spin.
-            if (entity.synodicPeriod !== undefined) {
-                entity.mesh.rotateY(daysPassed * state.synodicSpeedModifier / entity.synodicPeriod);
-            }
+                // Apply the synodic spin.
+                if (entity.synodicPeriod !== undefined) {
+                    entity.mesh.rotateY(daysPassed * state.synodicSpeedModifier / entity.synodicPeriod);
+                }
 
-            // If there is a fixed rotation, apply it.
-            if (entity.rotationProperties !== undefined) {
-                entity.mesh.rotateX(time / entity.rotationProperties.x);
-                entity.mesh.rotateY(time / entity.rotationProperties.y);
-                entity.mesh.rotateZ(time / entity.rotationProperties.z);
+                // If there is a fixed rotation, apply it.
+                if (entity.rotationProperties !== undefined) {
+                    entity.mesh.rotateX(time / entity.rotationProperties.x);
+                    entity.mesh.rotateY(time / entity.rotationProperties.y);
+                    entity.mesh.rotateZ(time / entity.rotationProperties.z);
+                }
             }
         }
 
         if (pointerControls.isLocked && !state.orbiting) {
-            let timePerformance = performance.now();
-            let deltaTime = (timePerformance - lastTickPerformance) / 1000;
+            let deltaTime = (timePerformance - state.lastTickPerformance) / 1000;
 
             state.velocity.x = 0;
             state.velocity.y = 0;
@@ -1090,8 +1093,6 @@ async function main() {
             pointerControls.moveForward(-state.velocity.z * deltaTime);
             pointerControls.getObject().position.y -= (state.velocity.y * deltaTime);
 
-            lastTickPerformance = timePerformance;
-
         } else if (state.orbiting) {
             if (state.selectedPlanetName !== null) {
                 orbitControls.target = entities[state.selectedPlanetName].mesh.position;
@@ -1104,7 +1105,8 @@ async function main() {
         renderer.render(hudscene, cameraHUD);
 
         // Update the last tick time.
-        lastTick = time;
+        state.lastTick = time;
+        state.lastTickPerformance = timePerformance;
     }
     animate();
 }
