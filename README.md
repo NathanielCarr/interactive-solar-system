@@ -1,10 +1,10 @@
-# cp-411-project
+# Interactive Solar System
 The final project (model of the solar system) for CP411
 
 ## Authors:
-- Brendan Whelan, 160662400
-- Nathaniel Carr, 160150170
-- Tim McGill, 160805190
+- Brendan Whelan
+- Nathaniel Carr
+- Tim McGill
 
 ## Controls:
 - WASD - Move Free Cam
